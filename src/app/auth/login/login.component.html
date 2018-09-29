@@ -1,0 +1,28 @@
+<form
+  (ngSubmit)="onSubmit(form)"
+  #form="ngForm"
+>
+  <label for="email">Email Address</label>
+  <input
+    name="email"
+    id="email"
+    type="email"
+    class=""
+    ngModel
+    required
+    email
+  />
+
+  <label for="password">Password</label>
+  <input
+    name="password"
+    id="password"
+    type="password"
+    class=""
+    ngModel
+    required
+  />
+
+  <button type="submit">Login</button>
+</form>
+

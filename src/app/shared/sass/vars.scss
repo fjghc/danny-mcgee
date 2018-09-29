@@ -1,0 +1,4 @@
+@mixin gotham($weight) {
+  font-family: 'Gotham SSm A', 'Gotham SSm B', 'Helvetica', 'Arial', sans-serif;
+  font-weight: $weight;
+}

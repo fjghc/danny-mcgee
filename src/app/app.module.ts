@@ -7,13 +7,19 @@ import { LoginComponent } from './auth/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormComponent } from './shared/form/form.component';
 import { InputComponent } from './shared/form/input/input.component';
+import { ProjectsComponent } from './projects/projects.component';
+import { DropdownDirective } from './shared/dropdown.directive';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     FormComponent,
-    InputComponent
+    InputComponent,
+    ProjectsComponent,
+    DropdownDirective,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

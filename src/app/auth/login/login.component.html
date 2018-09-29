@@ -1,27 +1,22 @@
 <form
-  (ngSubmit)="onSubmit(form)"
-  #form="ngForm"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="form"
 >
-  <label for="email">Email Address</label>
-  <input
-    name="email"
+  <dm-input
+    label="Email Address"
     id="email"
     type="email"
-    class=""
-    ngModel
-    required
-    email
-  />
+    [validators]="emailValidators"
+    [form]="form"
+  ></dm-input>
 
-  <label for="password">Password</label>
-  <input
-    name="password"
+  <dm-input
+    label="Password"
     id="password"
     type="password"
-    class=""
-    ngModel
-    required
-  />
+    [validators]="passwordValidators"
+    [form]="form"
+  ></dm-input>
 
   <button type="submit">Login</button>
 </form>

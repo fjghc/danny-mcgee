@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AuthService } from '../auth.service';
 
@@ -8,12 +8,20 @@ import { AuthService } from '../auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+
+  form: FormGroup;
+  emailValidators = [Validators.required, Validators.email];
+  passwordValidators = [Validators.required];
 
   constructor(private authService: AuthService) {}
 
-  onSubmit(form: NgForm) {
-    this.authService.login(form.value.email, form.value.password);
+  ngOnInit() {
+    this.form = new FormGroup({});
+  }
+
+  onSubmit() {
+    this.authService.login(this.form.value.email, this.form.value.password);
   }
 
 }

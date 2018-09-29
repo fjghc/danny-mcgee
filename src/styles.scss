@@ -1,7 +1,4 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-}
+@import 'app/shared/sass/global';
+@import 'app/shared/sass/layout';
+@import 'app/shared/sass/forms';
+@import 'app/shared/sass/interactables';

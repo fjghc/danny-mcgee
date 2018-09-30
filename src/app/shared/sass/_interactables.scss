@@ -1,0 +1,65 @@
+.btn {
+  position: relative;
+  z-index: 1;
+  border-radius: 0;
+  padding: 10px 30px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.btn-container > .btn {
+  margin-right: 10px;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+}
+
+@each $key, $value in $theme-colors {
+  .btn-#{$key} {
+    background-color: transparent;
+    color: $gray-lightest;
+    border: 2px solid $gray-lighter;
+
+    &::before {
+      content: ' ';
+      display: block;
+      width: 0;
+      position: absolute;
+      top: 0;
+      right: 50%;
+      bottom: 0;
+      left: 50%;
+      z-index: -1;
+      background-color: $value;
+      transition: width 0.15s ease-in,
+                  right 0.15s ease-in,
+                  left 0.15s ease-in;
+    }
+
+    &:hover, &:focus {
+      background-color: transparent;
+      border-color: $value;
+      color: map-get($contrast-color, $key);
+      @if (map-get($contrast-color, $key) != #fff) {
+        font-weight: 500;
+      }
+
+      &::before {
+        width: 100%;
+        right: 0;
+        left: 0;
+        transition: width 0.15s ease-out,
+                    right 0.15s ease-out,
+                    left 0.15s ease-out;
+      }
+    }
+
+    &:focus {
+       box-shadow: 0 0 0 4px transparentize($value, 0.5);
+    }
+  }
+}
+

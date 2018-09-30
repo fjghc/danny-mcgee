@@ -36,14 +36,25 @@ $light: $gray-lightest;
 $dark: $gray-darker;
 
 $theme-colors: (
-  "primary": $blue-bold,
-  "secondary": $gray-light,
-  "success": $green,
-  "info": $blue-light,
-  "warning": $yellow,
-  "danger": $red,
-  "light": $gray-lightest,
-  "dark": $gray-darker
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark
+);
+
+$contrast-color: (
+  "primary": #fff,
+  "secondary": $gray-darkest,
+  "success": $gray-darkest,
+  "info": $gray-darkest,
+  "warning": $gray-darkest,
+  "danger": #fff,
+  "light": $gray-darkest,
+  "dark": $light
 );
 
 

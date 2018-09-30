@@ -1,0 +1,8 @@
+* {
+  font-family: inherit;
+}
+
+body {
+  @include gotham(300);
+}
+

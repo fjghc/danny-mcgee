@@ -2,10 +2,15 @@
   <label [for]="id">{{ label }}</label>
   <input
     class="form-control"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
     [name]="id"
     [id]="id"
     [type]="type"
     [formControlName]="id"
+    autocomplete="off"
+    spellcheck="false"
   />
+  <span class="underline"></span>
 </ng-container>
 

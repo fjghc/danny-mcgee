@@ -1,0 +1,97 @@
+@-webkit-keyframes autofill {
+  to {
+    color: #666;
+    background: transparent;
+  }
+}
+
+input:-webkit-autofill {
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
+}
+
+.form-control {
+  border-radius: 0;
+}
+
+
+// Experimental
+
+form {
+  margin: 72px 0;
+}
+
+form.minimal {
+
+  .form-group {
+    position: relative;
+    padding-top: 12px;
+    margin-bottom: 30px;
+
+    label {
+      position: absolute;
+      top: 12px;
+      color: $gray-lightest;
+      margin-bottom: 0;
+      font-size: 16px;
+      line-height: 50px;
+      pointer-events: none;
+      transition: top 0.15s linear,
+                  color 0.15s linear,
+                  font-size 0.15s linear,
+                  line-height 0.15s linear;
+    }
+
+    &.focus label, &.filled label {
+      top: 0px;
+      color: $gray-light;
+      font-size: 13px;
+      line-height: 13px;
+      transition: top 0.15s linear,
+                  color 0.15s linear,
+                  font-size 0.15s linear,
+                  line-height 0.15s linear
+    }
+  }
+
+  .form-control {
+    height: auto;
+    padding: 12px 0;
+    background-color: transparent;
+    color: $gray-lightest;
+    border: 0;
+    border-bottom: 2px solid $gray-lighter;
+    font-weight: 300;
+    transition: color 0.15s linear;
+
+    & + .underline {
+      content: ' ';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      right: 50%;
+      left: 50%;
+      height: 2px;
+      background-color: $blue-bold;
+      transition: right 0.2s ease-in,
+                  left 0.2s ease-in;
+    }
+
+    &:focus {
+      box-shadow: none;
+      color: #fff;
+      transition: color 0.15s linear;
+
+      & + .underline {
+        right: 0;
+        left: 0;
+        transition: right 0.2s ease-out,
+                    left 0.2s ease-out;
+      }
+    }
+  }
+
+  .btn-container:last-child {
+    margin-top: 48px;
+  }
+}

@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm, NgModel, ValidatorFn } from '@angular/forms';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'dm-input',
@@ -16,11 +17,29 @@ export class InputComponent implements OnInit {
   @Input() form: FormGroup;
   control: FormControl;
 
+  @HostBinding('class.focus') isFocused = false;
+  @HostBinding('class.filled') isFilled = false;
+
   constructor() {}
 
   ngOnInit() {
     this.control = new FormControl(null, this.validators);
     this.form.addControl(this.id, this.control);
+
+    // detect auto-filled values
+    setTimeout(() => {
+      if (this.control.value) {
+        this.isFilled = true;
+      }
+    }, 50);
   }
 
+  onFocus() {
+    this.isFocused = true;
+  }
+
+  onBlur() {
+    this.isFocused = false;
+    this.control.value ? this.isFilled = true : this.isFilled = false;
+  }
 }

@@ -1,0 +1,14 @@
+@import '../../shared/sass/vars';
+
+.wrapper {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-color: $gray-darkest;
+}
+
+form.minimal {
+  background-color: $gray-darker;
+  padding: 72px 48px;
+}

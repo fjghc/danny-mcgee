@@ -1,7 +1,7 @@
 @-webkit-keyframes autofill {
   to {
-    color: #666;
-    background: transparent;
+    background-color: transparent;
+    color: $gray-lightest;
   }
 }
 
@@ -24,6 +24,7 @@ form {
 form.minimal {
 
   .form-group {
+    display: block;
     position: relative;
     padding-top: 12px;
     margin-bottom: 30px;
@@ -43,7 +44,7 @@ form.minimal {
     }
 
     &.focus label, &.filled label {
-      top: 0px;
+      top: 2px;
       color: $gray-light;
       font-size: 13px;
       line-height: 13px;
@@ -55,6 +56,7 @@ form.minimal {
   }
 
   .form-control {
+    width: 100%;
     height: auto;
     padding: 12px 0;
     background-color: transparent;
@@ -63,6 +65,7 @@ form.minimal {
     border-bottom: 2px solid $gray-lighter;
     font-weight: 300;
     transition: color 0.15s linear;
+    outline: none !important;
 
     & + .underline {
       content: ' ';

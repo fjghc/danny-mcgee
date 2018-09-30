@@ -2,3 +2,10 @@ body {
   background: map-get($theme-colors, "dark");
   color: map-get($theme-colors, "light");
 }
+
+::-moz-selection {
+  background: $primary;
+}
+::selection {
+  background: $primary;
+}

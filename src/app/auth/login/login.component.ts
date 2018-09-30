@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
+
+import { faLockAlt } from '@fortawesome/pro-light-svg-icons';
 
 import { AuthService } from '../auth.service';
-import { AngularFireDatabase } from '@angular/fire/database';
 
 @Component({
   selector: 'dm-login',
@@ -15,16 +16,18 @@ export class LoginComponent implements OnInit {
   emailValidators = [Validators.required, Validators.email];
   passwordValidators = [Validators.required];
 
-  constructor(
-    private authService: AuthService,
-    private db: AngularFireDatabase
-  ) {}
+  icons = {
+    lock: faLockAlt
+  };
+
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.form = new FormGroup({});
   }
 
   onSubmit() {
+    console.log('form value:', this.form.value);
     this.authService.login(this.form.value.email, this.form.value.password);
   }
 

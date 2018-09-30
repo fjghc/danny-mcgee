@@ -8,8 +8,7 @@
     [id]="id"
     [type]="type"
     [formControlName]="id"
-    autocomplete="off"
-    spellcheck="false"
+    [spellcheck]="type === 'text'"
   />
   <span class="underline"></span>
 </ng-container>

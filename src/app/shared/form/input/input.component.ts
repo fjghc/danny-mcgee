@@ -1,6 +1,5 @@
-import { Component, HostBinding, Input, OnChanges, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NgForm, NgModel, ValidatorFn } from '@angular/forms';
-import { isNullOrUndefined } from 'util';
+import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'dm-input',
@@ -8,7 +7,7 @@ import { isNullOrUndefined } from 'util';
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss']
 })
-export class InputComponent implements OnInit {
+export class InputComponent implements OnInit, AfterViewInit {
 
   @Input() label: string;
   @Input() id: string;
@@ -20,15 +19,22 @@ export class InputComponent implements OnInit {
   @HostBinding('class.focus') isFocused = false;
   @HostBinding('class.filled') isFilled = false;
 
-  constructor() {}
+  constructor(private element: ElementRef) {}
 
   ngOnInit() {
     this.control = new FormControl(null, this.validators);
     this.form.addControl(this.id, this.control);
+  }
 
-    // detect auto-filled values
+  ngAfterViewInit() {
     setTimeout(() => {
+      // check for autofilled values (works in Firefox)
       if (this.control.value) {
+        this.isFilled = true;
+      }
+
+      // check for Chrome autofill
+      if (this.element.nativeElement.querySelector('input:-webkit-autofill')) {
         this.isFilled = true;
       }
     }, 50);

@@ -4,11 +4,26 @@
   min-width: 100vw;
   min-height: 100vh;
   display: flex;
+  justify-content: center;
   align-items: center;
   background-color: $gray-darkest;
 }
 
 form.minimal {
-  background-color: $gray-darker;
+  width: 480px;
+  max-width: 100%;
   padding: 72px 48px;
+  background-color: $gray-darker;
+
+  .lock {
+    display: block;
+    margin-bottom: 30px;
+    color: $gray-mid;
+    font-size: 120px;
+    text-align: center;
+  }
+
+  .btn-container {
+    text-align: right;
+  }
 }

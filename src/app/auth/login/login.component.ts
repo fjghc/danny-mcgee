@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AuthService } from '../auth.service';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 @Component({
   selector: 'dm-login',
@@ -14,7 +15,10 @@ export class LoginComponent implements OnInit {
   emailValidators = [Validators.required, Validators.email];
   passwordValidators = [Validators.required];
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private db: AngularFireDatabase
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({});
@@ -22,6 +26,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.authService.login(this.form.value.email, this.form.value.password);
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 
 }

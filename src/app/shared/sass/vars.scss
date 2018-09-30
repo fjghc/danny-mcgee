@@ -1,4 +1,34 @@
+// colors
+
+$gray-lightest: #DBE6EC;
+$gray-lighter: #AEC1CC;
+$gray-light: #79858D;
+$gray: #323f55;
+$gray-dark: #2b3649;
+$gray-darker: #242d3d;
+$gray-darkest: #1c2430;
+
+$turquoise: #0FDEBD;
+$green: #16C98D;
+
+$blue-light: #8ABEE5;
+$blue-bold: #2c98ec;
+
+$pink-light: #FFB0C0;
+$pink: #FF708E;
+$red: #FA5E5B;
+
+$yellow: #FFC83F;
+
+$purple: #a787f8;
+
+
+
+// mixins
+
 @mixin gotham($weight) {
   font-family: 'Gotham SSm A', 'Gotham SSm B', 'Helvetica', 'Arial', sans-serif;
   font-weight: $weight;
 }
+
+

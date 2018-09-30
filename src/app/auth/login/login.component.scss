@@ -1,12 +1,10 @@
 @import '../../shared/sass/vars';
 
-.wrapper {
-  min-width: 100vw;
-  min-height: 100vh;
+:host {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: $gray-darkest;
+  min-height: 100vh;
 }
 
 form.minimal {
@@ -24,6 +22,8 @@ form.minimal {
   }
 
   .btn-container {
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }

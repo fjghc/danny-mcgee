@@ -5,6 +5,8 @@
   padding: 10px 30px;
   font-weight: 400;
   text-transform: uppercase;
+  cursor: pointer;
+  outline: none !important;
 }
 
 .btn-container > .btn {
@@ -27,16 +29,10 @@
       content: ' ';
       display: block;
       width: 0;
-      position: absolute;
-      top: 0;
-      right: 50%;
-      bottom: 0;
-      left: 50%;
+      @include absolute(0, 50%, 0, 50%);
       z-index: -1;
       background-color: $value;
-      transition: width 0.15s ease-in,
-                  right 0.15s ease-in,
-                  left 0.15s ease-in;
+      @include transition(0.15s, ease-in, width, right, left);
     }
 
     &:hover, &:focus {
@@ -49,11 +45,8 @@
 
       &::before {
         width: 100%;
-        right: 0;
-        left: 0;
-        transition: width 0.15s ease-out,
-                    right 0.15s ease-out,
-                    left 0.15s ease-out;
+        @include position(null, 0, null, 0);
+        @include transition(0.15s, ease-out, width, right, left);
       }
     }
 

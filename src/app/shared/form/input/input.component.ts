@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit,  } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
 @Component({
@@ -16,8 +16,8 @@ export class InputComponent implements OnInit, AfterViewInit {
   @Input() form: FormGroup;
   control: FormControl;
 
-  @HostBinding('class.focus') isFocused = false;
   @HostBinding('class.filled') isFilled = false;
+  @HostBinding('class.focus') isFocused = false;
 
   constructor(private element: ElementRef) {}
 

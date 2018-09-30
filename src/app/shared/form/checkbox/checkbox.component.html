@@ -1,0 +1,12 @@
+<ng-container [formGroup]="form">
+  <input
+    (change)="onChanged()"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    [id]="id"
+    type="checkbox"
+    [formControlName]="id"
+  />
+  <i class="ui-checkbox"></i>
+  <label>{{ label }}</label>
+</ng-container>

@@ -1,0 +1,8 @@
+@import 'shared/sass/vars';
+
+:host {
+  display: block;
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: $gray-darkest;
+}

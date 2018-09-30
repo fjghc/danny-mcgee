@@ -37,10 +37,7 @@ form.minimal {
       font-size: 16px;
       line-height: 50px;
       pointer-events: none;
-      transition: top 0.15s linear,
-                  color 0.15s linear,
-                  font-size 0.15s linear,
-                  line-height 0.15s linear;
+      @include transition(0.15s, linear, top, color, font-size, line-height);
     }
 
     &.focus label, &.filled label {
@@ -48,10 +45,6 @@ form.minimal {
       color: $gray-light;
       font-size: 13px;
       line-height: 13px;
-      transition: top 0.15s linear,
-                  color 0.15s linear,
-                  font-size 0.15s linear,
-                  line-height 0.15s linear
     }
   }
 
@@ -76,8 +69,7 @@ form.minimal {
       left: 50%;
       height: 2px;
       background-color: $blue-bold;
-      transition: right 0.2s ease-in,
-                  left 0.2s ease-in;
+      @include transition(0.2s, ease-in, right, left);
     }
 
     &:focus {
@@ -88,8 +80,91 @@ form.minimal {
       & + .underline {
         right: 0;
         left: 0;
-        transition: right 0.2s ease-out,
-                    left 0.2s ease-out;
+        @include transition(0.2s, ease-out, right, left);
+      }
+    }
+  }
+
+  .checkbox {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+
+    input {
+      display: block;
+      width: 100%;
+      height: 100%;
+      @include absolute-fill;
+      cursor: pointer;
+      opacity: 0;
+    }
+
+    .ui-checkbox {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      position: relative;
+      background-color: $gray-darker;
+      border: 2px solid $gray-lighter;
+      margin-right: 12px;
+
+      // focus ring
+      &::before {
+        content: ' ';
+        display: block;
+        box-sizing: initial;
+        width: 24px;
+        height: 24px;
+        z-index: -1;
+        border: 0 solid transparent;
+        border-radius: 16px;
+        @include absolute-center;
+        transition: border 0.1s linear;
+      }
+
+      // checked state
+      &::after {
+        content: ' ';
+        display: block;
+        width: 0;
+        height: 0;
+        @include absolute(50%, 50%, 50%, 50%);
+        @include transition(0.05s, linear, width, height, top, right, bottom, left);
+        background: $primary;
+      }
+    }
+
+    label {
+      position: relative;
+      bottom: -1px;
+      margin: 0;
+      color: $gray-light;
+      pointer-events: none;
+      transition: color 0.1s linear;
+    }
+
+    &.checked {
+
+      .ui-checkbox {
+        // checked state
+        &::after {
+          width: 14px;
+          height: 14px;
+          @include position(3px, 3px, 3px, 3px);
+        }
+      }
+
+      label {
+        color: $gray-lighter;
+      }
+    }
+
+    &.focus {
+      // focus ring
+      .ui-checkbox::before {
+        border: 5px solid transparentize($primary, 0.5);
+        transition: border 0.1s linear;
       }
     }
   }

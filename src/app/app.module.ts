@@ -15,6 +15,8 @@ import { InputComponent } from './shared/form/input/input.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { HomeComponent } from './home/home.component';
+import { CheckboxComponent } from './shared/form/checkbox/checkbox.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import { HomeComponent } from './home/home.component';
     InputComponent,
     ProjectsComponent,
     DropdownDirective,
-    HomeComponent
+    HomeComponent,
+    CheckboxComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

@@ -67,4 +67,40 @@ $contrast-color: (
   font-weight: $weight;
 }
 
+@mixin position($top: null, $right: null, $bottom: null, $left: null) {
+  @if ($top != null) {
+    top: $top;
+  }
+  @if ($right != null) {
+    right: $right;
+  }
+  @if ($bottom != null) {
+    bottom: $bottom;
+  }
+  @if ($left != null) {
+    left: $left;
+  }
+}
+
+@mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
+  position: absolute;
+  @include position($top, $right, $bottom, $left);
+}
+
+@mixin absolute-fill {
+  @include absolute(0, 0, 0, 0);
+}
+
+@mixin absolute-center {
+  @include absolute(50%, null, null, 50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+@mixin transition($delay, $timing, $properties...) {
+  $transition-list: ();
+  @each $property in $properties {
+    $transition-list: append($transition-list, $property $delay $timing, comma);
+  }
+  transition: $transition-list;
+}
 

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, NgForm, NgModel, ValidatorFn } from '@angular/f
 
 @Component({
   selector: 'dm-input',
+  host: { class: 'form-group' },
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss']
 })

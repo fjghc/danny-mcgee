@@ -24,6 +24,30 @@ $purple: #a787f8;
 
 
 
+// Bootstrap overwrites
+
+$primary: $blue-bold;
+$secondary: $gray-light;
+$success: $green;
+$info: $blue-light;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-lightest;
+$dark: $gray-darker;
+
+$theme-colors: (
+  "primary": $blue-bold,
+  "secondary": $gray-light,
+  "success": $green,
+  "info": $blue-light,
+  "warning": $yellow,
+  "danger": $red,
+  "light": $gray-lightest,
+  "dark": $gray-darker
+);
+
+
+
 // mixins
 
 @mixin gotham($weight) {

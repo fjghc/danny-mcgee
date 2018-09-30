@@ -1,24 +1,38 @@
-<form
-  (ngSubmit)="onSubmit()"
-  [formGroup]="form"
->
-  <dm-input
-    label="Email Address"
-    id="email"
-    type="email"
-    [validators]="emailValidators"
-    [form]="form"
-  ></dm-input>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+      <form
+        (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+      >
+        <dm-input
+          label="Email Address"
+          id="email"
+          type="email"
+          [validators]="emailValidators"
+          [form]="form"
+        ></dm-input>
 
-  <dm-input
-    label="Password"
-    id="password"
-    type="password"
-    [validators]="passwordValidators"
-    [form]="form"
-  ></dm-input>
+        <dm-input
+          label="Password"
+          id="password"
+          type="password"
+          [validators]="passwordValidators"
+          [form]="form"
+        ></dm-input>
 
-  <button type="submit">Login</button>
-  <button (click)="onLogout()" type="button">Logout</button>
-</form>
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >Login</button>
+        <button
+          class="btn btn-default"
+          (click)="onLogout()"
+          type="button"
+        >Logout</button>
+      </form>
+    </div>
+  </div>
+</div>
+
 

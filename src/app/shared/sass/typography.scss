@@ -1,4 +1,6 @@
-@import 'vars';
+* {
+  font-family: inherit;
+}
 
 body {
   @include gotham(400);

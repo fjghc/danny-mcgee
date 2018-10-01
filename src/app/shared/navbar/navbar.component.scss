@@ -1,0 +1,171 @@
+@import '../sass/vars';
+
+$menu-width: 64px;
+$menu-expanded-width: 300px;
+
+:host {
+  display: block;
+  position: relative;
+  z-index: 1000;
+}
+
+dm-logo {
+  @include absolute(16px, null, null, 100px);
+  z-index: 2;
+}
+
+.side-panel {
+  display: block;
+  width: $menu-width;
+  height: 100vh;
+  overflow-x: hidden;
+  background-color: $gray-darker;
+  transition: width 0.15s ease-in;
+
+  :host.expanded &, :host.hover & {
+    width: $menu-expanded-width;
+  }
+
+  // persistent side strip
+  &::before {
+    content: ' ';
+    display: block;
+    width: $menu-width;
+    @include absolute(0, null, 0, null);
+    background-color: $gray-darker;
+    transition: background-color 0.15s linear;
+
+    :host.expanded &, :host.hover & {
+      background-color: $gray-dark;
+    }
+  }
+}
+
+.menu-item, .menu-lock {
+  background-color: transparent;
+  color: $gray-light;
+  @include transition(0.1s, linear, background-color, color);
+
+  fa-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $menu-width;
+    height: $menu-width;
+    position: relative;
+    background-color: transparent;
+    color: $gray-lighter;
+    font-size: 24px;
+    box-shadow: inset 0 0 0 0 transparent;
+    @include transition(0.1s, linear, background-color, color, box-shadow);
+
+    :host.expanded &, :host.hover & {
+      color: $gray-lightest;
+    }
+  }
+
+  &:hover {
+    fa-icon {
+      background-color: $primary;
+      color: #fff !important;
+    }
+  }
+
+  &:focus {
+    fa-icon {
+      box-shadow: inset 0 0 0 4px transparentize($primary, 0.5);
+    }
+  }
+}
+
+.menu-lock {
+  display: block;
+  position: relative;
+  z-index: 1100;
+
+  fa-icon::ng-deep {
+    svg {
+      transform: rotate(0deg);
+      transition: transform 0.1s ease-in;
+    }
+  }
+
+  :host.expanded & {
+    background-color: $gray-darkest;
+    color: #fff;
+
+    fa-icon::ng-deep {
+      background-color: $gray-darkest;
+      color: #fff;
+
+      svg {
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}
+
+.menu-lock-section {
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+  transition: background-color 0.1s linear;
+
+  :host.expanded & {
+    background-color: $gray-darkest;
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+
+  :host.expanded &, :host.hover & {
+    color: $gray-lighter;
+  }
+
+  fa-icon {
+    :host.expanded &, :host.hover & {
+      color: $gray-lightest;
+    }
+  }
+
+  span {
+    flex-shrink: 0;
+    display: inline-block;
+    padding: 0 36px 0 15px;
+  }
+
+  &:hover {
+    background-color: darken($primary, 10%);
+    color: #fff !important;
+    text-decoration: none;
+
+    fa-icon {
+      color: #fff;
+    }
+  }
+
+  &.current {
+    background-color: $gray-darkest !important;
+    color: #fff !important;
+    cursor: default;
+
+    fa-icon {
+      background-color: $gray-darkest !important;
+      color: #fff !important;
+    }
+  }
+}
+
+hr {
+  position: relative;
+  z-index: 1200;
+  border-top: 2px solid $gray-darkest;
+  margin: 0;
+}
+
+.menu-section {
+  padding: 15px 0;
+}

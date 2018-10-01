@@ -3,9 +3,14 @@ body {
   color: map-get($theme-colors, "light");
 }
 
-::-moz-selection {
-  background: $primary;
+::-moz-selection  { background: $primary }
+::selection       { background: $primary }
+
+a {
+  outline: none !important;
+  cursor: pointer;
 }
-::selection {
-  background: $primary;
+
+.aria-only {
+  display: none !important;
 }

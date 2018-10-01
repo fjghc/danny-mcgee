@@ -1,3 +1,94 @@
-<p>
-  navbar works!
-</p>
+<dm-logo></dm-logo>
+
+<nav class="menu-section menu-lock-section">
+  <a
+    (click)="onExpandMenu()"
+    class="menu-lock"
+    tabindex="1"
+  >
+    <fa-icon [icon]="icons.menu"></fa-icon>
+    <span class="aria-only">Lock Menu</span>
+  </a>
+</nav>
+
+<hr />
+
+<div
+  (mouseenter)="onHover()"
+  (mouseleave)="onBlur()"
+  class="side-panel"
+>
+  <nav class="menu-section">
+    <a
+      class="menu-item"
+      tabindex="2"
+    >
+      <fa-icon [icon]="icons.about"></fa-icon>
+      <span>About</span>
+    </a>
+    <a
+      class="menu-item"
+      tabindex="3"
+    >
+      <fa-icon [icon]="icons.resume"></fa-icon>
+      <span>Resume</span>
+    </a>
+    <a
+      class="menu-item"
+      tabindex="4"
+    >
+      <fa-icon [icon]="icons.skills"></fa-icon>
+      <span>Skills</span>
+    </a>
+    <a
+      class="menu-item"
+      tabindex="5"
+    >
+      <fa-icon [icon]="icons.portfolio"></fa-icon>
+      <span>Projects</span>
+    </a>
+    <a
+      class="menu-item"
+      tabindex="6"
+    >
+      <fa-icon [icon]="icons.contact"></fa-icon>
+      <span>Contact</span>
+    </a>
+  </nav>
+
+  <hr />
+
+  <nav class="menu-section">
+    <a
+      class="menu-item"
+      tabindex="7"
+    >
+      <fa-icon [icon]="icons.code"></fa-icon>
+      <span>View Source</span>
+    </a>
+    <a
+      class="menu-item"
+      href="//github.com/dannymcgee"
+      target="_blank"
+      tabindex="8"
+    >
+      <fa-icon [icon]="icons.github"></fa-icon>
+      <span>GitHub</span>
+    </a>
+  </nav>
+
+  <hr />
+
+  <nav class="menu-section">
+    <a
+      class="menu-item"
+      routerLink="/login"
+      routerLinkActive="current"
+      tabindex="9"
+    >
+      <fa-icon [icon]="icons.lock"></fa-icon>
+      <span>Login</span>
+    </a>
+  </nav>
+
+</div>

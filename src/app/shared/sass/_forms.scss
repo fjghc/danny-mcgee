@@ -144,6 +144,20 @@ form.minimal {
       transition: color 0.1s linear;
     }
 
+    &.focus {
+      // focus ring
+      .ui-checkbox::before {
+        border: 5px solid transparentize($primary, 0.5);
+        transition: border 0.1s linear;
+      }
+    }
+
+    &:hover {
+      label {
+        color: $gray-lighter;
+      }
+    }
+
     &.checked {
 
       .ui-checkbox {
@@ -156,15 +170,7 @@ form.minimal {
       }
 
       label {
-        color: $gray-lighter;
-      }
-    }
-
-    &.focus {
-      // focus ring
-      .ui-checkbox::before {
-        border: 5px solid transparentize($primary, 0.5);
-        transition: border 0.1s linear;
+        color: $gray-lightest;
       }
     }
   }

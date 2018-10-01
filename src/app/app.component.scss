@@ -2,7 +2,13 @@
 
 :host {
   display: block;
-  min-width: 100vw;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+  @include fixed(0, 0, 0, 0);
   background-color: $gray-darkest;
+}
+
+.scroll {
+  max-height: 100vh;
+  overflow-y: auto;
 }

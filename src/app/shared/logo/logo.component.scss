@@ -1,0 +1,41 @@
+@import '../sass/vars';
+
+:host {
+  display: block;
+  width: 107px;
+  height: 64px;
+  margin: 0 20px;
+}
+
+a {
+  display: block;
+}
+
+.logo {
+  width: 100%;
+  filter: drop-shadow(0 0 10px $gray-darkest);
+
+  .text, .braces {
+    transition: fill 0.15s linear;
+  }
+
+  .text {
+    fill: $gray-lighter;
+
+    a:hover &,
+    a:focus &,
+    a.active & {
+      fill: #fff;
+    }
+  }
+
+  .braces {
+    fill: $gray-mid;
+
+    a:hover &,
+    a:focus &,
+    a.active & {
+      fill: $turquoise;
+    }
+  }
+}

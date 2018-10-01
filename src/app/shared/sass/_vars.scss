@@ -87,6 +87,11 @@ $contrast-color: (
   @include position($top, $right, $bottom, $left);
 }
 
+@mixin fixed($top: null, $right: null, $bottom: null, $left: null) {
+  position: fixed;
+  @include position($top, $right, $bottom, $left);
+}
+
 @mixin absolute-fill {
   @include absolute(0, 0, 0, 0);
 }

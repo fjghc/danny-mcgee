@@ -17,6 +17,7 @@ import { DropdownDirective } from './shared/dropdown.directive';
 import { HomeComponent } from './home/home.component';
 import { CheckboxComponent } from './shared/form/checkbox/checkbox.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
+import { LogoComponent } from './shared/logo/logo.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
     DropdownDirective,
     HomeComponent,
     CheckboxComponent,
-    NavbarComponent
+    NavbarComponent,
+    LogoComponent
   ],
   imports: [
     BrowserModule,

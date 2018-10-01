@@ -24,6 +24,7 @@
     background-color: transparent;
     color: $gray-lightest;
     border: 2px solid $gray-lighter;
+    @include transition(0.12s, linear, background-color, color, border);
 
     &::before {
       content: ' ';
@@ -32,7 +33,7 @@
       @include absolute(0, 50%, 0, 50%);
       z-index: -1;
       background-color: $value;
-      @include transition(0.15s, ease-in, width, right, left);
+      @include transition(0.12s, ease-in, width, right, left);
     }
 
     &:hover, &:focus {
@@ -41,12 +42,19 @@
       color: map-get($contrast-color, $key);
       @if (map-get($contrast-color, $key) != #fff) {
         font-weight: 500;
+        // compensate for difference in text size between weights
+        @supports (-webkit-appearance: none) {
+          letter-spacing: -0.001527em; // chrome
+        }
+        @supports (-moz-appearance: meterbar) {
+          letter-spacing: -0.0016em; // firefox
+        }
       }
 
       &::before {
         width: 100%;
         @include position(null, 0, null, 0);
-        @include transition(0.15s, ease-out, width, right, left);
+        @include transition(0.12s, ease-out, width, right, left);
       }
     }
 

@@ -147,6 +147,22 @@ dm-logo {
     }
   }
 
+  &.login:hover {
+    background-color: darken($success, 15%);
+
+    fa-icon {
+      background-color: darken($success, 7%);
+    }
+  }
+
+  &.logout:hover {
+    background-color: desaturate(darken($danger, 10%), 20%);
+
+    fa-icon {
+      background-color: $danger;
+    }
+  }
+
   &.current {
     background-color: $gray-darkest !important;
     color: #fff !important;

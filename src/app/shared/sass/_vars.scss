@@ -28,9 +28,9 @@ $purple: #a787f8;
 // Bootstrap overwrites
 
 $primary: $blue-bold;
-$secondary: $gray-light;
+$secondary: $gray-lightest;
 $success: $green;
-$info: $blue-light;
+$info: $purple;
 $warning: $yellow;
 $danger: $red;
 $light: $gray-lightest;
@@ -51,7 +51,7 @@ $contrast-color: (
   "primary": #fff,
   "secondary": $gray-darkest,
   "success": $gray-darkest,
-  "info": $gray-darkest,
+  "info": #fff,
   "warning": $gray-darkest,
   "danger": #fff,
   "light": $gray-darkest,

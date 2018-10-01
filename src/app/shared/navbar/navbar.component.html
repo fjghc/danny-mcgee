@@ -1,13 +1,16 @@
 <dm-logo></dm-logo>
 
-<nav class="menu-section menu-lock-section">
+<nav
+  class="menu-section menu-lock-section"
+  aria-hidden="true"
+>
   <a
-    (click)="onExpandMenu()"
+    (click)="onLockMenu()"
+    (keydown)="onKeyDownMenuLock($event)"
     class="menu-lock"
     tabindex="1"
   >
     <fa-icon [icon]="icons.menu"></fa-icon>
-    <span class="aria-only">Lock Menu</span>
   </a>
 </nav>
 
@@ -17,11 +20,17 @@
   (mouseenter)="onHover()"
   (mouseleave)="onBlur()"
   class="side-panel"
+  role="navigation"
 >
-  <nav class="menu-section">
+  <nav
+    class="menu-section"
+    role="menu"
+    aria-label="Site Navigation"
+  >
     <a
       class="menu-item"
       tabindex="2"
+      role="menuitem"
     >
       <fa-icon [icon]="icons.about"></fa-icon>
       <span>About</span>
@@ -29,6 +38,7 @@
     <a
       class="menu-item"
       tabindex="3"
+      role="menuitem"
     >
       <fa-icon [icon]="icons.resume"></fa-icon>
       <span>Resume</span>
@@ -36,6 +46,7 @@
     <a
       class="menu-item"
       tabindex="4"
+      role="menuitem"
     >
       <fa-icon [icon]="icons.skills"></fa-icon>
       <span>Skills</span>
@@ -43,6 +54,7 @@
     <a
       class="menu-item"
       tabindex="5"
+      role="menuitem"
     >
       <fa-icon [icon]="icons.portfolio"></fa-icon>
       <span>Projects</span>
@@ -50,6 +62,7 @@
     <a
       class="menu-item"
       tabindex="6"
+      role="menuitem"
     >
       <fa-icon [icon]="icons.contact"></fa-icon>
       <span>Contact</span>
@@ -58,10 +71,15 @@
 
   <hr />
 
-  <nav class="menu-section">
+  <nav
+    class="menu-section"
+    role="menu"
+    aria-label="Features"
+  >
     <a
       class="menu-item"
       tabindex="7"
+      role="menuitem"
     >
       <fa-icon [icon]="icons.code"></fa-icon>
       <span>View Source</span>
@@ -71,6 +89,7 @@
       href="//github.com/dannymcgee"
       target="_blank"
       tabindex="8"
+      role="link"
     >
       <fa-icon [icon]="icons.github"></fa-icon>
       <span>GitHub</span>
@@ -79,15 +98,31 @@
 
   <hr />
 
-  <nav class="menu-section">
+  <nav
+    class="menu-section"
+    role="menu"
+    aria-label="Admin Menu"
+  >
     <a
-      class="menu-item"
+      *ngIf="!authService.isAuthenticated()"
+      class="menu-item login"
       routerLink="/login"
       routerLinkActive="current"
       tabindex="9"
+      role="menuitem"
     >
-      <fa-icon [icon]="icons.lock"></fa-icon>
+      <fa-icon [icon]="icons.login"></fa-icon>
       <span>Login</span>
+    </a>
+    <a
+      *ngIf="authService.isAuthenticated()"
+      (click)="onLogout()"
+      class="menu-item logout"
+      tabindex="9"
+      role="menuitem"
+    >
+      <fa-icon [icon]="icons.logout"></fa-icon>
+      <span>Log Out</span>
     </a>
   </nav>
 

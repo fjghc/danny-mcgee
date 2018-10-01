@@ -7,9 +7,10 @@ import {
   faBriefcase,
   faCode,
   faLockAlt,
-  faBars, faEnvelope
+  faBars, faEnvelope, faSignOut
 } from '@fortawesome/pro-light-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'dm-navbar',
@@ -27,18 +28,25 @@ export class NavbarComponent implements OnInit {
     contact: faEnvelope,
     github: faGithub,
     code: faCode,
-    lock: faLockAlt
+    login: faLockAlt,
+    logout: faSignOut
   };
 
-  @HostBinding('class.expanded') isExpanded = false;
+  @HostBinding('class.expanded') isLocked = false;
   @HostBinding('class.hover') isHovered = false;
 
-  constructor() {}
+  constructor(public authService: AuthService) {}
 
   ngOnInit() {}
 
-  onExpandMenu() {
-    this.isExpanded = !this.isExpanded;
+  onLockMenu() {
+    this.isLocked = !this.isLocked;
+  }
+
+  onKeyDownMenuLock($event) {
+    if ($event.key === 'Enter' || $event.key === ' ') {
+      this.onLockMenu();
+    }
   }
 
   onHover() {
@@ -47,5 +55,9 @@ export class NavbarComponent implements OnInit {
 
   onBlur() {
     this.isHovered = false;
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 }

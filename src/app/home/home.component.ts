@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'dm-home',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
+
+  onGetToken = () => console.log(this.authService.getToken());
 
 }

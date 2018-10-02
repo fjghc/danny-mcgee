@@ -20,6 +20,7 @@ import { CheckboxComponent } from './shared/form/checkbox/checkbox.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { LogoComponent } from './shared/logo/logo.component';
 import { ProjectItemComponent } from './projects/project-item/project-item.component';
+import { HeaderComponent } from './shared/header/header.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { ProjectItemComponent } from './projects/project-item/project-item.compo
     CheckboxComponent,
     NavbarComponent,
     LogoComponent,
-    ProjectItemComponent
+    ProjectItemComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

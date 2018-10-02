@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
@@ -18,6 +19,7 @@ import { HomeComponent } from './home/home.component';
 import { CheckboxComponent } from './shared/form/checkbox/checkbox.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { LogoComponent } from './shared/logo/logo.component';
+import { ProjectItemComponent } from './projects/project-item/project-item.component';
 
 
 @NgModule({
@@ -31,12 +33,14 @@ import { LogoComponent } from './shared/logo/logo.component';
     HomeComponent,
     CheckboxComponent,
     NavbarComponent,
-    LogoComponent
+    LogoComponent,
+    ProjectItemComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     FontAwesomeModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),

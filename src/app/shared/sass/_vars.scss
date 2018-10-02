@@ -60,6 +60,19 @@ $contrast-color: (
 
 
 
+// sizes
+
+$top-buffer: 94px;
+$menu-width: 64px;
+$menu-expanded-width: 300px;
+$logo-offset: 120px;
+
+$main-container-padding: $logo-offset - $menu-width;
+
+$grid-gutter-width: $main-container-padding / 2;
+
+
+
 // mixins
 
 @mixin gotham($weight) {

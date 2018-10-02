@@ -1,9 +1,9 @@
-import { File } from './file.model';
-
 export class Project {
   constructor(
     public name: string,
+    public year: string,
     public url: string,
-    public source: File[]
+    public filesRef: string,
+    public imageFormat: string,
   ) {}
 }

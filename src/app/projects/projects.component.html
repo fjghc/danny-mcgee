@@ -1,3 +1,8 @@
-<p>
-  projects works!
-</p>
+<div class="row">
+  <div
+    *ngFor="let project of projects | async"
+    class="col-xl-4 col-lg-6"
+  >
+    <dm-project-item [project]="project"></dm-project-item>
+  </div>
+</div>

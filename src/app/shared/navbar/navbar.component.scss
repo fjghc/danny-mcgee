@@ -1,7 +1,6 @@
 @import '../sass/vars';
 
-$menu-width: 64px;
-$menu-expanded-width: 300px;
+
 
 :host {
   display: block;
@@ -10,7 +9,7 @@ $menu-expanded-width: 300px;
 }
 
 dm-logo {
-  @include absolute(16px, null, null, 100px);
+  @include absolute(16px, null, null, $logo-offset);
   z-index: 2;
 }
 
@@ -106,8 +105,13 @@ dm-logo {
   }
 }
 
-.menu-lock-section {
+.menu-section {
   position: relative;
+  z-index: 3;
+  padding: 15px 0;
+}
+
+.menu-lock-section {
   z-index: 1;
   background-color: transparent;
   transition: background-color 0.1s linear;
@@ -180,8 +184,4 @@ hr {
   z-index: 1200;
   border-top: 2px solid $gray-darkest;
   margin: 0;
-}
-
-.menu-section {
-  padding: 15px 0;
 }

@@ -1,12 +1,19 @@
 .btn {
   position: relative;
   z-index: 1;
+  border: 2px solid transparent;
   border-radius: 0;
   padding: 10px 30px;
   font-weight: 400;
   text-transform: uppercase;
   cursor: pointer;
   outline: none !important;
+}
+
+.btn-sm {
+  border-width: 1px;
+  padding: 8px 24px;
+  font-size: 14px;
 }
 
 .btn-container > .btn {
@@ -23,8 +30,8 @@
   .btn-#{$key} {
     background-color: transparent;
     color: $gray-lightest;
-    border: 2px solid $gray-lighter;
-    @include transition(0.12s, linear, background-color, color, border);
+    border-color: $gray-lighter;
+    @include transition(0.12s, linear, background-color, color, border-color);
 
     &::before {
       content: ' ';

@@ -13,17 +13,17 @@ a {
   height: 100%;
 
   // drop shadow
-  &::before {
-    content: ' ';
-    display: block;
-    // actual size: 247 x 172
-    width: 247px;
-    height: 130px;
-    @include absolute-center;
-    background: url('../../../assets/logo-shadow.png') no-repeat center center;
-    background-size: contain;
-    pointer-events: none;
-  }
+  //&::before {
+  //  content: ' ';
+  //  display: block;
+  //  // actual size: 247 x 172
+  //  width: 247px;
+  //  height: 130px;
+  //  @include absolute-center;
+  //  background: url('../../../assets/logo-shadow.png') no-repeat center center;
+  //  background-size: contain;
+  //  pointer-events: none;
+  //}
 }
 
 .logo {

@@ -1,0 +1,39 @@
+@import '../sass/vars';
+
+:host {
+  display: flex;
+  align-items: center;
+  height: $header-size;
+  padding: 0 $main-container-padding;
+  @include fixed(0, 17px, null, $menu-width);
+  z-index: 1100;
+  background-color: transparentize($gray-darkest, 0.1);
+}
+
+.header-separator {
+  display: inline-block;
+  margin: 0 12px 0 18px;
+  position: relative;
+  top: -3px;
+  color: $gray-light;
+  font-size: 30px;
+  font-weight: 200;
+  letter-spacing: .1em;
+}
+
+.page-title {
+  color: $gray-lighter;
+  font-size: 30px;
+  font-weight: 200;
+  margin-bottom: 0;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+
+  .btn {
+    margin-bottom: 0;
+  }
+}

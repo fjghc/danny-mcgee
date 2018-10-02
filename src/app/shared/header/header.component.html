@@ -1,3 +1,16 @@
-<p>
-  header works!
-</p>
+<dm-logo></dm-logo>
+<span class="header-separator">::</span>
+<h1 class="page-title">{{ pageTitle }}</h1>
+
+<div class="btn-container">
+  <ng-container *ngIf="authService.isAuthenticated() && pageTitle === 'Projects'">
+    <button
+      routerLink="/projects/new"
+      class="btn btn-success btn-sm"
+    >New</button>
+    <button
+      routerLink="/projects/edit"
+      class="btn btn-secondary btn-sm"
+    >Edit</button>
+  </ng-container>
+</div>

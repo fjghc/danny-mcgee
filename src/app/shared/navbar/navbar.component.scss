@@ -8,10 +8,10 @@
   z-index: 1000;
 }
 
-dm-logo {
-  @include absolute(16px, null, null, $logo-offset);
-  z-index: 2;
-}
+//dm-logo {
+//  @include absolute(16px, null, null, $logo-offset);
+//  z-index: 2;
+//}
 
 .side-panel {
   display: block;

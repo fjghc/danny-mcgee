@@ -1,0 +1,23 @@
+@import 'vars';
+
+::-webkit-scrollbar {
+  width: 17px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $gray-dark;
+
+  &:hover {
+    background-color: $gray;
+  }
+}
+
+::-webkit-scrollbar-button:start:decrement {
+  height: 28px;
+  background: url('../../../assets/scroll-arrow-up-2.png') center center no-repeat;
+}
+
+::-webkit-scrollbar-button:end:increment {
+  height: 28px;
+  background: url('../../../assets/scroll-arrow-down-2.png') center center no-repeat;
+}

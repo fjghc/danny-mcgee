@@ -8,8 +8,9 @@
   background-color: $gray-darkest;
 }
 
-.scroll {
+.main {
   max-height: 100vh;
   overflow-y: auto;
-  padding: ($top-buffer + 2) $main-container-padding 120px;
+  padding: ($header-size + 2) $main-container-padding 72px;
+  position: relative;
 }

@@ -26,7 +26,6 @@ export class HeaderComponent implements OnInit {
     this.router.events.subscribe(
       event => {
         if (event instanceof RoutesRecognized) {
-          console.log(event.url.toString());
           this.pageTitle = this.urlTitleLookup[event.url.toString()];
         }
       }

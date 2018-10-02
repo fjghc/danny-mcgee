@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-// import { ProjectsService } from './projects.service';
 import { Observable } from 'rxjs';
-import { Project } from './project.model';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { DatabaseService } from '../shared/database.service';
 
 @Component({
   selector: 'dm-projects',
@@ -12,11 +10,14 @@ import { AngularFireDatabase } from '@angular/fire/database';
 export class ProjectsComponent implements OnInit {
 
   projects: Observable<any[]>;
+  viewingSingle = false;
 
-  constructor(private db: AngularFireDatabase) {
-    this.projects = db.list('projects').valueChanges();
+  constructor(private dbService: DatabaseService) {
+
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.projects = this.dbService.fetchData('projects');
+  }
 
 }

@@ -25,16 +25,31 @@ iframe {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+
+  &::after {
+    content: ' ';
+    display: block;
+    width: 0;
+    height: 2px;
+    @include absolute(null, 50%, 0, 50%);
+    background-color: $primary;
+    @include transition(0.15s, ease-in, width, right, left);
+  }
+
+  &:hover::after {
+    width: 100%;
+    @include position(null, 0, 0, 0);
+  }
 }
 
 .project-info {
   display: flex;
   align-items: center;
-  padding: 10px 15px;
-  @include absolute(null, 0, -40px, 0);
+  padding: 12px 14px 14px;
+  @include absolute(null, 0, -45px, 0);
   // background-color: transparentize($gray-darker, 0.1);
   background-color: $gray-dark;
-  transition: bottom 0.1s ease-out;
+  transition: bottom 0.12s ease-out;
 
   .project-year {
     margin-right: 10px;

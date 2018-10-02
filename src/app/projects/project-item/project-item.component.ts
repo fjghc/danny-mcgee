@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'dm-project-item',
@@ -11,6 +11,7 @@ export class ProjectItemComponent implements OnInit {
   @Input() project;
   scaleFactor: number;
   timeout: number;
+  bypassedUrl: SafeResourceUrl;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -18,7 +19,9 @@ export class ProjectItemComponent implements OnInit {
     private cd: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.bypassedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.url);
+  }
 
   // ngAfterViewInit() {
   //   this.calculateScale();

@@ -18,8 +18,6 @@ export class AuthService {
     if (!remember) {
       this.afAuth.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
         .then(response => {
-          console.log('response:', response);
-
           this.loginSetTokenAndRedirect(email, password);
         });
     } else {
@@ -47,14 +45,11 @@ export class AuthService {
       this.afAuth.auth.currentUser.getIdToken()
         .then(token => {
           this.token = token;
-          console.log('token:', token);
         })
         .catch(error => {
           this.token = null;
-          console.log('No token found!', error);
         });
     } else {
-      console.log('no current user!');
       this.token = null;
     }
   }

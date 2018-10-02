@@ -8,7 +8,7 @@ import { Project } from './project.model';
 @Injectable({ providedIn: 'root' })
 export class ProjectsService {
 
-  projects: Observable<any[]>;
+  // projects: Observable<any[]>;
   localProjects: Project[] = [];
 
   constructor(private db: AngularFireDatabase) {
@@ -16,7 +16,7 @@ export class ProjectsService {
   }
 
   fetchProjects() {
-    return this.db.list('projects.json').valueChanges();
+    return this.db.list('projects').valueChanges();
   }
 
 }

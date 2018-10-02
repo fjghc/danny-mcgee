@@ -21,6 +21,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { LogoComponent } from './shared/logo/logo.component';
 import { ProjectItemComponent } from './projects/project-item/project-item.component';
 import { HeaderComponent } from './shared/header/header.component';
+import { ProjectDetailComponent } from './projects/project-detail/project-detail.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { HeaderComponent } from './shared/header/header.component';
     NavbarComponent,
     LogoComponent,
     ProjectItemComponent,
-    HeaderComponent
+    HeaderComponent,
+    ProjectDetailComponent
   ],
   imports: [
     BrowserModule,

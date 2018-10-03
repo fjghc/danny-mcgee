@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DatabaseService } from '../shared/database.service';
+import { Project } from './project.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProjectsService } from './projects.service';
 
 @Component({
   selector: 'dm-projects',
@@ -12,12 +14,29 @@ export class ProjectsComponent implements OnInit {
   projects: Observable<any[]>;
   viewingSingle = false;
 
-  constructor(private dbService: DatabaseService) {
-
-  }
+  constructor(
+    private projectsService: ProjectsService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.projects = this.dbService.fetchData('projects');
+    this.projects = this.projectsService.fetchProjects();
+    this.projectsService.closeActiveProject.subscribe(
+      event => {
+        this.onDismissModal();
+      }
+    );
+  }
+
+  onViewProject(project: Project) {
+    this.viewingSingle = true;
+    this.router.navigate([project.filesRef], { relativeTo: this.route });
+  }
+
+  onDismissModal() {
+    this.viewingSingle = false;
+    this.router.navigate(['projects']);
   }
 
 }

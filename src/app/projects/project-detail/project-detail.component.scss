@@ -1,0 +1,121 @@
+@import '../../shared/sass/vars';
+
+.project-menu-bar {
+  display: flex;
+  align-items: center;
+  background-color: $gray;
+}
+
+// TODO: Merge common styles (project-item.component.scss)
+.project-info {
+  display: flex;
+  align-items: center;
+  margin: 0 30px 0 20px;
+
+  .project-year {
+    margin-right: 10px;
+    font-size: 14px;
+  }
+
+  .project-name {
+    margin: 0;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+}
+
+.project-nav {
+  display: flex;
+}
+
+.menu-item, .close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  background-color: transparent;
+  color: $gray-lighter;
+  font-size: 21px;
+  @include transition(0.1s, linear, background-color, color);
+}
+
+.menu-item {
+
+  &:hover {
+    background-color: $primary;
+    color: #fff;
+  }
+
+  &:focus {
+    box-shadow: inset 0 0 0 4px transparentize($primary, 0.5);
+  }
+
+  &.current, &.current:hover {
+    background-color: $gray-darker;
+    color: #fff;
+    cursor: default;
+  }
+}
+
+.close {
+  margin-left: auto;
+
+  &:hover {
+    background-color: $danger;
+    color: $gray-darkest;
+  }
+
+  &:focus {
+    box-shadow: inset 0 0 0 4px transparentize($danger, 0.5);
+  }
+}
+
+.project-window {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1366px;
+  height: 768px;
+  background-color: $gray-darker;
+
+  .project-content {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    @include transition(0.33s, ease-in, width, height);
+
+    &.tablet {
+      width: 1000px;
+      height: 700px;
+    }
+
+    &.mobile {
+      width: 400px;
+      height: 700px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  }
+
+  .loading {
+    @include absolute-center;
+
+    .icons {
+      font-size: 36px;
+      color: $gray-light;
+      animation: spin 0.5s infinite ease-in-out;
+
+      fa-icon + fa-icon {
+        @include absolute(0, null, null, 0);
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

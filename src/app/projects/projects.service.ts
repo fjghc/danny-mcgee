@@ -1,22 +1,38 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { AngularFireDatabase } from '@angular/fire/database';
 
+import { DatabaseService } from '../shared/database.service';
 import { Project } from './project.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectsService {
 
-  // projects: Observable<any[]>;
-  localProjects: Project[] = [];
+  @Output() closeActiveProject = new EventEmitter<string>();
+  projectsObservable: Observable<any[]>;
+  projects: Project[];
 
-  constructor(private db: AngularFireDatabase) {
-    // this.projects = this.db.list('projects').valueChanges();
-  }
+  constructor(private dbService: DatabaseService) {}
 
   fetchProjects() {
-    return this.db.list('projects').valueChanges();
+    this.projectsObservable = this.dbService.fetchData('projects');
+
+    this.projectsObservable.subscribe(
+      projects => {
+        this.projects = projects;
+      }
+    );
+
+    return this.projectsObservable;
   }
 
+  getProjectByRef(ref: string): Project {
+    for (const project of this.projects) {
+      if (project.filesRef === ref) {
+        return project;
+      }
+    }
+
+    console.log(`ERROR: No project found with ref ${ref}`);
+  }
 }

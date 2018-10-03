@@ -3,12 +3,13 @@
   <!--[src]="getUrl()"-->
   <!--[ngStyle]="{ transform: 'scale(' + scaleFactor + ')' }"-->
 <!--&gt;</iframe>-->
-<a
-  class="view-project"
+<div
+  class="project-image"
   [ngStyle]="{ backgroundImage: 'url(\'assets/projects/' + project.filesRef + '.' + project.imageFormat + '\')' }"
+  role="presentation"
 >
   <div class="project-info">
     <span class="project-year">{{ project.year }}</span>
     <h5 class="project-name">{{ project.name }}</h5>
   </div>
-</a>
+</div>

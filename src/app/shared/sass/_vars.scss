@@ -122,3 +122,15 @@ $grid-gutter-width: $main-container-padding / 2;
   transition: $transition-list;
 }
 
+
+
+// animations
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

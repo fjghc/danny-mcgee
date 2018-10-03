@@ -4,27 +4,8 @@
   display: block;
   width: 100%;
   position: relative;
-}
-
-iframe {
-  width: 1366px;
-  height: 768px;
-  @include absolute(0, null, null, 0);
-  transform-origin: top left;
-  border: 0;
-  pointer-events: none;
-}
-
-.view-project {
-  display: block;
-  width: 100%;
-  height: 0;
-  padding-top: 56.25%;
-  position: relative;
-  overflow: hidden;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+  cursor: pointer;
+  outline: none !important;
 
   &::after {
     content: ' ';
@@ -36,20 +17,42 @@ iframe {
     @include transition(0.15s, ease-in, width, right, left);
   }
 
-  &:hover::after {
+  &:hover::after, &:focus::after {
     width: 100%;
     @include position(null, 0, 0, 0);
   }
 }
 
+iframe {
+  width: 1366px;
+  height: 768px;
+  @include absolute(0, null, null, 0);
+  transform-origin: top left;
+  border: 0;
+  pointer-events: none;
+}
+
+.project-image {
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-top: 56.25%;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+// TODO: Merge common styles (project-detail.component.scss)
 .project-info {
   display: flex;
   align-items: center;
   padding: 12px 14px 14px;
-  @include absolute(null, 0, -45px, 0);
-  // background-color: transparentize($gray-darker, 0.1);
+  @include absolute(null, 0, 0, 0);
+  transform: translateY(100%);
   background-color: $gray-dark;
-  transition: bottom 0.12s ease-out;
+  transition: transform 0.12s ease-out;
 
   .project-year {
     margin-right: 10px;
@@ -64,7 +67,7 @@ iframe {
     text-transform: uppercase;
   }
 
-  .view-project:hover & {
-    bottom: 0;
+  :host:hover &, :host:focus & {
+    transform: translateY(0);
   }
 }

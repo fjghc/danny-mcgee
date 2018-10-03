@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
+import { Router, RoutesRecognized } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
@@ -18,26 +18,21 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.router.events.subscribe(
       event => {
         if (event instanceof RoutesRecognized) {
-          this.pageTitle = this.urlTitleLookup[event.url.toString()];
+          const url = event.url.toString();
+
+          if (this.urlTitleLookup[url]) {
+            this.pageTitle = this.urlTitleLookup[url];
+          }
         }
       }
     );
-  }
-
-  onNewProject() {
-    this.router.navigate(['/new'], { relativeTo: this.route });
-  }
-
-  onEditProjects() {
-
   }
 
 }

@@ -27,7 +27,7 @@
   >
     <a
       class="menu-item"
-      tabindex="2"
+      tabindex="1"
       role="menuitem"
     >
       <fa-icon [icon]="icons.about"></fa-icon>
@@ -35,7 +35,7 @@
     </a>
     <a
       class="menu-item"
-      tabindex="3"
+      tabindex="1"
       role="menuitem"
     >
       <fa-icon [icon]="icons.resume"></fa-icon>
@@ -43,7 +43,7 @@
     </a>
     <a
       class="menu-item"
-      tabindex="4"
+      tabindex="1"
       role="menuitem"
     >
       <fa-icon [icon]="icons.skills"></fa-icon>
@@ -53,7 +53,7 @@
       class="menu-item"
       routerLink="/projects"
       routerLinkActive="current"
-      tabindex="5"
+      tabindex="1"
       role="menuitem"
     >
       <fa-icon [icon]="icons.portfolio"></fa-icon>
@@ -61,7 +61,7 @@
     </a>
     <a
       class="menu-item"
-      tabindex="6"
+      tabindex="1"
       role="menuitem"
     >
       <fa-icon [icon]="icons.contact"></fa-icon>
@@ -78,7 +78,7 @@
   >
     <a
       class="menu-item"
-      tabindex="7"
+      tabindex="1"
       role="menuitem"
     >
       <fa-icon [icon]="icons.code"></fa-icon>
@@ -88,7 +88,7 @@
       class="menu-item"
       href="//github.com/dannymcgee"
       target="_blank"
-      tabindex="8"
+      tabindex="1"
       role="link"
     >
       <fa-icon [icon]="icons.github"></fa-icon>
@@ -108,7 +108,7 @@
       class="menu-item login"
       routerLink="/login"
       routerLinkActive="current"
-      tabindex="9"
+      tabindex="1"
       role="menuitem"
     >
       <fa-icon [icon]="icons.login"></fa-icon>
@@ -118,7 +118,7 @@
       *ngIf="authService.isAuthenticated()"
       (click)="onLogout()"
       class="menu-item logout"
-      tabindex="9"
+      tabindex="1"
       role="menuitem"
     >
       <fa-icon [icon]="icons.logout"></fa-icon>

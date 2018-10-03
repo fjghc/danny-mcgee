@@ -1,3 +1,67 @@
-<p>
-  project-detail works!
-</p>
+<div class="project-menu-bar">
+
+  <div class="project-info">
+    <span class="project-year">{{ project.year }}</span>
+    <h4 class="project-name">{{ project.name }}</h4>
+  </div>
+
+  <nav class="project-nav">
+    <a
+      (click)="onTab('desktop')"
+      class="menu-item"
+      [ngClass]="{ 'current' : activeTab === 'desktop' }"
+    >
+      <fa-icon [icon]="icons.desktop"></fa-icon>
+    </a>
+    <a
+      (click)="onTab('tablet')"
+      class="menu-item"
+      [ngClass]="{ 'current' : activeTab === 'tablet' }"
+    >
+      <fa-icon [icon]="icons.tablet"></fa-icon>
+    </a>
+    <a
+      (click)="onTab('mobile')"
+      class="menu-item"
+      [ngClass]="{ 'current' : activeTab === 'mobile' }"
+    >
+      <fa-icon [icon]="icons.mobile"></fa-icon>
+    </a>
+    <a
+      (click)="onTab('code')"
+      class="menu-item"
+      [ngClass]="{ 'current' : activeTab === 'code' }"
+    >
+      <fa-icon [icon]="icons.code"></fa-icon>
+    </a>
+  </nav>
+
+  <a (click)="onClose()" class="close">
+    <fa-icon [icon]="icons.close"></fa-icon>
+  </a>
+</div>
+
+<div
+  [ngSwitch]="true"
+  class="project-window"
+>
+  <div class="loading">
+    <div class="icons">
+      <fa-icon [icon]="icons.spinner"></fa-icon>
+      <fa-icon [icon]="icons.spinner"></fa-icon>
+    </div>
+  </div>
+  <div
+    *ngSwitchCase="activeTab === 'desktop' || activeTab === 'tablet' || activeTab === 'mobile'"
+    class="project-content"
+    [ngClass]="activeTab"
+  >
+    <iframe [src]="bypassedUrl" referrerpolicy="no-referrer"></iframe>
+  </div>
+  <div
+    *ngSwitchCase="activeTab === 'code'"
+    class="project-content"
+  >
+    <h2>Code View</h2>
+  </div>
+</div>

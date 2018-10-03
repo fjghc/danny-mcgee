@@ -1,0 +1,13 @@
+.modal {
+  @include fixed(0, 0, 0, 0);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-backdrop {
+    background-color: transparentize($gray-darkest, 0.1);
+    @include absolute(0, 0, 0, 0);
+    z-index: -1;
+  }
+}

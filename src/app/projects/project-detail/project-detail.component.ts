@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ProjectsService } from '../projects.service';
 import { Project } from '../project.model';
 import { ActivatedRoute } from '@angular/router';
@@ -23,6 +23,7 @@ export class ProjectDetailComponent implements OnInit {
     close: faTimes,
     spinner: faSpinnerThird
   };
+  @ViewChild('iframe') iframe: ElementRef;
 
   constructor(
     private projectsService: ProjectsService,
@@ -40,8 +41,10 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   onTab(tab: string) {
-    console.log('active tab is ' + tab);
     this.activeTab = tab;
+    if (this.project.needsRefresh && this.iframe !== undefined) {
+      this.iframe.nativeElement.src = this.project.url;
+    }
   }
 
   onClose() {

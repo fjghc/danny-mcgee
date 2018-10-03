@@ -1,14 +1,14 @@
-<div class="container">
-  <p>Home works!</p>
+<p>Home works!</p>
+<div class="btn-container">
   <button
-    (click)="onGetToken()"
+    (click)="onUpdateCode()"
     class="btn btn-info"
-  >Get Token</button>
-  <hr />
-  <button
-    (click)="onGetToken()"
-    class="btn btn-secondary"
-  >Get Token</button>
-  <hr />
-  <ngx-monaco-editor [options]="monacoOptions" [(ngModel)]="code"></ngx-monaco-editor>
+  >Update Code</button>
 </div>
+
+<hr />
+<ngx-monaco-editor
+  [options]="monacoOptions"
+  [ngModel]="code"
+  #editor="ngModel"
+></ngx-monaco-editor>

@@ -56,7 +56,7 @@
     class="project-content"
     [ngClass]="activeTab"
   >
-    <iframe [src]="bypassedUrl" referrerpolicy="no-referrer"></iframe>
+    <iframe [src]="bypassedUrl" #iframe></iframe>
   </div>
   <div
     *ngSwitchCase="activeTab === 'code'"

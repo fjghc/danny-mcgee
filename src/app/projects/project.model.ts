@@ -5,5 +5,6 @@ export class Project {
     public url: string,
     public filesRef: string,
     public imageFormat: string,
+    public needsRefresh?: boolean
   ) {}
 }

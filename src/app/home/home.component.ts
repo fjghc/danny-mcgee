@@ -8,6 +8,12 @@ import { AuthService } from '../auth/auth.service';
 })
 export class HomeComponent implements OnInit {
 
+  monacoOptions = {
+    theme: 'vs-dark',
+    language: 'typescript'
+  };
+  code = 'function x() {\nconsole.log("Hello world!");\n}';
+
   constructor(private authService: AuthService) {}
 
   ngOnInit() {}

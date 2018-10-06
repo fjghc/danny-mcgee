@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'dm-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   urlTitleLookup = {
     '/': 'Home',
@@ -15,6 +16,7 @@ export class HeaderComponent implements OnInit {
     '/login': 'Login'
   };
   pageTitle: string;
+  subscription: Subscription;
 
   constructor(
     public authService: AuthService,
@@ -22,7 +24,7 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.router.events.subscribe(
+    this.subscription = this.router.events.subscribe(
       event => {
         if (event instanceof RoutesRecognized) {
           const url = event.url.toString();
@@ -33,6 +35,10 @@ export class HeaderComponent implements OnInit {
         }
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

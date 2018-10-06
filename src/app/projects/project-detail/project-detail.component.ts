@@ -1,16 +1,17 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ProjectsService } from '../projects.service';
 import { Project } from '../project.model';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { faCode, faDesktop, faMobile, faSpinnerThird, faTablet, faTimes } from '@fortawesome/pro-light-svg-icons';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'dm-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrls: ['./project-detail.component.scss']
 })
-export class ProjectDetailComponent implements OnInit {
+export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   project: Project;
   activeTab = 'desktop';
@@ -24,6 +25,7 @@ export class ProjectDetailComponent implements OnInit {
     spinner: faSpinnerThird
   };
   @ViewChild('iframe') iframe: ElementRef;
+  subscription: Subscription;
 
   constructor(
     private projectsService: ProjectsService,
@@ -32,7 +34,7 @@ export class ProjectDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(
+    this.subscription = this.route.params.subscribe(
       params => {
         this.project = this.projectsService.getProjectByRef(params['path']);
         this.bypassedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.url);
@@ -49,6 +51,10 @@ export class ProjectDetailComponent implements OnInit {
 
   onClose() {
     this.projectsService.closeActiveProject.emit('close');
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

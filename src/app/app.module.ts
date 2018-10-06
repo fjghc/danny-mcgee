@@ -22,7 +22,6 @@ import { LogoComponent } from './shared/logo/logo.component';
 import { ProjectItemComponent } from './projects/project-item/project-item.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { ProjectDetailComponent } from './projects/project-detail/project-detail.component';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 @NgModule({
   declarations: [
@@ -49,8 +48,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFireDatabaseModule,
-    MonacoEditorModule.forRoot()
+    AngularFireDatabaseModule
   ],
   providers: [],
   bootstrap: [AppComponent]

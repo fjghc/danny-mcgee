@@ -20,7 +20,8 @@ import { ProjectsService } from './projects.service';
 export class ProjectsComponent implements OnInit, OnDestroy {
 
   // Data
-  projects: Observable<Project[]>;
+  projectsObservable: Observable<Project[]>;
+  projects: Project[];
   icons = {
     drag: faEllipsisV
   };
@@ -33,6 +34,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   closeProjectSub: Subscription;
   editModeSub: Subscription;
   newProjectSub: Subscription;
+  saveChangesSub: Subscription;
 
   // Services
   constructor(
@@ -44,16 +46,17 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   // Init
   ngOnInit() {
-    this.projects = this.projectsService.fetchProjects();
-
     this.closeProjectSub = this.projectsService.closeActiveProject.subscribe(
       () => this.onDismissModal()
     );
     this.editModeSub = this.projectsService.editMode.subscribe(
-      value => this.editMode = value
+      mode => this.onEditModeChange(mode)
     );
     this.newProjectSub = this.projectsService.newProject.subscribe(
       () => this.onNewProject()
+    );
+    this.saveChangesSub = this.projectsService.saveChanges.subscribe(
+      () => this.onSaveChanges()
     );
   }
 
@@ -77,6 +80,29 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   onDismissModal() {
     this.viewingSingle = false;
     this.router.navigate(['projects']);
+  }
+
+  onEditModeChange(mode) {
+    this.editMode = mode;
+    if (mode) {
+      // Create a temporary copy of the projects for editing
+      this.projects = this.projectsService.getProjectsTemp();
+    } else {
+      // Get projects from database
+      this.projectsObservable = this.projectsService.getProjectsFromDatabase();
+    }
+  }
+
+  onSaveChanges() {
+    this.projectsService.commitChangesToDatabase();
+    this.projectsService.editMode.next(false);
+  }
+
+  onDrag($event) {
+    this.projectsService.setProjects(this.projects);
+    console.log('Dragula event:', $event);
+    console.log('Projects component projects:', this.projects);
+    console.log('Projects Service projectsTemp:', this.projectsService.projectsTemp);
   }
 
   // Cleanup

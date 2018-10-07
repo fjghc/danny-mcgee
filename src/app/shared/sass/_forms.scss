@@ -91,6 +91,7 @@ form.minimal {
     display: flex;
     align-items: center;
     position: relative;
+    margin-bottom: 30px;
     z-index: 1;
 
     input {
@@ -177,7 +178,14 @@ form.minimal {
     }
   }
 
-  .btn-container:last-child {
-    margin-top: 48px;
+  .btn-container {
+
+    .checkbox:last-of-type {
+      margin-bottom: 0;
+    }
+
+    &:last-child {
+      margin-top: 48px;
+    }
   }
 }

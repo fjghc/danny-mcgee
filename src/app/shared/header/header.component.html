@@ -3,14 +3,19 @@
 <h1 class="page-title">{{ pageTitle }}</h1>
 
 <div class="btn-container">
+  <ng-container *ngIf="pageTitle === 'Projects'">
+    <ul class="legend">
+      <li class="legend-item"><span class="color primary"></span> Professional</li>
+      <li class="legend-item"><span class="color info"></span> Personal</li>
+    </ul>
+  </ng-container>
   <ng-container *ngIf="authService.isAuthenticated() && pageTitle === 'Projects'">
     <button
       (click)="projectsService.newProject.emit()"
-      class="btn btn-success btn-sm"
+      class="btn btn-primary btn-sm"
       role="button"
       tabindex="2"
     >New Project</button>
-    <!-- Using conditionally rendered buttons to prevent persistent focus -->
     <button
       *ngIf="!projectsService.editMode.getValue()"
       (click)="projectsService.toggleEditMode()"
@@ -20,11 +25,18 @@
     >Edit</button>
     <button
       *ngIf="projectsService.editMode.getValue()"
-      (click)="projectsService.toggleEditMode()"
+      (click)="projectsService.saveChanges.emit()"
       class="btn btn-sm btn-success"
       role="button"
       tabindex="2"
-    >Done Editing</button>
+    >Save Changes</button>
+    <button
+      *ngIf="projectsService.editMode.getValue()"
+      (click)="projectsService.toggleEditMode()"
+      class="btn btn-sm btn-danger"
+      role="button"
+      tabindex="2"
+    >Discard</button>
 
   </ng-container>
 </div>

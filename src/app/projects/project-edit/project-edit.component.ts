@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { Project, createProject } from '../project.model';
 import { ProjectsService } from '../projects.service';
 
+// Component config
 @Component({
   selector: 'dm-project-edit',
   templateUrl: './project-edit.component.html',
@@ -17,8 +18,8 @@ import { ProjectsService } from '../projects.service';
 })
 export class ProjectEditComponent implements OnInit, OnDestroy {
 
+  // Data
   project: Project;
-  newProject = false;
   form: FormGroup;
   requiredValidator = [Validators.required];
   yearValidator = [
@@ -29,32 +30,43 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     Validators.required,
     Validators.pattern(/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i)
   ];
-  subscription: Subscription;
   @ViewChild('needsRefresh') needsRefreshComponent;
+  @ViewChild('personal') personalComponent;
 
+  // State
+  newProject = false;
+
+  // Subs
+  routeSub: Subscription;
+
+  // Services
   constructor(
     private projectsService: ProjectsService,
     private route: ActivatedRoute
   ) { }
 
+  // Init
   ngOnInit() {
     // Initialize the form
     this.form = new FormGroup({});
 
     // Find out if we're editing an existing project
-    this.subscription = this.route.params.subscribe(
+    this.routeSub = this.route.params.subscribe(
       params => {
         if (params['path']) {
           // We're editing a project that already exists
-          this.project = this.projectsService.getProject(params['path']);
+          this.project = this.projectsService.getProject(params['path'], 'temp');
 
           // Set the form values
           setTimeout(() => {
             this.form.patchValue(this.project);
 
-            // Update the checkbox class if necessary
+            // Update the checkbox classes if necessary
             if (this.project.needsRefresh) {
               this.needsRefreshComponent.onChanged();
+            }
+            if (this.project.personal) {
+              this.personalComponent.onChanged();
             }
           });
         } else {
@@ -66,6 +78,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Events
   onSubmit() {
     const formValue = this.form.value;
 
@@ -74,18 +87,21 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     this.project.url = formValue.url;
     this.project.imageFormat = formValue.imageFormat;
     this.project.needsRefresh = formValue.needsRefresh === true;
+    this.project.personal = formValue.personal === true;
 
     if (this.newProject) {
       this.project.id = formValue.id;
-      this.project.order = this.projectsService.projects.length;
+      this.project.order = this.projectsService.projectsTemp.length;
+      this.projectsService.addProject(this.project);
+    } else {
+      this.projectsService.editProject(this.project);
     }
-
-    this.projectsService.addOrEditProject(this.project);
     this.projectsService.closeActiveProject.emit();
   }
 
+  // Cleanup
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.routeSub.unsubscribe();
   }
 
 }

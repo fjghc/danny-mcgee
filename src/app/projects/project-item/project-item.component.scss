@@ -21,6 +21,10 @@
     }
   }
 
+  &.personal::after {
+    background-color: $purple;
+  }
+
   &:hover::after, &:focus::after {
     width: 100%;
     @include position(null, 0, 0, 0);

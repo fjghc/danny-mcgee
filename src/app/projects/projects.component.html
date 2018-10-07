@@ -1,20 +1,50 @@
-<div class="row">
+<ng-container
+  [ngSwitch]="true"
+>
   <div
-    *ngFor="let project of projects | async"
-    class="project-container col-xl-4 col-lg-6"
+    *ngSwitchCase="editMode"
+    dragula="projects"
+    [(dragulaModel)]="projects"
+    (dragulaModelChange)="onDrag($event)"
+    class="row"
   >
-    <dm-project-item
-      (click)="editMode ? onEditProject(project) : onViewProject(project)"
-      [project]="project"
-      role="link"
-      aria-label="View Project"
-      [tabindex]="viewingSingle ? -1 : 3"
-    ></dm-project-item>
-    <div class="drag-handle">
-      <fa-icon [icon]="icons.drag"></fa-icon>
+    <!-- Edit Mode -->
+    <div
+      *ngFor="let project of projects"
+      class="project-container col-xl-4 col-lg-6"
+    >
+      <dm-project-item
+        (click)="onEditProject(project)"
+        [project]="project"
+        role="link"
+        aria-label="View Project"
+        [tabindex]="viewingSingle ? -1 : 3"
+      ></dm-project-item>
     </div>
+
   </div>
-</div>
+  <div
+    *ngSwitchCase="!editMode"
+    class="row"
+  >
+    <!-- Readonly Mode -->
+    <div
+      *ngFor="let project of projectsObservable | async"
+      class="project-container col-xl-4 col-lg-6"
+    >
+      <dm-project-item
+        (click)="onViewProject(project)"
+        [project]="project"
+        role="link"
+        aria-label="View Project"
+        [tabindex]="viewingSingle ? -1 : 3"
+      ></dm-project-item>
+    </div>
+
+  </div>
+
+
+</ng-container>
 <div
   *ngIf="viewingSingle"
   class="modal"

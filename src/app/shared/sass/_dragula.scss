@@ -1,0 +1,19 @@
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  pointer-events: none;
+  cursor: grab;
+}
+
+.gu-hide {
+  left: -9999px !important;
+}
+
+.gu-unselectable {
+  user-select: none;
+}
+
+.gu-transit {
+  opacity: 0;
+}

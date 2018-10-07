@@ -1,29 +1,35 @@
+// Angular imports
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+
+// Dependency imports
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { environment } from '../environments/environment';
 
+// App imports
+import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
 import { FormComponent } from './shared/form/form.component';
 import { InputComponent } from './shared/form/input/input.component';
-import { ProjectsComponent } from './projects/projects.component';
 import { DropdownDirective } from './shared/dropdown.directive';
-import { HomeComponent } from './home/home.component';
 import { CheckboxComponent } from './shared/form/checkbox/checkbox.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { LogoComponent } from './shared/logo/logo.component';
-import { ProjectItemComponent } from './projects/project-item/project-item.component';
 import { HeaderComponent } from './shared/header/header.component';
+import { ProjectsComponent } from './projects/projects.component';
+import { HomeComponent } from './home/home.component';
+import { ProjectItemComponent } from './projects/project-item/project-item.component';
 import { ProjectDetailComponent } from './projects/project-detail/project-detail.component';
 import { ProjectEditComponent } from './projects/project-edit/project-edit.component';
+import { DragulaModule } from 'ng2-dragula';
 
+// Module config
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,7 +56,8 @@ import { ProjectEditComponent } from './projects/project-edit/project-edit.compo
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    DragulaModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

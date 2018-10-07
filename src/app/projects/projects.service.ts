@@ -14,15 +14,16 @@ export class ProjectsService implements OnDestroy {
 
   // Data
   projectsObservable: Observable<Project[]>;
-  projects: Project[];
+  projectsTemp: Project[];
+  private projects: Project[];
 
   // Event emitters
   @Output() closeActiveProject = new EventEmitter();
   @Output() newProject = new EventEmitter();
+  @Output() saveChanges = new EventEmitter();
 
   // State
   editMode = new BehaviorSubject<boolean>(false);
-  orderChanged = new BehaviorSubject<boolean>(false);
 
   // Subs
   dbSub: Subscription;
@@ -31,7 +32,7 @@ export class ProjectsService implements OnDestroy {
   constructor(private dbService: DatabaseService) {}
 
   // Getters
-  fetchProjects(): Observable<Project[]> {
+  getProjectsFromDatabase(): Observable<Project[]> {
     // Sync this service's data with the database
     this.projectsObservable = this.dbService.fetchCollection('projects') as Observable<Project[]>;
 
@@ -45,8 +46,17 @@ export class ProjectsService implements OnDestroy {
     return this.projectsObservable;
   }
 
-  getProject(id: string): Project {
+  getProjectsTemp(): Project[] {
+    // return a copy of the projects in their current state from the database
+    this.projectsTemp = [];
     for (const project of this.projects) {
+      this.projectsTemp.push({...project});
+    }
+    return this.projectsTemp;
+  }
+
+  getProject(id: string, projectsRef: 'temp' | 'db'): Project {
+    for (const project of this.resolveProjectsRef(projectsRef)) {
       if (project.id === id) {
         return project;
       }
@@ -61,22 +71,86 @@ export class ProjectsService implements OnDestroy {
   }
 
   // Data manipulation
-  addOrEditProject(project: Project) {
-    this.dbService.setDocument('projects', project.id, project);
+  setProjects(projects: Project[]) {
+    this.projectsTemp = projects;
   }
 
-  commitReorder() {
-    for (let i = 0; i < this.projects.length; i++) {
-      this.dbService.updateDocument('projects', this.projects[i].id, { 'order': i });
+  editProject(project: Project) {
+    const index = this.indexOf(project.id, 'temp');
+    if (index !== false) {
+      this.projectsTemp[index] = project;
+    }
+  }
+
+  addProject(project: Project) {
+    this.projectsTemp.push(project);
+  }
+
+  commitChangesToDatabase() {
+    // set order values
+    for (let i = 0; i < this.projectsTemp.length; i++) {
+      this.projectsTemp[i].order = i;
+    }
+
+    // compare temp projects to database projects and update where necessary
+    for (const project of this.projectsTemp) {
+      const index = this.indexOf(project.id, 'db');
+
+      if (index !== false) {
+        // this project already exists
+        if (this.areProjectsDifferent(project, this.projects[index])) {
+          // this project is different than the one in the database
+          this.dbService.updateDocument('projects', project.id, project);
+        }
+      } else {
+        // this is a new project
+        this.dbService.setDocument('projects', project.id, project);
+      }
     }
   }
 
   // Helper functions
-  indexOf(id: string): number {
-    for (const project of this.projects) {
+  indexOf(id: string, projectsRef: 'temp' | 'db'): number | false {
+    // determine which array to search
+    const projects = this.resolveProjectsRef(projectsRef);
+
+    // search the array
+    for (const project of projects) {
       if (project.id === id) {
-        return this.projects.indexOf(project);
+        // if project is found, return the index
+        return projects.indexOf(project);
       }
+    }
+
+    // if we get this far, there's no project matching that id
+    return false;
+  }
+
+  areProjectsDifferent(a: Project, b: Project) {
+    const aProps = Object.getOwnPropertyNames(a);
+    const bProps = Object.getOwnPropertyNames(b);
+
+    if (aProps.length !== bProps.length) {
+      return true;
+    }
+
+    for (let i = 0; i < aProps.length; i++) {
+      const propName = aProps[i];
+
+      if (a[propName] !== b[propName]) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  resolveProjectsRef(ref: 'temp' | 'db'): Project[] {
+    if (ref === 'temp') {
+      return this.projectsTemp;
+    }
+    if (ref === 'db') {
+      return this.projects;
     }
   }
 

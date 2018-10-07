@@ -44,4 +44,11 @@ ul.legend {
     //  }
     //}
   }
+
+  .btn-container & {
+
+    &:not(:last-child) {
+      margin-right: $grid-gutter-width;
+    }
+  }
 }

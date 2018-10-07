@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 @Injectable({ providedIn: 'root' })
-export class DatabaseService {
+export class DataStorageService {
 
-  constructor(private afs: AngularFirestore) {}
+  constructor(
+    private afs: AngularFirestore,
+    private rtdb: AngularFireDatabase
+  ) {}
 
   fetchCollection(path: string): Observable<any> {
     return this.afs.collection(path, ref => ref.orderBy('order')).valueChanges();

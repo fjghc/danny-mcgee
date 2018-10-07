@@ -6,3 +6,8 @@ body {
   @include gotham(300);
 }
 
+h1, h2, h3 {
+  font-weight: 200;
+  color: $gray-lighter;
+  margin-bottom: 1em;
+}

@@ -8,7 +8,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DragulaModule } from 'ng2-dragula';
 
 // App imports
 import { environment } from '../environments/environment';
@@ -27,7 +30,6 @@ import { HomeComponent } from './home/home.component';
 import { ProjectItemComponent } from './projects/project-item/project-item.component';
 import { ProjectDetailComponent } from './projects/project-detail/project-detail.component';
 import { ProjectEditComponent } from './projects/project-edit/project-edit.component';
-import { DragulaModule } from 'ng2-dragula';
 
 // Module config
 @NgModule({
@@ -57,6 +59,8 @@ import { DragulaModule } from 'ng2-dragula';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    AngularFireDatabaseModule,
+    AngularFireStorageModule,
     DragulaModule.forRoot()
   ],
   providers: [],

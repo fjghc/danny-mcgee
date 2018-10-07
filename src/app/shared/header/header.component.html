@@ -10,19 +10,23 @@
     </ul>
   </ng-container>
   <ng-container *ngIf="authService.isAuthenticated() && pageTitle === 'Projects'">
+
     <button
+      *ngIf="!projectsService.editMode.getValue()"
+      (click)="projectsService.toggleEditMode()"
+      class="btn btn-sm btn-secondary"
+      role="button"
+      tabindex="2"
+    >Edit</button>
+
+    <button
+      *ngIf="projectsService.editMode.getValue()"
       (click)="projectsService.newProject.emit()"
       class="btn btn-primary btn-sm"
       role="button"
       tabindex="2"
     >New Project</button>
-    <button
-      *ngIf="!projectsService.editMode.getValue()"
-      (click)="projectsService.toggleEditMode()"
-      class="btn btn-sm btn-warning"
-      role="button"
-      tabindex="2"
-    >Edit</button>
+
     <button
       *ngIf="projectsService.editMode.getValue()"
       (click)="projectsService.saveChanges.emit()"
@@ -30,6 +34,7 @@
       role="button"
       tabindex="2"
     >Save Changes</button>
+
     <button
       *ngIf="projectsService.editMode.getValue()"
       (click)="projectsService.toggleEditMode()"

@@ -5,7 +5,7 @@ import { EventEmitter, Injectable, OnDestroy, Output } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 // App imports
-import { DatabaseService } from '../shared/database.service';
+import { DataStorageService } from '../shared/data-storage.service';
 import { Project } from './project.model';
 
 // Component config
@@ -29,12 +29,12 @@ export class ProjectsService implements OnDestroy {
   dbSub: Subscription;
 
   // Services
-  constructor(private dbService: DatabaseService) {}
+  constructor(private dataService: DataStorageService) {}
 
   // Getters
   getProjectsFromDatabase(): Observable<Project[]> {
     // Sync this service's data with the database
-    this.projectsObservable = this.dbService.fetchCollection('projects') as Observable<Project[]>;
+    this.projectsObservable = this.dataService.fetchCollection('projects') as Observable<Project[]>;
 
     this.dbSub = this.projectsObservable.subscribe(
       projects => {
@@ -100,11 +100,11 @@ export class ProjectsService implements OnDestroy {
         // this project already exists
         if (this.areProjectsDifferent(project, this.projects[index])) {
           // this project is different than the one in the database
-          this.dbService.updateDocument('projects', project.id, project);
+          this.dataService.updateDocument('projects', project.id, project);
         }
       } else {
         // this is a new project
-        this.dbService.setDocument('projects', project.id, project);
+        this.dataService.setDocument('projects', project.id, project);
       }
     }
   }

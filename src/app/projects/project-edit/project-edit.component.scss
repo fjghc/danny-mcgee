@@ -1,4 +1,9 @@
+@import '../../shared/sass/vars';
+
 form {
-  width: 800px;
-  max-width: 100%;
+  width: 100%;
+}
+
+.row:not(:last-child) {
+  margin-bottom: $grid-gutter-width * 2;
 }

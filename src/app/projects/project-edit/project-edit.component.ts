@@ -13,6 +13,7 @@ import { ProjectsService } from '../projects.service';
 // Component config
 @Component({
   selector: 'dm-project-edit',
+  host: { class: 'container' },
   templateUrl: './project-edit.component.html',
   styleUrls: ['./project-edit.component.scss']
 })

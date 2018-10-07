@@ -26,6 +26,7 @@ export class CheckboxComponent implements OnInit {
 
   onChanged() {
     this.control.value ? this.isChecked = true : this.isChecked = false;
+    console.log('onChanged called! value is ' + this.control.value);
   }
 
   onFocus() {

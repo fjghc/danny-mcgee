@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFirestore } from '@angular/fire/firestore';
+// import { AngularFireDatabase } from '@angular/fire/database';
 
 @Injectable({ providedIn: 'root' })
 export class DatabaseService {
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private afs: AngularFirestore) {}
 
-  fetchData(pathOrRef) {
-    return this.db.list(pathOrRef).valueChanges();
+  fetchCollection(path) {
+    return this.afs.collection(path).valueChanges();
   }
 
 }

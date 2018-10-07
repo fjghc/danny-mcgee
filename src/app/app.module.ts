@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { environment } from '../environments/environment';
 
@@ -22,6 +22,7 @@ import { LogoComponent } from './shared/logo/logo.component';
 import { ProjectItemComponent } from './projects/project-item/project-item.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { ProjectDetailComponent } from './projects/project-detail/project-detail.component';
+import { ProjectEditComponent } from './projects/project-edit/project-edit.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ProjectDetailComponent } from './projects/project-detail/project-detail
     LogoComponent,
     ProjectItemComponent,
     HeaderComponent,
-    ProjectDetailComponent
+    ProjectDetailComponent,
+    ProjectEditComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +50,7 @@ import { ProjectDetailComponent } from './projects/project-detail/project-detail
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFireDatabaseModule
+    AngularFirestoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]

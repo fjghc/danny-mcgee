@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import * as firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { ProjectsService } from '../projects/projects.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -11,13 +12,14 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private projectsService: ProjectsService
   ) {}
 
   login(email: string, password: string, remember?: boolean) {
     if (!remember) {
       this.afAuth.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
-        .then(response => {
+        .then(() => {
           this.loginSetTokenAndRedirect(email, password);
         });
     } else {
@@ -27,8 +29,9 @@ export class AuthService {
 
   logout() {
     this.afAuth.auth.signOut()
-      .then(response => {
+      .then(() => {
         this.token = null;
+        this.projectsService.editMode.next(false);
       });
   }
 
@@ -48,6 +51,7 @@ export class AuthService {
         })
         .catch(error => {
           this.token = null;
+          console.log('ERROR: ' + error);
         });
     } else {
       this.token = null;
@@ -60,7 +64,7 @@ export class AuthService {
 
   private loginSetTokenAndRedirect(email: string, password: string) {
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then(credential => {
+      .then(() => {
         this.afAuth.auth.currentUser.getIdToken()
           .then(token => this.token = token);
 

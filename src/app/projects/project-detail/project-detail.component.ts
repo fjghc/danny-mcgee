@@ -36,7 +36,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.params.subscribe(
       params => {
-        this.project = this.projectsService.getProjectByRef(params['path']);
+        this.project = this.projectsService.getProject(params['path']);
         this.bypassedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.url);
       }
     );

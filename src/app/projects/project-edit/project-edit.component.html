@@ -1,0 +1,59 @@
+<form
+  class="minimal"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="form"
+>
+
+  <dm-input
+    label="Project ID"
+    id="id"
+    type="text"
+    [validators]="requiredValidator"
+    [form]="form"
+  ></dm-input>
+
+  <dm-input
+    label="Project Name"
+    id="name"
+    type="text"
+    [validators]="requiredValidator"
+    [form]="form"
+  ></dm-input>
+
+  <dm-input
+    label="Year"
+    id="year"
+    type="text"
+    [validators]="yearValidator"
+    [form]="form"
+  ></dm-input>
+
+  <dm-input
+    label="Iframe URL"
+    id="url"
+    type="text"
+    [validators]="urlValidator"
+    [form]="form"
+  ></dm-input>
+
+  <dm-input
+    label="Screenshot file extension"
+    id="imageFormat"
+    type="text"
+    [validators]="requiredValidator"
+    [form]="form"
+  ></dm-input>
+
+  <dm-checkbox
+    label="Requires page refresh on resize"
+    id="needsRefresh"
+    [form]="form"
+    #needsRefresh
+  ></dm-checkbox>
+
+  <div class="btn-container">
+    <button class="btn btn-primary" type="submit">Save Changes</button>
+    <button (click)="form.value.needsRefresh = true" class="btn btn-secondary" type="button">Check the box</button>
+  </div>
+
+</form>

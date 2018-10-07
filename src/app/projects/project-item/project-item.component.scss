@@ -7,7 +7,7 @@
   cursor: pointer;
   outline: none !important;
 
-  &::after {
+  &::after::ng-deep {
     content: ' ';
     display: block;
     width: 0;
@@ -15,6 +15,10 @@
     @include absolute(null, 50%, 0, 50%);
     background-color: $primary;
     @include transition(0.15s, ease-in, width, right, left);
+
+    .edit-mode & {
+      background-color: $warning;
+    }
   }
 
   &:hover::after, &:focus::after {
@@ -57,6 +61,7 @@ iframe {
   .project-year {
     margin-right: 10px;
     font-size: 12px;
+    text-transform: uppercase;
   }
 
   .project-name {

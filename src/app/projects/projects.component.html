@@ -4,7 +4,7 @@
     class="project-container col-xl-4 col-lg-6"
   >
     <dm-project-item
-      (click)="onViewProject(project)"
+      (click)="editMode ? onEditProject(project) : onViewProject(project)"
       [project]="project"
       role="link"
       aria-label="View Project"

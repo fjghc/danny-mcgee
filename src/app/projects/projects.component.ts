@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Project } from './project.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectsService } from './projects.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'dm-projects',
@@ -11,11 +12,13 @@ import { ProjectsService } from './projects.service';
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
 
-  projects: Observable<any[]>;
+  projects: Observable<Project[]>;
   viewingSingle = false;
-  subscription: Subscription;
+  closeProjectSub: Subscription;
+  @HostBinding('class.edit-mode') editMode: boolean;
 
   constructor(
+    public authService: AuthService,
     private projectsService: ProjectsService,
     private router: Router,
     private route: ActivatedRoute
@@ -23,16 +26,28 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.projects = this.projectsService.fetchProjects();
-    this.subscription = this.projectsService.closeActiveProject.subscribe(
+
+    this.closeProjectSub = this.projectsService.closeActiveProject.subscribe(
       () => {
         this.onDismissModal();
+      }
+    );
+
+    this.projectsService.editMode.subscribe(
+      value => {
+        this.editMode = value;
       }
     );
   }
 
   onViewProject(project: Project) {
     this.viewingSingle = true;
-    this.router.navigate([project.filesRef], { relativeTo: this.route });
+    this.router.navigate([project.id], { relativeTo: this.route });
+  }
+
+  onEditProject(project: Project) {
+    this.viewingSingle = true;
+    this.router.navigate(['edit', project.id], { relativeTo: this.route });
   }
 
   onDismissModal() {
@@ -41,7 +56,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.closeProjectSub.unsubscribe();
   }
 
 }

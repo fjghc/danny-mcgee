@@ -9,12 +9,22 @@
       class="btn btn-success btn-sm"
       role="button"
       tabindex="2"
-    >New</button>
+    >New Project</button>
+    <!-- Using conditionally rendered buttons to prevent persistent focus -->
     <button
-      routerLink="/projects/edit"
-      class="btn btn-secondary btn-sm"
+      *ngIf="!projectsService.editMode.getValue()"
+      (click)="projectsService.toggleEditMode()"
+      class="btn btn-sm btn-warning"
       role="button"
       tabindex="2"
     >Edit</button>
+    <button
+      *ngIf="projectsService.editMode.getValue()"
+      (click)="projectsService.toggleEditMode()"
+      class="btn btn-sm btn-success"
+      role="button"
+      tabindex="2"
+    >Done Editing</button>
+
   </ng-container>
 </div>

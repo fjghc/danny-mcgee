@@ -22,6 +22,8 @@ form {
 }
 
 form.minimal {
+  padding: 72px 48px;
+  background-color: $gray-darker;
 
   .form-group {
     display: block;

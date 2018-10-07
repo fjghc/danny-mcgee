@@ -9,6 +9,7 @@ import { Project } from './project.model';
 export class ProjectsService implements OnDestroy {
 
   @Output() closeActiveProject = new EventEmitter();
+  @Output() newProject = new EventEmitter();
   editMode = new BehaviorSubject<boolean>(false);
   projectsObservable: Observable<Project[]>;
   projects: Project[];
@@ -38,8 +39,26 @@ export class ProjectsService implements OnDestroy {
     console.log(`ERROR: No project found with id ${id}`);
   }
 
+  indexOf(id: string): number {
+    for (const project of this.projects) {
+      if (project.id === id) {
+        return this.projects.indexOf(project);
+      }
+    }
+  }
+
   toggleEditMode() {
     this.editMode.next(!this.editMode.getValue());
+  }
+
+  addOrEditProject(project: Project) {
+    this.dbService.setDocument('projects', project.id, project);
+  }
+
+  commitReorder() {
+    for (let i = 0; i < this.projects.length; i++) {
+      this.dbService.updateDocument('projects', this.projects[i].id, { 'order': i });
+    }
   }
 
   ngOnDestroy() {

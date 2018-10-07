@@ -31,7 +31,8 @@
     background-color: transparent;
     color: $gray-lightest;
     border-color: $gray-lighter;
-    @include transition(0.12s, linear, background-color, color, border-color);
+    opacity: 1;
+    @include transition(0.12s, linear, background-color, color, border-color, opacity);
 
     &::before {
       content: ' ';
@@ -43,7 +44,7 @@
       @include transition(0.12s, ease-in, width, right, left);
     }
 
-    &:hover, &:focus {
+    &:hover:not(:disabled), &:focus:not(:disabled) {
       background-color: transparent;
       border-color: $value;
       color: map-get($contrast-color, $key);
@@ -67,6 +68,12 @@
 
     &:focus {
        box-shadow: 0 0 0 4px transparentize($value, 0.5);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
     }
   }
 }

@@ -15,6 +15,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   projects: Observable<Project[]>;
   viewingSingle = false;
   closeProjectSub: Subscription;
+  editModeSub: Subscription;
+  newProjectSub: Subscription;
+
   @HostBinding('class.edit-mode') editMode: boolean;
 
   constructor(
@@ -28,21 +31,27 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.projects = this.projectsService.fetchProjects();
 
     this.closeProjectSub = this.projectsService.closeActiveProject.subscribe(
-      () => {
-        this.onDismissModal();
-      }
+      () => this.onDismissModal()
     );
 
-    this.projectsService.editMode.subscribe(
-      value => {
-        this.editMode = value;
-      }
+    this.editModeSub = this.projectsService.editMode.subscribe(
+      value => this.editMode = value
+    );
+
+    this.newProjectSub = this.projectsService.newProject.subscribe(
+      () => this.onNewProject()
     );
   }
 
   onViewProject(project: Project) {
     this.viewingSingle = true;
     this.router.navigate([project.id], { relativeTo: this.route });
+  }
+
+  onNewProject() {
+    this.projectsService.editMode.next(true);
+    this.viewingSingle = true;
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 
   onEditProject(project: Project) {
@@ -57,6 +66,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.closeProjectSub.unsubscribe();
+    this.editModeSub.unsubscribe();
   }
 
 }

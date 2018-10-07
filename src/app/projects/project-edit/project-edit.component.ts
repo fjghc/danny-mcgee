@@ -18,12 +18,16 @@ import { ProjectsService } from '../projects.service';
 export class ProjectEditComponent implements OnInit, OnDestroy {
 
   project: Project;
+  newProject = false;
   form: FormGroup;
   requiredValidator = [Validators.required];
-  yearValidator = [Validators.required, Validators.pattern('\b(\d){4}\b')];
+  yearValidator = [
+    Validators.required,
+    Validators.pattern(/(\d){4}/g)
+  ];
   urlValidator = [
     Validators.required,
-    Validators.pattern('[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)')
+    Validators.pattern(/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i)
   ];
   subscription: Subscription;
   @ViewChild('needsRefresh') needsRefreshComponent;
@@ -56,13 +60,28 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         } else {
           // This is a new project
           this.project = createProject();
+          this.newProject = true;
         }
       }
     );
   }
 
   onSubmit() {
-    console.log(this.form.value);
+    const formValue = this.form.value;
+
+    this.project.name = formValue.name;
+    this.project.year = formValue.year;
+    this.project.url = formValue.url;
+    this.project.imageFormat = formValue.imageFormat;
+    this.project.needsRefresh = formValue.needsRefresh === true;
+
+    if (this.newProject) {
+      this.project.id = formValue.id;
+      this.project.order = this.projectsService.projects.length;
+    }
+
+    this.projectsService.addOrEditProject(this.project);
+    this.projectsService.closeActiveProject.emit();
   }
 
   ngOnDestroy() {

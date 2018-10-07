@@ -72,7 +72,7 @@ iframe {
     text-transform: uppercase;
   }
 
-  :host:hover &, :host:focus & {
+  :host:hover &, :host:focus &, ::ng-deep .edit-mode & {
     transform: translateY(0);
   }
 }

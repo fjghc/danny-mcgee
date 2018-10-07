@@ -5,6 +5,7 @@
 >
 
   <dm-input
+    *ngIf="newProject"
     label="Project ID"
     id="id"
     type="text"
@@ -52,8 +53,11 @@
   ></dm-checkbox>
 
   <div class="btn-container">
-    <button class="btn btn-primary" type="submit">Save Changes</button>
-    <button (click)="form.value.needsRefresh = true" class="btn btn-secondary" type="button">Check the box</button>
+    <button
+      class="btn btn-primary"
+      type="submit"
+      [disabled]="!form.valid"
+    >Save Changes</button>
   </div>
 
 </form>

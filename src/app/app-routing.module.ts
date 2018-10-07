@@ -21,12 +21,16 @@ const appRoutes: Routes = [
     component: ProjectsComponent,
     children: [
       {
-        path: ':path',
-        component: ProjectDetailComponent
+        path: 'new',
+        component: ProjectEditComponent
       },
       {
         path: 'edit/:path',
         component: ProjectEditComponent
+      },
+      {
+        path: ':path',
+        component: ProjectDetailComponent
       }
     ]
   }

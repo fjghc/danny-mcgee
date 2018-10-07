@@ -5,7 +5,7 @@
 <div class="btn-container">
   <ng-container *ngIf="authService.isAuthenticated() && pageTitle === 'Projects'">
     <button
-      routerLink="/projects/new"
+      (click)="projectsService.newProject.emit()"
       class="btn btn-success btn-sm"
       role="button"
       tabindex="2"

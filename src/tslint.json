@@ -12,6 +12,7 @@
             "element",
             "dm",
             "kebab-case"
-        ]
+        ],
+        "use-host-property-decorator": false
     }
 }

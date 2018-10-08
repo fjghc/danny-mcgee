@@ -1,0 +1,27 @@
+.filename {
+  font-size: 14px;
+  color: $gray-lightest;
+  user-select: none;
+
+  fa-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: $editor-icon-margin;
+    font-size: 16px;
+    text-align: center;
+
+    &.folder {
+      color: $gray-lighter;
+    }
+    &.html {
+      color: $red;
+    }
+    &.css {
+      color: $blue-bold;
+    }
+    &.javascript {
+      color: $yellow;
+    }
+  }
+}

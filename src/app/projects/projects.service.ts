@@ -5,7 +5,7 @@ import { EventEmitter, Injectable, OnDestroy, Output } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 // App imports
-import { DataStorageService } from '../shared/data-storage.service';
+import { DataHandler } from '../shared/data-handler.service';
 import { Project } from './project.model';
 
 // Component config
@@ -29,12 +29,12 @@ export class ProjectsService implements OnDestroy {
   dbSub: Subscription;
 
   // Services
-  constructor(private dataService: DataStorageService) {}
+  constructor(private dataHandler: DataHandler) {}
 
   // Getters
   getProjectsFromDatabase(): Observable<Project[]> {
     // Sync this service's data with the database
-    this.projectsObservable = this.dataService.fetchCollection('projects') as Observable<Project[]>;
+    this.projectsObservable = this.dataHandler.fetchCollection('projects') as Observable<Project[]>;
 
     this.dbSub = this.projectsObservable.subscribe(
       projects => {
@@ -50,7 +50,7 @@ export class ProjectsService implements OnDestroy {
     // return a copy of the projects in their current state from the database
     this.projectsTemp = [];
     for (const project of this.projects) {
-      this.projectsTemp.push({...project});
+      this.projectsTemp.push({ ...project });
     }
     return this.projectsTemp;
   }
@@ -87,7 +87,8 @@ export class ProjectsService implements OnDestroy {
   }
 
   commitChangesToDatabase() {
-    // set order values
+    // Dragula changes the order of the items in the array with drag-and-drop
+    // Update the 'order' property of each project to match the new array order
     for (let i = 0; i < this.projectsTemp.length; i++) {
       this.projectsTemp[i].order = i;
     }
@@ -100,11 +101,11 @@ export class ProjectsService implements OnDestroy {
         // this project already exists
         if (this.areProjectsDifferent(project, this.projects[index])) {
           // this project is different than the one in the database
-          this.dataService.updateDocument('projects', project.id, project);
+          this.dataHandler.updateDocument('projects', project.id, project);
         }
       } else {
         // this is a new project
-        this.dataService.setDocument('projects', project.id, project);
+        this.dataHandler.setDocument('projects', project.id, project);
       }
     }
   }

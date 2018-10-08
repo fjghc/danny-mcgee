@@ -30,6 +30,10 @@ import { HomeComponent } from './home/home.component';
 import { ProjectItemComponent } from './projects/project-item/project-item.component';
 import { ProjectDetailComponent } from './projects/project-detail/project-detail.component';
 import { ProjectEditComponent } from './projects/project-edit/project-edit.component';
+import { EditorComponent } from './shared/editor/editor.component';
+import { FiletreeComponent } from './shared/editor/filetree/filetree.component';
+import { FileComponent } from './shared/editor/filetree/file/file.component';
+import { MonacoEditorModule } from 'ngx-monaco';
 
 // Module config
 @NgModule({
@@ -47,7 +51,10 @@ import { ProjectEditComponent } from './projects/project-edit/project-edit.compo
     ProjectItemComponent,
     HeaderComponent,
     ProjectDetailComponent,
-    ProjectEditComponent
+    ProjectEditComponent,
+    EditorComponent,
+    FiletreeComponent,
+    FileComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +68,8 @@ import { ProjectEditComponent } from './projects/project-edit/project-edit.compo
     AngularFirestoreModule,
     AngularFireDatabaseModule,
     AngularFireStorageModule,
-    DragulaModule.forRoot()
+    DragulaModule.forRoot(),
+    MonacoEditorModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

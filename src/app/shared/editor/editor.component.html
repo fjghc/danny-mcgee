@@ -1,0 +1,44 @@
+<div class="row no-gutters">
+  <div class="col-3">
+    <dm-filetree
+      [files]="files"
+    ></dm-filetree>
+  </div>
+  <div class="col-9">
+
+    <nav class="tabs-nav">
+      <a
+        *ngFor="let tab of tabs"
+        (click)="onSetActive(tab)"
+        class="tabs-nav-item"
+        [ngClass]="{ 'temp': tab.type === 'temp', 'active': activeTab === tab }"
+      >
+        <span class="filename">
+          <fa-icon
+            [icon]="editorService.getIconForType(tab.file.type)"
+            [ngClass]="tab.file.type"
+          ></fa-icon> {{ tab.file.name }}
+        </span>
+        <fa-icon
+          (click)="onCloseTab(tab)"
+          [icon]="closeIcon"
+          class="close"
+        ></fa-icon>
+      </a>
+    </nav>
+
+    <div class="tabs-content">
+      <div
+        *ngFor="let tab of tabs"
+        class="tabs-content-item"
+        [ngClass]="{ 'active': activeTab === tab }"
+      >
+        <monaco-editor
+          theme="vs-dark"
+          [file]="tab.file.monacoFile | async"
+        ></monaco-editor>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,54 @@
+@import '../sass/vars';
+
+.tabs-nav {
+  display: flex;
+}
+
+.tabs-nav-item {
+  flex-shrink: 0;
+  flex-grow: 0;
+  padding: 8px 16px;
+  background-color: $gray-dark;
+
+  &.temp {
+    font-style: italic;
+  }
+
+  &.active {
+    background-color: $gray-darker;
+
+    .filename {
+      color: #fff;
+    }
+  }
+
+  .close {
+    display: inline-block;
+    margin: 0 -4px 0 4px;
+    color: $gray-mid;
+
+    &:hover {
+      color: $gray-light;
+    }
+  }
+}
+
+.tabs-content {
+  height: 600px;
+
+  .tabs-content-item {
+    display: none;
+    width: 100%;
+    height: 100%;
+
+    &.active {
+      display: block;
+    }
+
+    monaco-editor, [monaco-editor] {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

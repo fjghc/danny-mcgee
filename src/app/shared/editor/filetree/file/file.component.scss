@@ -1,0 +1,12 @@
+@import '../../../sass/vars';
+
+:host {
+  display: block;
+  padding-left: $editor-file-indent;
+
+  .folder-toggle {
+    margin-left: -($editor-file-indent + $editor-icon-margin);
+    color: $gray-light;
+    cursor: pointer;
+  }
+}

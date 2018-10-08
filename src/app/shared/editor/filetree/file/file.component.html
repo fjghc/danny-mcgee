@@ -1,0 +1,19 @@
+<span
+  (click)="onOpenFile()"
+  class="filename"
+>
+  <ng-container *ngIf="file.type === 'folder'">
+    <fa-icon
+      (click)="onToggleOpen()"
+      [icon]="angleIcon"
+      class="folder-toggle"
+    ></fa-icon>
+  </ng-container>
+  <fa-icon [icon]="icon" [ngClass]="file.type"></fa-icon> {{ file.name }}
+</span>
+<ng-container *ngIf="file.type === 'folder' && isOpen">
+  <dm-file
+    *ngFor="let _file of file.contents"
+    [file]="_file"
+  ></dm-file>
+</ng-container>

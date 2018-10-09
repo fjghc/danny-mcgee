@@ -59,11 +59,11 @@ export class EditorService {
       file.contents = new Promise((resolve, reject) => {
         this.dataHandler.readFile(file.storageRef)
           .then(content => {
-            console.log('Content received:', content);
+            // console.log('Content received:', content);
             resolve(content);
           })
           .catch(error => {
-            console.log('ERROR: MonacoFile could not be generated', error);
+            // console.log('ERROR: MonacoFile could not be generated', error);
             reject(error);
           });
       });

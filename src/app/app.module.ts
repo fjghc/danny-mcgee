@@ -12,7 +12,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DragulaModule } from 'ng2-dragula';
-import { CovalentCodeEditorModule } from '@covalent/code-editor';
+import { MonacoEditorModule, NgMonacoEditorConfig } from './shared/editor/ngx-monaco-editor/platform/monaco-editor';
 
 // App imports
 import { environment } from '../environments/environment';
@@ -35,6 +35,17 @@ import { EditorComponent } from './shared/editor/editor.component';
 import { FiletreeComponent } from './shared/editor/filetree/filetree.component';
 import { FileComponent } from './shared/editor/filetree/file/file.component';
 import { LoadingComponent } from './shared/loading/loading.component';
+import { dm_theme } from './shared/editor/theme';
+import { tokenizer } from './shared/editor/tokenizer';
+
+// Monaco config
+const monacoConfig: NgMonacoEditorConfig = {
+  onMonacoLoad: () => {
+    monaco.editor.defineTheme('dm-theme', dm_theme);
+    monaco.languages.setMonarchTokensProvider('javascript', { tokenizer } as any);
+    monaco.languages.setMonarchTokensProvider('typescript', { tokenizer } as any);
+  }
+};
 
 // Module config
 @NgModule({
@@ -71,7 +82,7 @@ import { LoadingComponent } from './shared/loading/loading.component';
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     DragulaModule.forRoot(),
-    CovalentCodeEditorModule
+    MonacoEditorModule.forRoot(monacoConfig)
   ],
   providers: [],
   bootstrap: [AppComponent]

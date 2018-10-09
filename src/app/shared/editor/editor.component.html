@@ -38,12 +38,16 @@
         [ngClass]="{ 'active': activeTab === tab }"
       >
         <dm-loading></dm-loading>
-        <td-code-editor
-          [language]="tab.file.type"
-          automaticLayout
-          [editorOptions]="{ theme: 'dm-theme' }"
+        <dm-monaco-editor
+          [options]="{
+            theme: 'dm-theme',
+            fontFamily: 'Operator Mono SSm A, Operator Mono SSm B',
+            fontSize: '15',
+            autoIndent: true,
+            language: tab.file.type
+          }"
           [ngModel]="tab.file.contents | async"
-        ></td-code-editor>
+        ></dm-monaco-editor>
       </div>
     </div>
 

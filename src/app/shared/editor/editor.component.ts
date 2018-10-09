@@ -48,8 +48,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.openFileSub = this.editorService.openFile.subscribe(
       file => this.onOpenFile(file)
     );
-    console.log('defining theme!');
-    editor.defineTheme('dm-theme', dm_theme);
   }
 
   // Events

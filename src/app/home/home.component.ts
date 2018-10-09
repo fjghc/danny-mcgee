@@ -60,6 +60,11 @@ export class HomeComponent {
           name: 'script.js',
           type: 'javascript',
           storageRef: 'dannymcgee/src/js/script.js'
+        },
+        {
+          name: 'mock-data.ts',
+          type: 'typescript',
+          storageRef: 'dannymcgee/src/js/mock-data.ts'
         }
       ]
     },

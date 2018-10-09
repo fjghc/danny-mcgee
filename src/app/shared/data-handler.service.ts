@@ -51,28 +51,28 @@ export class DataHandler {
 
   // HTTP methods
   readFile(refOrUrl: string): Promise<string> {
-    console.log('ref received: ' + refOrUrl);
+    // console.log('ref received: ' + refOrUrl);
     // test whether this is a reference or URL
     const regex = RegExp(/^(http(s)?:\/\/).*$/);
 
     if (!regex.test(refOrUrl)) {
-      console.log('ref is NOT a URL');
+      // console.log('ref is NOT a URL');
       // This is NOT a URL, so resolve the reference with Firebase Storage
       return new Promise((resolve, reject) => {
         this.getDownloadUrlForRef(refOrUrl).toPromise()
           .then(downloadUrl => {
-            console.log('resolved URL: ' + downloadUrl);
+            // console.log('resolved URL: ' + downloadUrl);
             this.getFileAsText(downloadUrl)
               .then(content => {
                 resolve(content);
               })
               .catch(error => {
-                console.log('ERROR: Could not read file', error);
+                // console.log('ERROR: Could not read file', error);
                 reject(error);
               });
           })
           .catch(error => {
-            console.log('ERROR: Could not get download URL', error);
+            // console.log('ERROR: Could not get download URL', error);
             reject(error);
           });
       });

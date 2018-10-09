@@ -1,0 +1,1 @@
+This implementation of Monaco Editor for Angular was forked from [this repository](https://github.com/atularen/ngx-monaco-editor), updated to Monaco 0.14.3, and edited slightly to meet the needs of this project

@@ -27,6 +27,7 @@ export class EditorService {
 
   // Event emitters
   @Output() openFile = new EventEmitter<File>();
+  @Output() fileTreeClick = new EventEmitter();
 
   // Services
   constructor(private dataHandler: DataHandler) {}
@@ -54,17 +55,12 @@ export class EditorService {
 
   // Data manipulation
   setupFileContent(file: File) {
-    if (!file.monacoFile) {
-      file.monacoFile = new Promise((resolve, reject) => {
+    if (!file.contents) {
+      file.contents = new Promise((resolve, reject) => {
         this.dataHandler.readFile(file.storageRef)
           .then(content => {
             console.log('Content received:', content);
-            resolve({
-              uri: file.storageRef,
-              language: file.type,
-              content: content
-            });
-            console.log('MonacoFile is:', file.monacoFile);
+            resolve(content);
           })
           .catch(error => {
             console.log('ERROR: MonacoFile could not be generated', error);

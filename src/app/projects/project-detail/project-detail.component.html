@@ -45,12 +45,7 @@
   [ngSwitch]="true"
   class="project-window"
 >
-  <div class="loading">
-    <div class="icons">
-      <fa-icon [icon]="icons.spinner"></fa-icon>
-      <fa-icon [icon]="icons.spinner"></fa-icon>
-    </div>
-  </div>
+  <dm-loading></dm-loading>
   <div
     *ngSwitchCase="activeTab === 'desktop' || activeTab === 'tablet' || activeTab === 'mobile'"
     class="project-content"

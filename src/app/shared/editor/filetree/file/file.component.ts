@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { File } from '../../../file.model';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { EditorService } from '../../editor.service';
-import { Tab, createTab } from '../../tab.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'dm-file',
@@ -17,13 +17,22 @@ export class FileComponent implements OnInit {
   angleIcon: IconDefinition;
 
   // State
+  @Input() indent: number;
   isOpen = false;
-  isSingleClick = false;
+  lastClicked = false;
 
+  // Subs
+  fileClickSub: Subscription;
+
+  // Services
   constructor(private editorService: EditorService) { }
 
+  // Init
   ngOnInit() {
     this.setIcons();
+    this.fileClickSub = this.editorService.openFile.subscribe(
+      () => this.lastClicked = false
+    );
   }
 
   setIcons() {
@@ -36,6 +45,7 @@ export class FileComponent implements OnInit {
     }
   }
 
+  // Events
   onToggleOpen() {
     this.isOpen = !this.isOpen;
     this.setIcons();
@@ -43,6 +53,7 @@ export class FileComponent implements OnInit {
 
   onOpenFile() {
     this.editorService.openFile.next(this.file);
+    this.lastClicked = true;
   }
 
 }

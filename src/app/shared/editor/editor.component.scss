@@ -2,6 +2,10 @@
 
 .tabs-nav {
   display: flex;
+  height: 40px;
+  position: relative;
+  z-index: 1;
+  background-color: $gray-darker;
 }
 
 .tabs-nav-item {
@@ -31,24 +35,57 @@
       color: $gray-light;
     }
   }
+
+  &::before {
+    content: ' ';
+    display: block;
+    @include absolute-fill;
+    z-index: -1;
+    background-color: $gray-dark;
+  }
 }
 
 .tabs-content {
   height: 600px;
+  position: relative;
+  background-color: $gray-darker;
+
+  .splash {
+    @include absolute-center;
+    top: calc(50% - 40px);
+    text-align: center;
+
+    fa-icon {
+      font-size: 150px;
+      color: $gray-darkest;
+    }
+
+    p {
+      font-size: 14px;
+      font-weight: 400;
+      color: $gray-light;
+    }
+  }
 
   .tabs-content-item {
     display: none;
     width: 100%;
     height: 100%;
+    position: relative;
+    background-color: $gray-darker;
 
     &.active {
       display: block;
     }
 
-    monaco-editor, [monaco-editor] {
+    td-code-editor::ng-deep {
       display: block;
       width: 100%;
       height: 100%;
+
+      .editorContainer {
+        height: 100%;
+      }
     }
   }
 }

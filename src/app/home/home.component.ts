@@ -15,10 +15,41 @@ export class HomeComponent {
       type: 'folder',
       contents: [
         {
+          name: 'another folder',
+          type: 'folder',
+          contents: [
+            {
+              name: 'styles.css',
+              type: 'css',
+              storageRef: 'dannymcgee/src/css/styles.css'
+            },
+            {
+              name: 'styles.css',
+              type: 'css',
+              storageRef: 'dannymcgee/src/css/styles.css'
+            },
+          ]
+        },
+        {
           name: 'styles.css',
           type: 'css',
           storageRef: 'dannymcgee/src/css/styles.css'
-        }
+        },
+        {
+          name: 'styles.css',
+          type: 'css',
+          storageRef: 'dannymcgee/src/css/styles.css'
+        },
+        {
+          name: 'styles.css',
+          type: 'css',
+          storageRef: 'dannymcgee/src/css/styles.css'
+        },
+        {
+          name: 'styles.css',
+          type: 'css',
+          storageRef: 'dannymcgee/src/css/styles.css'
+        },
       ]
     },
     {

@@ -1,4 +1,11 @@
-<dm-file
-  *ngFor="let file of files"
-  [file]="file"
-></dm-file>
+<div class="heading">
+  <h6>Explorer</h6>
+</div>
+<div class="files">
+  <dm-file
+    *ngFor="let file of files"
+    [file]="file"
+    [indent]="1"
+    class="indent-1"
+  ></dm-file>
+</div>

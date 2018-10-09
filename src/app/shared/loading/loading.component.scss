@@ -1,0 +1,16 @@
+@import '../sass/vars';
+
+:host {
+  @include absolute-center;
+
+  .icons {
+    font-size: 36px;
+    color: $gray-light;
+    animation: spin 0.5s infinite ease-in-out;
+
+    fa-icon + fa-icon {
+      @include absolute(0, null, null, 0);
+      transform: rotate(180deg);
+    }
+  }
+}

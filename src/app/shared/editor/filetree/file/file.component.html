@@ -1,6 +1,8 @@
-<span
+<a
   (click)="onOpenFile()"
   class="filename"
+  [ngClass]="{ 'last-clicked': lastClicked }"
+  tabindex="0"
 >
   <ng-container *ngIf="file.type === 'folder'">
     <fa-icon
@@ -10,10 +12,12 @@
     ></fa-icon>
   </ng-container>
   <fa-icon [icon]="icon" [ngClass]="file.type"></fa-icon> {{ file.name }}
-</span>
+</a>
 <ng-container *ngIf="file.type === 'folder' && isOpen">
   <dm-file
     *ngFor="let _file of file.contents"
     [file]="_file"
+    [indent]="indent + 1"
+    [ngClass]="'indent-' + (indent + 1)"
   ></dm-file>
 </ng-container>

@@ -2,11 +2,47 @@
 
 :host {
   display: block;
-  padding-left: $editor-file-indent;
+  // padding-left: $editor-file-indent;
+}
 
-  .folder-toggle {
-    margin-left: -($editor-file-indent + $editor-icon-margin);
-    color: $gray-light;
-    cursor: pointer;
+.filename {
+  display: block;
+  cursor: pointer;
+  padding-right: 10px;
+  outline: none !important;
+
+  &.last-clicked {
+    background-color: $gray;
   }
+
+  &:hover {
+    color: $gray-lightest;
+    background-color: $gray;
+    text-decoration: none;
+  }
+
+  &:focus {
+    background-color: transparentize($primary, 0.6);
+    color: #fff;
+
+    .folder-toggle, .folder {
+      color: $gray-lightest;
+    }
+  }
+
+  ::ng-deep.indent-1 {
+    padding-left: $editor-file-indent + 15;
+  }
+
+  @for $i from 1 through 20 {
+    ::ng-deep.indent-#{$i} & {
+      padding-left: $editor-file-indent * $i + 15;
+    }
+  }
+}
+
+.folder-toggle {
+  margin-left: -$editor-file-indent;
+  color: $gray-light;
+  cursor: pointer;
 }

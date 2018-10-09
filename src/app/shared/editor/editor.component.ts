@@ -1,12 +1,16 @@
 // Angular imports
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
+// Dependency imports
+import { editor } from 'monaco-editor';
+import { Subscription } from 'rxjs';
+import { faCode, faTimes } from '@fortawesome/pro-light-svg-icons';
+
 // App imports
+import { dm_theme } from './theme';
 import { File } from '../file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
-import { Subscription } from 'rxjs';
-import { faTimes } from '@fortawesome/pro-light-svg-icons';
 import { DataHandler } from '../data-handler.service';
 
 // Component config
@@ -21,7 +25,10 @@ export class EditorComponent implements OnInit, OnDestroy {
   // Data
   @Input() files: File[];
   tabs: Tab[] = [];
-  closeIcon = faTimes;
+  icons = {
+    close: faTimes,
+    code: faCode
+  };
 
   // State
   activeTab: Tab;
@@ -41,6 +48,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.openFileSub = this.editorService.openFile.subscribe(
       file => this.onOpenFile(file)
     );
+    console.log('defining theme!');
+    editor.defineTheme('dm-theme', dm_theme);
   }
 
   // Events
@@ -71,6 +80,10 @@ export class EditorComponent implements OnInit, OnDestroy {
       }
     }
 
+    // If we've made it this far, this file hasn't been opened yet
+    // Set up the file contents
+    this.editorService.setupFileContent(file);
+
     // If there's already a temp tab open, replace its file with this one and make it active
     for (const tab of this.tabs) {
       if (tab.type === 'temp') {
@@ -80,12 +93,9 @@ export class EditorComponent implements OnInit, OnDestroy {
       }
     }
 
-    // If there's NOT already a temp tab open, create one and make it active
+    // Create a new tab and make it active
     this.tabs.push(createTab('temp', file));
     this.activeTab = this.tabs[this.tabs.length - 1];
-
-    // Generate the MonacoFile
-    this.editorService.setupFileContent(file);
 
     // Set a timeout to watch for double clicks
     setTimeout(() => {

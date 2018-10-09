@@ -21,22 +21,29 @@
         </span>
         <fa-icon
           (click)="onCloseTab(tab)"
-          [icon]="closeIcon"
+          [icon]="icons.close"
           class="close"
         ></fa-icon>
       </a>
     </nav>
 
     <div class="tabs-content">
+      <div class="splash">
+        <fa-icon [icon]="icons.code"></fa-icon>
+        <p>Open a file on the left to start browsing</p>
+      </div>
       <div
         *ngFor="let tab of tabs"
         class="tabs-content-item"
         [ngClass]="{ 'active': activeTab === tab }"
       >
-        <monaco-editor
-          theme="vs-dark"
-          [file]="tab.file.monacoFile | async"
-        ></monaco-editor>
+        <dm-loading></dm-loading>
+        <td-code-editor
+          [language]="tab.file.type"
+          automaticLayout
+          [editorOptions]="{ theme: 'dm-theme' }"
+          [ngModel]="tab.file.contents | async"
+        ></td-code-editor>
       </div>
     </div>
 

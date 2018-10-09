@@ -12,6 +12,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DragulaModule } from 'ng2-dragula';
+import { CovalentCodeEditorModule } from '@covalent/code-editor';
 
 // App imports
 import { environment } from '../environments/environment';
@@ -33,7 +34,7 @@ import { ProjectEditComponent } from './projects/project-edit/project-edit.compo
 import { EditorComponent } from './shared/editor/editor.component';
 import { FiletreeComponent } from './shared/editor/filetree/filetree.component';
 import { FileComponent } from './shared/editor/filetree/file/file.component';
-import { MonacoEditorModule } from 'ngx-monaco';
+import { LoadingComponent } from './shared/loading/loading.component';
 
 // Module config
 @NgModule({
@@ -54,7 +55,8 @@ import { MonacoEditorModule } from 'ngx-monaco';
     ProjectEditComponent,
     EditorComponent,
     FiletreeComponent,
-    FileComponent
+    FileComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,7 @@ import { MonacoEditorModule } from 'ngx-monaco';
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     DragulaModule.forRoot(),
-    MonacoEditorModule.forRoot()
+    CovalentCodeEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

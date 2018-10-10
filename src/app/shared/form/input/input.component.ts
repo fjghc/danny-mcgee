@@ -34,10 +34,12 @@ export class InputComponent implements OnInit, AfterViewInit {
       }
 
       // check for Chrome autofill
-      if (this.element.nativeElement.querySelector('input:-webkit-autofill')) {
-        this.isFilled = true;
-      }
-    }, 50);
+      try {
+        if (this.element.nativeElement.querySelector('input:-webkit-autofill')) {
+          this.isFilled = true;
+        }
+      } catch (e) {}
+    }, 200);
   }
 
   onFocus() {

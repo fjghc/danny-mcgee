@@ -2,16 +2,17 @@
 
 .tabs-nav {
   display: flex;
-  height: 40px;
   position: relative;
   z-index: 1;
   background-color: $gray-darker;
 }
 
 .tabs-nav-item {
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
   flex-grow: 0;
-  padding: 8px 16px;
+  padding: 6px 16px;
   background-color: $gray-dark;
 
   &.temp {
@@ -28,11 +29,33 @@
 
   .close {
     display: inline-block;
-    margin: 0 -4px 0 4px;
+    width: 24px;
+    margin: 0 -10px 0 8px;
+    position: relative;
     color: $gray-mid;
+    text-align: center;
 
     &:hover {
-      color: $gray-light;
+      color: $gray-lighter;
+    }
+
+    &.modified::after {
+      content: ' ';
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      @include absolute-center;
+      z-index: 10;
+      background-color: $blue-bold;
+    }
+
+    &.modified:hover {
+      color: $warning;
+
+      &::after {
+        display: none;
+      }
     }
   }
 

@@ -2,20 +2,27 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 // Dependency imports
-// import 'codemirror/mode/javascript/javascript';
-import './languages/javascript';
-// import 'codemirror/mode/htmlembedded/htmlembedded';
-// import 'codemirror/mode/htmlmixed/htmlmixed';
-// import 'codemirror/mode/css/css';
-// import 'codemirror/mode/sass/sass';
-import 'codemirror/addon/selection/active-line';
 import { Subscription } from 'rxjs';
 import { faCode, faTimes } from '@fortawesome/pro-light-svg-icons';
 
+// CodeMirror
+// Languages
+import './languages/javascript';
+import './languages/htmlmixed';
+import 'codemirror/mode/css/css';
+import 'codemirror/mode/sass/sass';
+
+// Addons
+import 'codemirror/addon/selection/active-line';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/edit/closetag';
+import 'codemirror/addon/edit/matchtags';
+
 // App imports
-import { File } from '../file.model';
+import { File } from './file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
+import { AuthService } from '../../auth/auth.service';
 
 // Component config
 @Component({
@@ -42,7 +49,10 @@ export class EditorComponent implements OnInit, OnDestroy {
   openFileSub: Subscription;
 
   // Services
-  constructor(public editorService: EditorService) {}
+  constructor(
+    public editorService: EditorService,
+    public authService: AuthService
+  ) {}
 
   // Init
   ngOnInit() {
@@ -118,6 +128,13 @@ export class EditorComponent implements OnInit, OnDestroy {
           needsNewActiveTab = true;
         }
 
+        // Confirm before closing if the file has been modified
+        if (this.tabs[i].file.contents !== this.tabs[i].file.initialContent) {
+          if (!confirm('Close this file? Unsaved changes will be lost!')) {
+            return;
+          }
+        }
+
         // Remove the tab from the array
         this.tabs.splice(i, 1);
 
@@ -128,6 +145,13 @@ export class EditorComponent implements OnInit, OnDestroy {
           this.activeTab = i === 0 ? this.tabs[0] : this.tabs[i - 1];
         }
       }
+    }
+  }
+
+  onChange($event, tab: Tab) {
+    tab.file.contents = new Promise(resolve => resolve($event));
+    if (tab.type === 'temp') {
+      tab.type = 'perm';
     }
   }
 

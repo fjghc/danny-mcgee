@@ -1,4 +1,4 @@
-// colors
+// Colors
 
 $gray-lightest: #DBE6EC;
 $gray-lighter: #AEC1CC;
@@ -14,7 +14,6 @@ $green: #16C98D;
 
 $blue-light: #8ABEE5;
 $blue-bold: #2c98ec;
-$blue-dark: #288AD6;
 
 $pink-light: #FFB0C0;
 $pink: #FF708E;
@@ -66,7 +65,7 @@ $contrast-color: (
 
 
 
-// sizes
+// Sizes
 
 $header-size: 94px;
 $menu-width: 64px;
@@ -82,12 +81,31 @@ $editor-icon-margin: 3px;
 
 
 
-// mixins
+// Fonts
 
 @mixin gotham($weight) {
   font-family: 'Gotham SSm A', 'Gotham SSm B', 'Helvetica', 'Arial', sans-serif;
   font-weight: $weight;
 }
+
+@mixin gotham-narrow($weight) {
+  font-family: 'Gotham Narrow SSm A', 'Gotham Narrow SSm B', 'Helvetica', 'Arial', sans-serif;
+  font-weight: $weight;
+}
+
+@mixin operator-mono($weight) {
+  font-family: 'Operator Mono SSm A', 'Operator Mono SSm B', 'Consolas', courier-new, monospace, mono;
+  font-weight: $weight;
+}
+
+@mixin fira-code($weight) {
+  font-family: 'Fira Code', 'Consolas', courier-new, monospace, mono;
+  font-weight: $weight;
+}
+
+
+
+// Mixins
 
 @mixin position($top: null, $right: null, $bottom: null, $left: null) {
   @if ($top != null) {
@@ -133,7 +151,7 @@ $editor-icon-margin: 3px;
 
 
 
-// animations
+// Animations
 
 @keyframes spin {
   from {

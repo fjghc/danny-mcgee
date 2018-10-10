@@ -8,7 +8,7 @@ import { faCss3, faHtml5, faJs } from '@fortawesome/free-brands-svg-icons';
 
 // App imports
 import { DataHandler } from '../data-handler.service';
-import { File } from '../file.model';
+import { File } from './file.model';
 
 // Service config
 @Injectable()
@@ -56,7 +56,7 @@ export class EditorService {
   // Data manipulation
   setupFileContent(file: File) {
     if (!file.contents) {
-      file.contents = new Promise((resolve, reject) => {
+      const contentPromise = new Promise<string>((resolve, reject) => {
         this.dataHandler.readFile(file.storageRef)
           .then(content => {
             // console.log('Content received:', content);
@@ -67,6 +67,8 @@ export class EditorService {
             reject(error);
           });
       });
+      file.initialContent = contentPromise;
+      file.contents = contentPromise;
     }
   }
 

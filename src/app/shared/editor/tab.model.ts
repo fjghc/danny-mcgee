@@ -1,4 +1,4 @@
-import { File } from '../file.model';
+import { File } from './file.model';
 
 export interface Tab {
   type: 'temp' | 'perm';

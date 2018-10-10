@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { File } from '../../../file.model';
+import { File } from '../../file.model';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { EditorService } from '../../editor.service';
 import { Subscription } from 'rxjs';

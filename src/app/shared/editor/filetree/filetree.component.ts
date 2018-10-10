@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { File } from '../../file.model';
+import { File } from '../file.model';
 
 @Component({
   selector: 'dm-filetree',

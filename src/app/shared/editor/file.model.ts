@@ -3,6 +3,7 @@ export class File {
     public name: string,
     public type: string,
     public contents?: File[] | Promise<string>,
+    public initialContent?: string | Promise<string>,
     public storageRef?: string
   ) {}
 }

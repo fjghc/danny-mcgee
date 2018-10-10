@@ -16,13 +16,14 @@
         <span class="filename">
           <fa-icon
             [icon]="editorService.getIconForType(tab.file.type)"
-            [ngClass]="tab.file.type"
+            [class]="tab.file.type"
           ></fa-icon> {{ tab.file.name }}
         </span>
         <fa-icon
           (click)="onCloseTab(tab)"
           [icon]="icons.close"
           class="close"
+          [ngClass]="{ 'modified': tab.file.initialContent !== tab.file.contents }"
         ></fa-icon>
       </a>
     </nav>
@@ -41,12 +42,18 @@
         <ngx-codemirror
           [name]="tab.file.name"
           [ngModel]="tab.file.contents | async"
+          (ngModelChange)="onChange($event, tab)"
           [options]="{
             theme: 'dm',
             lineNumbers: true,
             styleActiveLine: true,
-            mode: tab.file.type === 'typescript' ? 'text/typescript' : tab.file.type,
-            tabSize: 2
+            indentWithTabs: true,
+            tabSize: 2,
+            autoCloseBrackets: true,
+            autoCloseTags: true,
+            matchTags: { bothTags: true },
+            readOnly: !authService.isAuthenticated(),
+            mode: tab.file.type === 'typescript' ? 'text/typescript' : tab.file.type
           }"
         ></ngx-codemirror>
       </div>

@@ -288,7 +288,7 @@
               if (stream.peek() === '(')
                 cx.marked += ' func func-call';
             if (cx.marked === 'def')
-              if (stream.match(/^( *)?\(|^( *)?=( *)?(function( *)?\()|^( *)?=( *)?(\([\w]*?\)|[\w]+)( *)=>/, false, false))
+              if (stream.match(/^( *)?\(|^( *)?=( *)?(function( *)?\()|^( *)?=( *)?(\([\w, ]*?\)|[\w]+)( *)=>/i, false))
                 cx.marked += ' func func-def';
             return cx.marked;
           }

@@ -14,7 +14,7 @@
     &.folder {
       color: $gray-lighter;
     }
-    &.html {
+    &.html, &.htmlmixed {
       color: $red;
     }
     &.css {
@@ -22,6 +22,95 @@
     }
     &.javascript {
       color: $yellow;
+    }
+  }
+}
+
+.CodeMirror {
+  height: 100%;
+
+  // Custom theme
+  &.cm-s-dm {
+    // Main
+    font-family: 'Operator Mono SSm A', 'Operator Mono SSm B', 'Consolas', courier-new, monospace;
+    font-size: 14px;
+    background-color: $gray-darker;
+    color: $gray-lightest;
+
+    // UI
+    .CodeMirror-cursor {
+      border-left-width: 2px;
+      border-color: $gray-light;
+    }
+
+    .CodeMirror-selected {
+      background-color: $gray;
+    }
+
+    .CodeMirror-gutters {
+      width: 60px;
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    .CodeMirror-linenumber {
+      padding: 0 20px;
+      color: darken($gray-light, 10%);
+    }
+
+    .CodeMirror-activeline {
+
+      .CodeMirror-activeline-background, .CodeMirror-activeline-gutter {
+        background-color: darken($gray-darker, 2.5%);
+      }
+
+      .CodeMirror-linenumber {
+        color: $gray-lighter;
+      }
+    }
+
+    // Tokens
+    .cm-meta {
+      color: $orange;
+    }
+    .cm-comment {
+      color: $blue-bold;
+      font-style: italic;
+    }
+    .cm-keyword {
+      color: $blue-light;
+      font-style: italic;
+    }
+    .cm-operator {
+      color: $gray-lighter;
+    }
+    .cm-string {
+      color: $green;
+    }
+    .cm-number {
+      color: $turquoise;
+    }
+    .cm-variable {
+      color: $pink;
+    }
+    .cm-variable-2, .cm-def {
+      color: $pink-light;
+    }
+    .cm-property {
+      color: $pink;
+    }
+    .cm-tag {
+      color: $red;
+      &.cm-bracket {
+        color: $gray-lighter;
+      }
+    }
+    .cm-attribute {
+      color: $yellow;
+      font-style: italic;
+    }
+    .cm-func {
+      color: $turquoise;
     }
   }
 }

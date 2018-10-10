@@ -38,16 +38,17 @@
         [ngClass]="{ 'active': activeTab === tab }"
       >
         <dm-loading></dm-loading>
-        <dm-monaco-editor
-          [options]="{
-            theme: 'dm-theme',
-            fontFamily: 'Operator Mono SSm A, Operator Mono SSm B',
-            fontSize: '15',
-            autoIndent: true,
-            language: tab.file.type
-          }"
+        <ngx-codemirror
+          [name]="tab.file.name"
           [ngModel]="tab.file.contents | async"
-        ></dm-monaco-editor>
+          [options]="{
+            theme: 'dm',
+            lineNumbers: true,
+            styleActiveLine: true,
+            mode: tab.file.type === 'typescript' ? 'text/typescript' : tab.file.type,
+            tabSize: 2
+          }"
+        ></ngx-codemirror>
       </div>
     </div>
 

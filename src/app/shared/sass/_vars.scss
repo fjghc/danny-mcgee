@@ -14,14 +14,20 @@ $green: #16C98D;
 
 $blue-light: #8ABEE5;
 $blue-bold: #2c98ec;
+$blue-dark: #288AD6;
 
 $pink-light: #FFB0C0;
 $pink: #FF708E;
 $red: #FA5E5B;
 
 $yellow: #FFC83F;
+$orange: #FF953F;
 
 $purple: #a787f8;
+
+@function brightenUp($color) {
+  @return lighten(saturate($color, 100%), 1%);
+}
 
 
 

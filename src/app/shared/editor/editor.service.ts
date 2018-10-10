@@ -20,7 +20,7 @@ export class EditorService {
     folderOpen: faFolderOpen,
     angle: faCaretRight,
     angleOpen: faCaretDown,
-    html: faHtml5,
+    htmlmixed: faHtml5,
     css: faCss3,
     js: faJs
   };
@@ -42,8 +42,8 @@ export class EditorService {
           return [this.icons.folder, this.icons.angle];
         }
 
-      case 'html':
-        return this.icons.html;
+      case 'htmlmixed':
+        return this.icons.htmlmixed;
 
       case 'css':
         return this.icons.css;

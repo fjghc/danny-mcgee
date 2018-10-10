@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { File } from '../../../file.model';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { EditorService } from '../../editor.service';
@@ -41,6 +41,7 @@ export class FileComponent implements OnInit {
       this.icon = icons[0];
       this.angleIcon = icons[1];
     } else {
+      console.log('getting icon for type ' + this.file.type);
       this.icon = this.editorService.getIconForType(this.file.type);
     }
   }

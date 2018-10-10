@@ -15,37 +15,6 @@ export class HomeComponent {
       type: 'folder',
       contents: [
         {
-          name: 'another folder',
-          type: 'folder',
-          contents: [
-            {
-              name: 'styles.css',
-              type: 'css',
-              storageRef: 'dannymcgee/src/css/styles.css'
-            },
-            {
-              name: 'styles.css',
-              type: 'css',
-              storageRef: 'dannymcgee/src/css/styles.css'
-            },
-          ]
-        },
-        {
-          name: 'styles.css',
-          type: 'css',
-          storageRef: 'dannymcgee/src/css/styles.css'
-        },
-        {
-          name: 'styles.css',
-          type: 'css',
-          storageRef: 'dannymcgee/src/css/styles.css'
-        },
-        {
-          name: 'styles.css',
-          type: 'css',
-          storageRef: 'dannymcgee/src/css/styles.css'
-        },
-        {
           name: 'styles.css',
           type: 'css',
           storageRef: 'dannymcgee/src/css/styles.css'
@@ -56,6 +25,22 @@ export class HomeComponent {
       name: 'js',
       type: 'folder',
       contents: [
+        {
+          name: 'test',
+          type: 'folder',
+          contents: [
+            {
+              name: 'test.js',
+              type: 'javascript',
+              storageRef: 'dannymcgee/src/js/test/test.js'
+            }
+          ]
+        },
+        {
+          name: 'test.js',
+          type: 'javascript',
+          storageRef: 'dannymcgee/src/js/test.js'
+        },
         {
           name: 'script.js',
           type: 'javascript',
@@ -70,7 +55,7 @@ export class HomeComponent {
     },
     {
       name: 'index.html',
-      type: 'html',
+      type: 'htmlmixed',
       storageRef: 'dannymcgee/src/index.html'
     }
   ];

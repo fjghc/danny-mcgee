@@ -46,7 +46,7 @@
 }
 
 .tabs-content {
-  height: 600px;
+  height: 700px;
   position: relative;
   background-color: $gray-darker;
 
@@ -76,16 +76,6 @@
 
     &.active {
       display: block;
-    }
-
-    dm-monaco-editor::ng-deep {
-      display: block;
-      width: 100%;
-      height: 100%;
-
-      .editor-container {
-        height: 100%;
-      }
     }
   }
 }

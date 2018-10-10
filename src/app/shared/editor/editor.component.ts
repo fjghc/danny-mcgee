@@ -2,16 +2,20 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 // Dependency imports
-import { editor } from 'monaco-editor';
+// import 'codemirror/mode/javascript/javascript';
+import './languages/javascript';
+// import 'codemirror/mode/htmlembedded/htmlembedded';
+// import 'codemirror/mode/htmlmixed/htmlmixed';
+// import 'codemirror/mode/css/css';
+// import 'codemirror/mode/sass/sass';
+import 'codemirror/addon/selection/active-line';
 import { Subscription } from 'rxjs';
 import { faCode, faTimes } from '@fortawesome/pro-light-svg-icons';
 
 // App imports
-import { dm_theme } from './theme';
 import { File } from '../file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
-import { DataHandler } from '../data-handler.service';
 
 // Component config
 @Component({
@@ -38,10 +42,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   openFileSub: Subscription;
 
   // Services
-  constructor(
-    public editorService: EditorService,
-    private dataHandler: DataHandler
-  ) {}
+  constructor(public editorService: EditorService) {}
 
   // Init
   ngOnInit() {

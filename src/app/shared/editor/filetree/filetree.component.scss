@@ -9,16 +9,24 @@
   background-color: $gray-dark;
 }
 
-.files {
-  @include absolute(40px, 0, 0, 0);
+.overflow-guard {
+  @include absolute($editor-tab-height, 0, 0, 0);
   overflow: auto;
   padding: 10px 0;
+}
+
+.sizer::ng-deep {
+  display: table;
+
+  dm-file {
+    white-space: nowrap;
+  }
 }
 
 .heading {
   display: flex;
   align-items: center;
-  height: 36px;
+  height: $editor-tab-height;
   padding: 0 15px;
   background-color: $gray;
   color: $gray-lightest;

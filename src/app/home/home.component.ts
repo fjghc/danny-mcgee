@@ -57,6 +57,11 @@ export class HomeComponent {
       name: 'index.html',
       type: 'htmlmixed',
       storageRef: 'dannymcgee/src/index.html'
+    },
+    {
+      name: 'heresastupidlongfilenamefortestingloremipsumdolorsitametconsecteturadipiscingelit.html',
+      type: 'htmlmixed',
+      storageRef: 'dannymcgee/src/heresastupidlongfilenamefortestingloremipsumdolorsitametconsecteturadipiscingelit.html'
     }
   ];
 

@@ -32,7 +32,9 @@
 
 .tabs-nav {
   display: flex;
-  height: 36px;
+  max-width: 100%;
+  height: $editor-tab-height;
+  overflow-y: auto;
   position: relative;
   z-index: 1;
   background-color: $gray-darker;
@@ -41,9 +43,8 @@
 .tabs-nav-item {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
-  flex-grow: 0;
-  padding: 6px 16px;
+  flex: 0 0 0;
+  padding: 0 16px;
   background-color: $gray-dark;
 
   &.temp {
@@ -55,6 +56,10 @@
 
     .filename {
       color: #fff;
+    }
+
+    .close.modified::after {
+      border-color: $gray-darker;
     }
   }
 
@@ -73,9 +78,10 @@
     &.modified::after {
       content: ' ';
       display: block;
-      width: 10px;
-      height: 10px;
-      border-radius: 5px;
+      width: 14px;
+      height: 14px;
+      border: 2px solid $gray-dark;
+      border-radius: 7px;
       @include absolute-center;
       z-index: 10;
       background-color: $blue-bold;

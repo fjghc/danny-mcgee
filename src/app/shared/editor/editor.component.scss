@@ -1,7 +1,38 @@
 @import '../sass/vars';
 
+:host > .row {
+  flex-wrap: nowrap !important;
+}
+
+.filetree-col {
+  flex: 0 0;
+  position: relative;
+
+  .resizer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8px;
+    @include absolute(0, 0, 0, null);
+    z-index: 10;
+    background-color: transparent;
+    color: $gray-mid;
+    cursor: col-resize;
+
+    &:hover {
+      background-color: $gray;
+      color: $gray-light;
+    }
+  }
+}
+
+.editor-col {
+  overflow-x: auto;
+}
+
 .tabs-nav {
   display: flex;
+  height: 36px;
   position: relative;
   z-index: 1;
   background-color: $gray-darker;
@@ -69,7 +100,7 @@
 }
 
 .tabs-content {
-  height: 700px;
+  height: calc(100vh - #{$header-size + $main-container-padding + 36});
   position: relative;
   background-color: $gray-darker;
 
@@ -78,9 +109,26 @@
     top: calc(50% - 40px);
     text-align: center;
 
-    fa-icon {
-      font-size: 150px;
-      color: $gray-darkest;
+    dm-logo::ng-deep {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 300px;
+      height: 75px;
+      margin-bottom: 36px;
+
+      a {
+        pointer-events: none;
+      }
+
+      .logo {
+        position: relative;
+        height: auto;
+
+        .braces, .text {
+          fill: darken($gray-darkest, 1%);
+        }
+      }
     }
 
     p {

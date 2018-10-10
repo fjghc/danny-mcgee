@@ -1,9 +1,9 @@
 // Angular imports
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 
 // Dependency imports
 import { Subscription } from 'rxjs';
-import { faCode, faTimes } from '@fortawesome/pro-light-svg-icons';
+import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
 
 // CodeMirror
 // Languages
@@ -38,12 +38,17 @@ export class EditorComponent implements OnInit, OnDestroy {
   tabs: Tab[] = [];
   icons = {
     close: faTimes,
-    code: faCode
+    splash: faCode,
+    resizer: faEllipsisV
   };
 
   // State
   activeTab: Tab;
   justOpenedFile: File = null;
+  sidebarWidth = 300;
+  sidebarStartingWidth: number;
+  resizing = false;
+  resizeStartPos: number;
 
   // Subs
   openFileSub: Subscription;
@@ -148,10 +153,40 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChange($event, tab: Tab) {
+  onEditorChange($event, tab: Tab) {
     tab.file.contents = new Promise(resolve => resolve($event));
     if (tab.type === 'temp') {
       tab.type = 'perm';
+    }
+  }
+
+  // Simple file tree resizing
+  onResizeStart($event: MouseEvent) {
+    if ($event.button === 0) {
+      this.resizing = true;
+      console.log('start resizing!');
+
+      $event.stopPropagation();
+      $event.preventDefault();
+
+      this.sidebarStartingWidth = this.sidebarWidth;
+      this.resizeStartPos = $event.clientX;
+    }
+  }
+
+  @HostListener('document:mouseup')
+  @HostListener('document:mouseleave')
+  onResizeEnd() {
+    if (this.resizing) {
+      this.resizing = false;
+    }
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onResizeMove($event: MouseEvent) {
+    if (this.resizing) {
+      // TODO Generate the max sidebar width dynamically depending on viewport size
+      this.sidebarWidth = Math.min(this.sidebarStartingWidth + ($event.clientX - this.resizeStartPos), 600);
     }
   }
 

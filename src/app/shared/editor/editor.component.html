@@ -1,28 +1,34 @@
 <div class="row no-gutters">
-  <div class="col-3">
+  <div
+    class="col filetree-col"
+    [ngStyle]="{ 'flex-basis': sidebarWidth + 'px' }"
+  >
     <dm-filetree
       [files]="files"
     ></dm-filetree>
+    <div (mousedown)="onResizeStart($event)" class="resizer">
+      <fa-icon [icon]="icons.resizer"></fa-icon>
+    </div>
   </div>
-  <div class="col-9">
+  <div class="col editor-col">
 
     <nav class="tabs-nav">
       <a
+        class="tabs-nav-item"
         *ngFor="let tab of tabs"
         (click)="onSetActive(tab)"
-        class="tabs-nav-item"
         [ngClass]="{ 'temp': tab.type === 'temp', 'active': activeTab === tab }"
       >
         <span class="filename">
           <fa-icon
-            [icon]="editorService.getIconForType(tab.file.type)"
             [class]="tab.file.type"
+            [icon]="editorService.getIconForType(tab.file.type)"
           ></fa-icon> {{ tab.file.name }}
         </span>
         <fa-icon
+          class="close"
           (click)="onCloseTab(tab)"
           [icon]="icons.close"
-          class="close"
           [ngClass]="{ 'modified': tab.file.initialContent !== tab.file.contents }"
         ></fa-icon>
       </a>
@@ -30,7 +36,8 @@
 
     <div class="tabs-content">
       <div class="splash">
-        <fa-icon [icon]="icons.code"></fa-icon>
+        <!--<fa-icon [icon]="icons.splash"></fa-icon>-->
+        <dm-logo></dm-logo>
         <p>Open a file on the left to start browsing</p>
       </div>
       <div
@@ -42,7 +49,7 @@
         <ngx-codemirror
           [name]="tab.file.name"
           [ngModel]="tab.file.contents | async"
-          (ngModelChange)="onChange($event, tab)"
+          (ngModelChange)="onEditorChange($event, tab)"
           [options]="{
             theme: 'dm',
             lineNumbers: true,

@@ -3,7 +3,7 @@ import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core
 
 // Dependency imports
 import { Subscription } from 'rxjs';
-import { faCode, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
 
 // CodeMirror
 // Languages

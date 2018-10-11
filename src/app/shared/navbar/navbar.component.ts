@@ -6,9 +6,9 @@ import {
   faChartBar,
   faBriefcase,
   faCode,
-  faLock,
-  faBars, faEnvelope, faSignOutAlt
-} from '@fortawesome/free-solid-svg-icons';
+  faLockAlt,
+  faBars, faEnvelope, faSignOut
+} from '@fortawesome/pro-light-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from '../../auth/auth.service';
 
@@ -28,8 +28,8 @@ export class NavbarComponent implements OnInit {
     contact: faEnvelope,
     github: faGithub,
     code: faCode,
-    login: faLock,
-    logout: faSignOutAlt
+    login: faLockAlt,
+    logout: faSignOut
   };
 
   @HostBinding('class.expanded') isLocked = false;

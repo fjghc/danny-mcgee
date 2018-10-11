@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faSpinnerThird } from '@fortawesome/pro-light-svg-icons';
 
 @Component({
   selector: 'dm-loading',
@@ -8,7 +8,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 })
 export class LoadingComponent implements OnInit {
 
-  icon = faSpinner;
+  icon = faSpinnerThird;
 
   constructor() { }
 

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 // Dependency imports
 import { Observable, Subscription } from 'rxjs';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV } from '@fortawesome/pro-light-svg-icons';
 
 // App imports
 import { Project } from './project.model';

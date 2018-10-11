@@ -3,7 +3,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 
 // Dependency imports
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faCaretDown, faCaretRight, faFolder, faFolderOpen, faFile, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretRight, faFolder, faFolderOpen, faFilePlus, faFolderPlus } from '@fortawesome/pro-solid-svg-icons';
 import { faCss3, faHtml5, faJs } from '@fortawesome/free-brands-svg-icons';
 
 // App imports
@@ -26,7 +26,7 @@ export class EditorService {
       js: faJs
     },
     ui: {
-      newFile: faFile,
+      newFile: faFilePlus,
       newFolder: faFolderPlus
     }
   };
@@ -43,9 +43,9 @@ export class EditorService {
     switch (type) {
       case 'folder':
         if (open) {
-          return [this.icons.files.folderOpen, this.icons.files.angleOpen] as IconDefinition[];
+          return [this.icons.files.folderOpen, this.icons.files.angleOpen];
         } else {
-          return [this.icons.files.folder, this.icons.files.angle] as IconDefinition[];
+          return [this.icons.files.folder, this.icons.files.angle];
         }
 
       case 'html':

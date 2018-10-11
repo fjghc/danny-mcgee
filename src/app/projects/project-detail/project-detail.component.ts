@@ -3,7 +3,7 @@ import { ProjectsService } from '../projects.service';
 import { Project } from '../project.model';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { faCode, faDesktop, faMobile, faSpinner, faTablet, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCode, faDesktop, faMobile, faSpinnerThird, faTablet, faTimes } from '@fortawesome/pro-light-svg-icons';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -22,7 +22,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     mobile: faMobile,
     code: faCode,
     close: faTimes,
-    spinner: faSpinner
+    spinner: faSpinnerThird
   };
   @ViewChild('iframe') iframe: ElementRef;
   subscription: Subscription;

@@ -17,13 +17,13 @@
     &.folder {
       color: $gray-lighter;
     }
-    &.html, &.htmlmixed {
+    &.html {
       color: $red;
     }
     &.css {
       color: $blue-bold;
     }
-    &.javascript {
+    &.js {
       color: $yellow;
     }
   }

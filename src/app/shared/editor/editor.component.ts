@@ -24,8 +24,6 @@ import { File } from './file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
 import { AuthService } from '../../auth/auth.service';
-import { mergeAnalyzedFiles } from '@angular/compiler';
-import { DataHandler } from '../data-handler.service';
 
 // Component config
 @Component({
@@ -107,7 +105,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       path
     );
     parent.push(newFile);
-    this.editorService.newFile.next(newFile);
+    setTimeout(() => this.editorService.newFile.next(newFile));
   }
 
   onFileTreeClick(file: File) {
@@ -199,7 +197,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   onEditorChange($event, tab: Tab) {
-    tab.file.contents = new Promise(resolve => resolve($event));
+    tab.file.contents = $event;
     if (tab.type === 'temp') {
       tab.type = 'perm';
     }

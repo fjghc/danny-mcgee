@@ -9,6 +9,7 @@ import { faCss3, faHtml5, faJs } from '@fortawesome/free-brands-svg-icons';
 // App imports
 import { DataHandler } from '../data-handler.service';
 import { File } from './file.model';
+import { faFile } from '@fortawesome/pro-light-svg-icons';
 
 // Service config
 @Injectable()
@@ -21,6 +22,7 @@ export class EditorService {
       folderOpen: faFolderOpen,
       angle: faCaretRight,
       angleOpen: faCaretDown,
+      unknownFile: faFile,
       html: faHtml5,
       css: faCss3,
       js: faJs
@@ -34,6 +36,7 @@ export class EditorService {
   // Event emitters
   @Output() fileTreeClick = new EventEmitter<File>();
   @Output() newFile = new EventEmitter<File>();
+  @Output() newFileCommitted = new EventEmitter<File>();
 
   // Services
   constructor(private dataHandler: DataHandler) {}
@@ -56,6 +59,9 @@ export class EditorService {
 
       case 'js':
         return this.icons.files.js;
+
+      default:
+        return this.icons.files.unknownFile;
     }
   }
 
@@ -79,6 +85,10 @@ export class EditorService {
     }
   }
 
+  parseFileExtension(filename: string): string {
+    return filename.match(/\.[\w]+$/)[0].replace(/^./, '');
+  }
+
   getFiles(projectId: string): Promise<File[]> {
     return this.dataHandler.getList('filesMap/' + projectId) as Promise<File[]>;
   }
@@ -86,19 +96,14 @@ export class EditorService {
   // Data manipulation
   setupFileContent(file: File) {
     if (!file.contents) {
-      const contentPromise = new Promise<string>((resolve, reject) => {
-        this.dataHandler.readFile(file.path)
-          .then(content => {
-            // console.log('Content received:', content);
-            resolve(content);
-          })
-          .catch(error => {
-            // console.log('ERROR: MonacoFile could not be generated', error);
-            reject(error);
-          });
-      });
-      file.initialContent = contentPromise;
-      file.contents = contentPromise;
+      this.dataHandler.readFile(file.path)
+        .then(content => {
+          file.initialContent = content;
+          file.contents = content;
+        })
+        .catch(error => {
+          console.log('ERROR: Couldn\'t get content for file:', file, error);
+        });
     }
   }
 

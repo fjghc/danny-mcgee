@@ -11,26 +11,30 @@
 
 .filename {
   display: block;
-  cursor: pointer;
   padding-right: 10px;
   outline: none !important;
+  cursor: default;
 
   &.last-clicked {
     background-color: $gray;
   }
 
-  &:hover {
-    color: $gray-lightest;
-    background-color: $gray;
-    text-decoration: none;
-  }
+  :host:not(.new) > & {
+    cursor: pointer;
 
-  &:focus {
-    background-color: transparentize($primary, 0.6);
-    color: #fff;
-
-    .folder-toggle, .folder {
+    &:hover {
       color: $gray-lightest;
+      background-color: $gray;
+      text-decoration: none;
+    }
+
+    &:focus {
+      background-color: transparentize($primary, 0.6);
+      color: #fff;
+
+      .folder-toggle, .folder {
+        color: $gray-lightest;
+      }
     }
   }
 
@@ -49,4 +53,23 @@
   margin-left: -$editor-file-indent;
   color: $gray-light;
   cursor: pointer;
+
+  :host.new & {
+    pointer-events: none;
+  }
+}
+
+.new-file-name-input {
+  width: calc(100% - 22px);
+  border: 1px solid transparent;
+  margin-left: 2px;
+  position: relative;
+  z-index: 10;
+  background-color: $gray-darker;
+  color: $gray-lightest;
+  outline: none !important;
+
+  &:focus {
+    border-color: $primary;
+  }
 }

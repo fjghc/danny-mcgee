@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { File } from '../../file.model';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { EditorService } from '../../editor.service';
@@ -15,6 +15,7 @@ export class FileComponent implements OnInit, OnDestroy {
   @Input() file: File;
   icon: IconDefinition | IconDefinition[];
   angleIcon: IconDefinition;
+  @ViewChild('newFileNameInput') newFileNameInput: ElementRef;
 
   // State
   @Input() indent: number;
@@ -27,7 +28,7 @@ export class FileComponent implements OnInit, OnDestroy {
   newFileSub: Subscription;
 
   // Services
-  constructor(private editorService: EditorService) { }
+  constructor(private editorService: EditorService) {}
 
   // Init
   ngOnInit() {
@@ -41,10 +42,9 @@ export class FileComponent implements OnInit, OnDestroy {
     );
     this.newFileSub = this.editorService.newFile.subscribe(
       file => {
-        console.log('new file event received');
         if (file === this.file) {
-          console.log('it\'s this one!');
           this.newFile = true;
+          this.onNewFile();
         }
       }
     );
@@ -67,8 +67,56 @@ export class FileComponent implements OnInit, OnDestroy {
   }
 
   onFileTreeClick() {
+    console.log('file tree click');
     this.editorService.fileTreeClick.next(this.file);
     this.lastClicked = true;
+  }
+
+  onNewFile() {
+    setTimeout(() => this.newFileNameInput.nativeElement.focus());
+  }
+
+  onKeyDownNameInput($event) {
+    if ($event.key === 'Enter') {
+      this.onCommitNewFile(this.newFileNameInput.nativeElement.value);
+    }
+    if ($event.key === 'Escape') {
+      this.onCancelNewFile();
+    }
+  }
+
+  onCommitNewFile(name: string) {
+    if (name.length > 0) {
+      // Name the new file
+      console.log('file named: ' + name);
+      this.file.name = name;
+
+      if (this.file.type !== 'folder') {
+        // Set the file type
+        const extension = this.editorService.parseFileExtension(name);
+        if (extension) {
+          console.log('setting type to ' + extension);
+          this.file.type = extension;
+          this.setIcons();
+        } else {
+          console.log('ERROR: no extension for filename ' + name);
+        }
+
+        // Initialize contents
+        this.file.contents = '\n';
+        this.file.initialContent = '\n';
+      }
+
+      // Let the EditorService know
+      this.editorService.newFileCommitted.next(this.file);
+
+      // Clear the new file
+      this.newFile = false;
+    }
+  }
+
+  onCancelNewFile() {
+    console.log('new file cancelled!');
   }
 
   // Cleanup

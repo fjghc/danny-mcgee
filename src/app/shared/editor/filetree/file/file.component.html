@@ -1,17 +1,25 @@
 <a
-  (click)="onFileTreeClick()"
+  (click)="newFile ? null : onFileTreeClick()"
   class="filename"
   [ngClass]="{ 'last-clicked': lastClicked }"
   tabindex="0"
 >
-  <ng-container *ngIf="file.type === 'folder'">
+  <ng-container *ngIf="file.type === 'folder' && !newFile">
     <fa-icon
       (click)="onToggleOpen()"
       [icon]="angleIcon"
       class="folder-toggle"
     ></fa-icon>
   </ng-container>
-  <fa-icon [icon]="icon" [ngClass]="file.type"></fa-icon> {{ file.name }}
+  <fa-icon [icon]="icon" [ngClass]="file.type"></fa-icon>
+  <input
+    class="new-file-name-input"
+    (keydown)="onKeyDownNameInput($event)"
+    *ngIf="newFile"
+    type="text"
+    #newFileNameInput
+  />
+  {{ newFile ? null : file.name }}
 </a>
 <ng-container *ngIf="file.type === 'folder' && isOpen">
   <dm-file

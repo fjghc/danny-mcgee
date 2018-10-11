@@ -11,14 +11,20 @@ import { Subscription } from 'rxjs';
 export class FiletreeComponent implements OnInit, OnDestroy {
 
   @Input() files: File[];
-  newFileSub: Subscription;
   hasNewFile = false;
+
+  // Subs
+  newFileSub: Subscription;
+  nweFileCommittedSub: Subscription;
 
   constructor(private editorService: EditorService) {}
 
   ngOnInit() {
     this.newFileSub = this.editorService.newFile.subscribe(
       () => this.hasNewFile = true
+    );
+    this.nweFileCommittedSub = this.editorService.newFileCommitted.subscribe(
+      () => this.hasNewFile = false
     );
   }
 
@@ -29,6 +35,7 @@ export class FiletreeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.newFileSub.unsubscribe();
+    this.nweFileCommittedSub.unsubscribe();
   }
 
 }

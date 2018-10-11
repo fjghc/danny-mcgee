@@ -68,7 +68,7 @@
         <dm-loading></dm-loading>
         <ngx-codemirror
           [name]="tab.file.name"
-          [ngModel]="tab.file.contents | async"
+          [ngModel]="tab.file.contents"
           (ngModelChange)="onEditorChange($event, tab)"
           [options]="{
             theme: 'dm',

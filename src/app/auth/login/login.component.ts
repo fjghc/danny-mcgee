@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 
-import { faLockAlt } from '@fortawesome/pro-light-svg-icons';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthService } from '../auth.service';
 
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   passwordValidators = [Validators.required];
 
   icons = {
-    lock: faLockAlt
+    lock: faLock
   };
 
   constructor(private authService: AuthService) {}

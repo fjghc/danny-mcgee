@@ -13,6 +13,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DragulaModule } from 'ng2-dragula';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 // App imports
 import { environment } from '../environments/environment';
@@ -71,7 +72,8 @@ import { LoadingComponent } from './shared/loading/loading.component';
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     DragulaModule.forRoot(),
-    CodemirrorModule
+    CodemirrorModule,
+    PerfectScrollbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

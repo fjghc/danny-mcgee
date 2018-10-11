@@ -9,6 +9,9 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+// App imports
+import { File } from './editor/file.model';
+
 // Service config
 @Injectable({ providedIn: 'root' })
 export class DataHandler {
@@ -43,6 +46,21 @@ export class DataHandler {
   }
 
   // Firebase Realtime Database methods
+  getList(path: string): Promise<{}[]> {
+    return new Promise((resolve, reject) => {
+      const sub = this.rtdb.list(path).valueChanges()
+        .subscribe(
+          response => {
+            sub.unsubscribe();
+            resolve(response);
+          },
+          error => {
+            sub.unsubscribe();
+            reject(error);
+          }
+        );
+    });
+  }
 
   // Firebase Storage methods
   private getDownloadUrlForRef(ref: string): Observable<string> {

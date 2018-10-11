@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { File } from '../../file.model';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { EditorService } from '../../editor.service';
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.scss']
 })
-export class FileComponent implements OnInit {
+export class FileComponent implements OnInit, OnDestroy {
 
   // Data
   @Input() file: File;
@@ -18,11 +18,13 @@ export class FileComponent implements OnInit {
 
   // State
   @Input() indent: number;
+  @HostBinding('class.new') newFile = false;
   isOpen = false;
   lastClicked = false;
 
   // Subs
   fileClickSub: Subscription;
+  newFileSub: Subscription;
 
   // Services
   constructor(private editorService: EditorService) { }
@@ -30,8 +32,21 @@ export class FileComponent implements OnInit {
   // Init
   ngOnInit() {
     this.setIcons();
-    this.fileClickSub = this.editorService.openFile.subscribe(
-      () => this.lastClicked = false
+    this.fileClickSub = this.editorService.fileTreeClick.subscribe(
+      file => {
+        if (file !== this.file) {
+          this.lastClicked = false;
+        }
+      }
+    );
+    this.newFileSub = this.editorService.newFile.subscribe(
+      file => {
+        console.log('new file event received');
+        if (file === this.file) {
+          console.log('it\'s this one!');
+          this.newFile = true;
+        }
+      }
     );
   }
 
@@ -41,7 +56,6 @@ export class FileComponent implements OnInit {
       this.icon = icons[0];
       this.angleIcon = icons[1];
     } else {
-      console.log('getting icon for type ' + this.file.type);
       this.icon = this.editorService.getIconForType(this.file.type);
     }
   }
@@ -52,9 +66,14 @@ export class FileComponent implements OnInit {
     this.setIcons();
   }
 
-  onOpenFile() {
-    this.editorService.openFile.next(this.file);
+  onFileTreeClick() {
+    this.editorService.fileTreeClick.next(this.file);
     this.lastClicked = true;
   }
 
+  // Cleanup
+  ngOnDestroy() {
+    this.fileClickSub.unsubscribe();
+    this.newFileSub.unsubscribe();
+  }
 }

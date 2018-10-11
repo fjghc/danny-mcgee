@@ -8,19 +8,57 @@
   flex: 0 0;
   position: relative;
 
+  .filetree-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    height: $editor-tab-height;
+    padding: 0 15px;
+    background-color: $gray;
+    color: $gray-lightest;
+
+    h6 {
+      font-size: 13px;
+      font-weight: 400;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .btn-container {
+      flex: 0 0 auto;
+      display: flex;
+      flex-wrap: nowrap;
+      margin-right: -8px;
+      margin-left: auto;
+
+      fa-icon {
+        display: block;
+        width: 24px;
+        text-align: center;
+        color: $gray-light;
+        cursor: pointer;
+
+        &:hover {
+          color: $gray-lighter;
+        }
+      }
+    }
+  }
+
   .resizer {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 8px;
+    width: 4px;
     @include absolute(0, 0, 0, null);
     z-index: 10;
     background-color: transparent;
     color: $gray-mid;
     cursor: col-resize;
+    @include transition(0.1s, linear, background-color, color);
 
     &:hover {
-      background-color: $gray;
+      background-color: transparentize($gray-lightest, 0.95);
       color: $gray-light;
     }
   }
@@ -34,10 +72,14 @@
   display: flex;
   max-width: 100%;
   height: $editor-tab-height;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
   z-index: 1;
-  background-color: $gray-darker;
+  background-color: $gray-dark;
+
+  &.empty {
+    background-color: $gray-darker;
+  }
 }
 
 .tabs-nav-item {
@@ -96,17 +138,17 @@
     }
   }
 
-  &::before {
-    content: ' ';
-    display: block;
-    @include absolute-fill;
-    z-index: -1;
-    background-color: $gray-dark;
-  }
+  //&::before {
+  //  content: ' ';
+  //  display: block;
+  //  @include absolute-fill;
+  //  z-index: -1;
+  //  background-color: $gray-dark;
+  //}
 }
 
 .tabs-content {
-  height: calc(100vh - #{$header-size + $main-container-padding + 36});
+  height: calc(100vh - #{$header-size + 2 + $main-container-padding + $editor-tab-height});
   position: relative;
   background-color: $gray-darker;
 

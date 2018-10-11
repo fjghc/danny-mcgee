@@ -3,6 +3,22 @@
     class="col filetree-col"
     [ngStyle]="{ 'flex-basis': sidebarWidth + 'px' }"
   >
+    <div class="filetree-heading">
+      <h6>Explorer</h6>
+      <div
+        class="btn-container"
+        *ngIf="authService.isAuthenticated()"
+      >
+        <fa-icon
+          (click)="onNewFile(true)"
+          [icon]="editorService.icons.ui.newFolder"
+        ></fa-icon>
+        <fa-icon
+          (click)="onNewFile()"
+          [icon]="editorService.icons.ui.newFile"
+        ></fa-icon>
+      </div>
+    </div>
     <dm-filetree
       [files]="files"
     ></dm-filetree>
@@ -12,7 +28,11 @@
   </div>
   <div class="col editor-col">
 
-    <nav class="tabs-nav">
+    <nav
+      class="tabs-nav"
+      [ngClass]="{ 'empty': tabs.length === 0 }"
+      [perfectScrollbar]="{ suppressScrollY: true, useBothWheelAxes: true }"
+    >
       <a
         class="tabs-nav-item"
         *ngFor="let tab of tabs"
@@ -59,8 +79,9 @@
             autoCloseBrackets: true,
             autoCloseTags: true,
             matchTags: { bothTags: true },
+            scrollbarStyle: 'overlay',
             readOnly: !authService.isAuthenticated(),
-            mode: tab.file.type === 'typescript' ? 'text/typescript' : tab.file.type
+            mode: editorService.getModeForType(tab.file.type)
           }"
         ></ngx-codemirror>
       </div>

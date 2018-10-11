@@ -2,7 +2,11 @@
 
 :host {
   display: block;
-  // padding-left: $editor-file-indent;
+
+  &.new {
+    position: relative;
+    z-index: 9999;
+  }
 }
 
 .filename {

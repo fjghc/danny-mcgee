@@ -11,6 +11,6 @@
 .main {
   max-height: 100vh;
   overflow-y: auto;
-  padding: ($header-size + 2) $main-container-padding 72px;
+  padding: ($header-size + 2) $main-container-padding $main-container-padding;
   position: relative;
 }

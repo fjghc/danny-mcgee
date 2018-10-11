@@ -3,7 +3,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 
 // Dependency imports
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faCaretDown, faCaretRight, faFolder, faFolderOpen } from '@fortawesome/pro-solid-svg-icons';
+import { faCaretDown, faCaretRight, faFolder, faFolderOpen, faFilePlus, faFolderPlus } from '@fortawesome/pro-solid-svg-icons';
 import { faCss3, faHtml5, faJs } from '@fortawesome/free-brands-svg-icons';
 
 // App imports
@@ -16,18 +16,24 @@ export class EditorService {
 
   // Data
   icons = {
-    folder: faFolder,
-    folderOpen: faFolderOpen,
-    angle: faCaretRight,
-    angleOpen: faCaretDown,
-    htmlmixed: faHtml5,
-    css: faCss3,
-    js: faJs
+    files: {
+      folder: faFolder,
+      folderOpen: faFolderOpen,
+      angle: faCaretRight,
+      angleOpen: faCaretDown,
+      html: faHtml5,
+      css: faCss3,
+      js: faJs
+    },
+    ui: {
+      newFile: faFilePlus,
+      newFolder: faFolderPlus
+    }
   };
 
   // Event emitters
-  @Output() openFile = new EventEmitter<File>();
-  @Output() fileTreeClick = new EventEmitter();
+  @Output() fileTreeClick = new EventEmitter<File>();
+  @Output() newFile = new EventEmitter<File>();
 
   // Services
   constructor(private dataHandler: DataHandler) {}
@@ -37,27 +43,51 @@ export class EditorService {
     switch (type) {
       case 'folder':
         if (open) {
-          return [this.icons.folderOpen, this.icons.angleOpen];
+          return [this.icons.files.folderOpen, this.icons.files.angleOpen];
         } else {
-          return [this.icons.folder, this.icons.angle];
+          return [this.icons.files.folder, this.icons.files.angle];
         }
 
-      case 'htmlmixed':
-        return this.icons.htmlmixed;
+      case 'html':
+        return this.icons.files.html;
 
       case 'css':
-        return this.icons.css;
+        return this.icons.files.css;
 
-      case 'javascript':
-        return this.icons.js;
+      case 'js':
+        return this.icons.files.js;
     }
+  }
+
+  getModeForType(type: string): string {
+    switch (type) {
+      case 'html':
+        return 'htmlmixed';
+
+      case 'css':
+        return 'css';
+
+      case 'js':
+        return 'javascript';
+
+      case 'ts':
+        return 'application/typescript';
+
+      default:
+        console.log('Mode not found for type ' + type);
+        break;
+    }
+  }
+
+  getFiles(projectId: string): Promise<File[]> {
+    return this.dataHandler.getList('filesMap/' + projectId) as Promise<File[]>;
   }
 
   // Data manipulation
   setupFileContent(file: File) {
     if (!file.contents) {
       const contentPromise = new Promise<string>((resolve, reject) => {
-        this.dataHandler.readFile(file.storageRef)
+        this.dataHandler.readFile(file.path)
           .then(content => {
             // console.log('Content received:', content);
             resolve(content);

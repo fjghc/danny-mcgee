@@ -17,12 +17,15 @@ import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/matchtags';
+import 'codemirror/addon/scroll/simplescrollbars';
 
 // App imports
 import { File } from './file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
 import { AuthService } from '../../auth/auth.service';
+import { mergeAnalyzedFiles } from '@angular/compiler';
+import { DataHandler } from '../data-handler.service';
 
 // Component config
 @Component({
@@ -34,7 +37,9 @@ import { AuthService } from '../../auth/auth.service';
 export class EditorComponent implements OnInit, OnDestroy {
 
   // Data
-  @Input() files: File[];
+  // @Input() files: File[];
+  @Input() storageRef: string;
+  files: File[];
   tabs: Tab[] = [];
   icons = {
     close: faTimes,
@@ -44,14 +49,15 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   // State
   activeTab: Tab;
-  justOpenedFile: File = null;
+  justOpenedFile: File;
+  selectedFile: File;
   sidebarWidth = 300;
   sidebarStartingWidth: number;
   resizing = false;
   resizeStartPos: number;
 
   // Subs
-  openFileSub: Subscription;
+  fileTreeClickSub: Subscription;
 
   // Services
   constructor(
@@ -61,13 +67,52 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   // Init
   ngOnInit() {
-    this.openFileSub = this.editorService.openFile.subscribe(
-      file => this.onOpenFile(file)
+    this.fileTreeClickSub = this.editorService.fileTreeClick.subscribe(
+      file => {
+        if (file) {
+          this.onFileTreeClick(file);
+        } else {
+          this.selectedFile = null;
+        }
+      }
     );
+    this.editorService.getFiles(this.storageRef)
+      .then(files => this.files = files)
+      .catch(error => console.log(error));
   }
 
   // Events
-  onOpenFile(file: File) {
+  onNewFile(isFolder = false) {
+    let parent: File[];
+    let path: string;
+
+    if (this.selectedFile) {
+      if (this.selectedFile.type === 'folder') {
+        parent = this.selectedFile.contents as File[];
+        path = this.selectedFile.path;
+      } else {
+        const parentFile = this.findFileParent(this.selectedFile);
+        parent = parentFile.contents as File[];
+        path = parentFile.path;
+      }
+    } else {
+      path = this.storageRef + '/';
+      parent = this.files;
+    }
+    const newFile = new File(
+      '',
+      isFolder ? 'folder' : null,
+      [],
+      null,
+      path
+    );
+    parent.push(newFile);
+    this.editorService.newFile.next(newFile);
+  }
+
+  onFileTreeClick(file: File) {
+    this.selectedFile = file;
+
     // Don't open folders as tabs
     if (file.type === 'folder') {
       return;
@@ -164,8 +209,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   onResizeStart($event: MouseEvent) {
     if ($event.button === 0) {
       this.resizing = true;
-      console.log('start resizing!');
-
       $event.stopPropagation();
       $event.preventDefault();
 
@@ -190,9 +233,22 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Helper functions
+  findFileParent(needle: File, haystack?: File): File {
+    const haystackContents = haystack ? haystack.contents as File[] : this.files;
+
+    for (const hay of haystackContents) {
+      if (hay === needle) {
+        return haystack;
+      } else if (hay.contents instanceof Array) {
+        return this.findFileParent(needle, hay);
+      }
+    }
+  }
+
   // Cleanup
   ngOnDestroy() {
-    this.openFileSub.unsubscribe();
+    this.fileTreeClickSub.unsubscribe();
   }
 
 }

@@ -141,3 +141,75 @@
     }
   }
 }
+
+// Scrollbars
+
+// both
+.ps__rail-x, .ps__rail-y,
+.ps__thumb-x, .ps__thumb-y {
+  position: absolute;
+}
+.ps__thumb-x, .ps__thumb-y,
+.CodeMirror-overlayscroll-vertical > div, .CodeMirror-overlayscroll-horizontal > div {
+  border-radius: 3px;
+  background-color: $gray-lightest;
+  opacity: 0.1;
+  transition: opacity 0.1s linear;
+
+  &:hover {
+    opacity: 0.25;
+  }
+
+  .tabs-nav:not(:hover) & {
+    opacity: 0;
+  }
+}
+
+// x
+.ps__rail-x {
+  height: 12px;
+  padding: 3px 0;
+  margin: 0 3px;
+  bottom: 0;
+
+  .tabs-nav & {
+    height: 3px;
+    padding: 0;
+  }
+}
+.ps__thumb-x {
+  height: 6px;
+
+  .tabs-nav & {
+    height: 3px;
+  }
+}
+
+// y
+.ps__rail-y, .CodeMirror-overlayscroll-vertical {
+  width: 12px;
+  right: 0;
+
+  & > div, .ps__thumb-y {
+    width: 6px;
+  }
+}
+.ps__rail-y {
+  padding: 0 3px;
+  margin: 3px 0;
+
+  dm-filetree & {
+    padding-right: 4px;
+  }
+}
+.CodeMirror-overlayscroll-vertical {
+  padding: 3px;
+
+  & > div {
+    right: 3px;
+  }
+}
+
+.CodeMirror-scrollbar-filler {
+  background: transparent;
+}

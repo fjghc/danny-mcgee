@@ -1,7 +1,7 @@
-<div class="heading">
-  <h6>Explorer</h6>
-</div>
-<div class="overflow-guard">
+<div
+  class="overflow-guard"
+  [perfectScrollbar]
+>
   <div class="sizer">
     <dm-file
       *ngFor="let file of files"
@@ -9,5 +9,10 @@
       [indent]="1"
       class="indent-1"
     ></dm-file>
+    <div class="new-file-overlay" *ngIf="hasNewFile"></div>
   </div>
+  <div
+    class="deselector"
+    (click)="onDeselect()"
+  ></div>
 </div>

@@ -4,6 +4,6 @@ export class File {
     public type: string,
     public contents?: File[] | Promise<string>,
     public initialContent?: string | Promise<string>,
-    public storageRef?: string
+    public path?: string
   ) {}
 }

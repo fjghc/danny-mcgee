@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'dm-home',
@@ -8,62 +7,61 @@ import { environment } from '../../environments/environment';
 })
 export class HomeComponent {
 
-  baseUrl = 'gs://' + environment.firebase.storageBucket;
-  files = [
-    {
-      name: 'css',
-      type: 'folder',
-      contents: [
-        {
-          name: 'styles.css',
-          type: 'css',
-          storageRef: 'dannymcgee/src/css/styles.css'
-        },
-      ]
-    },
-    {
-      name: 'js',
-      type: 'folder',
-      contents: [
-        {
-          name: 'test',
-          type: 'folder',
-          contents: [
-            {
-              name: 'test.js',
-              type: 'javascript',
-              storageRef: 'dannymcgee/src/js/test/test.js'
-            }
-          ]
-        },
-        {
-          name: 'test.js',
-          type: 'javascript',
-          storageRef: 'dannymcgee/src/js/test.js'
-        },
-        {
-          name: 'script.js',
-          type: 'javascript',
-          storageRef: 'dannymcgee/src/js/script.js'
-        },
-        {
-          name: 'mock-data.ts',
-          type: 'typescript',
-          storageRef: 'dannymcgee/src/js/mock-data.ts'
-        }
-      ]
-    },
-    {
-      name: 'index.html',
-      type: 'htmlmixed',
-      storageRef: 'dannymcgee/src/index.html'
-    },
-    {
-      name: 'heresastupidlongfilenamefortestingloremipsumdolorsitametconsecteturadipiscingelit.html',
-      type: 'htmlmixed',
-      storageRef: 'dannymcgee/src/heresastupidlongfilenamefortestingloremipsumdolorsitametconsecteturadipiscingelit.html'
-    }
-  ];
+  // files = [
+  //   {
+  //     name: 'css',
+  //     type: 'folder',
+  //     contents: [
+  //       {
+  //         name: 'styles.css',
+  //         type: 'css',
+  //         path: 'dannymcgee/src/css/styles.css'
+  //       },
+  //     ]
+  //   },
+  //   {
+  //     name: 'js',
+  //     type: 'folder',
+  //     contents: [
+  //       {
+  //         name: 'test',
+  //         type: 'folder',
+  //         contents: [
+  //           {
+  //             name: 'test.js',
+  //             type: 'javascript',
+  //             path: 'dannymcgee/src/js/test/test.js'
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         name: 'test.js',
+  //         type: 'javascript',
+  //         path: 'dannymcgee/src/js/test.js'
+  //       },
+  //       {
+  //         name: 'script.js',
+  //         type: 'javascript',
+  //         path: 'dannymcgee/src/js/script.js'
+  //       },
+  //       {
+  //         name: 'mock-data.ts',
+  //         type: 'typescript',
+  //         path: 'dannymcgee/src/js/mock-data.ts'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     name: 'index.html',
+  //     type: 'htmlmixed',
+  //     path: 'dannymcgee/src/index.html'
+  //   },
+  //   {
+  //     name: 'heresastupidlongfilenamefortestingloremipsumdolorsitametconsecteturadipiscingelit.html',
+  //     type: 'htmlmixed',
+  //     path: 'dannymcgee/src/heresastupidlongfilenamefortestingloremipsumdolorsitametconsecteturadipiscingelit.html'
+  //   }
+  // ];
 
   constructor() {}
 

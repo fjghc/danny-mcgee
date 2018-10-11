@@ -7,6 +7,7 @@
       <h6>Explorer</h6>
       <div
         class="btn-container"
+        *ngIf="authService.isAuthenticated()"
       >
         <fa-icon
           (click)="onNewFile(true)"

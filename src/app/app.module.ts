@@ -37,6 +37,8 @@ import { FiletreeComponent } from './shared/editor/filetree/filetree.component';
 import { FileComponent } from './shared/editor/filetree/file/file.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 
+// TODO: Please refactor me
+
 // Module config
 @NgModule({
   declarations: [

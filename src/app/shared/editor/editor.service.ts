@@ -1,21 +1,28 @@
 // Angular imports
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 // Dependency imports
+import { Observable, Subject, Subscription } from 'rxjs';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCaretDown, faCaretRight, faFolder, faFolderOpen, faFilePlus, faFolderPlus } from '@fortawesome/pro-solid-svg-icons';
 import { faCss3, faHtml5, faJs } from '@fortawesome/free-brands-svg-icons';
+import { faFile } from '@fortawesome/pro-light-svg-icons';
 
 // App imports
 import { DataHandler } from '../data-handler.service';
 import { File } from './file.model';
-import { faFile } from '@fortawesome/pro-light-svg-icons';
 
 // Service config
 @Injectable()
 export class EditorService {
 
   // Data
+  // Files
+  filesObservable: Observable<File[]>;
+  filesTemp: File[];
+  private files: File[];
+
+  // Icons
   icons = {
     files: {
       folder: faFolder,
@@ -33,15 +40,37 @@ export class EditorService {
     }
   };
 
-  // Event emitters
-  @Output() fileTreeClick = new EventEmitter<File>();
-  @Output() newFile = new EventEmitter<File>();
-  @Output() newFileCommitted = new EventEmitter<File>();
+  // Event Subjects
+  fileTreeClick = new Subject<File>();
+  newFile = new Subject<File>();
+  newFileCommitted = new Subject<File>();
+
+  // Subs
+  filesSub: Subscription;
 
   // Services
   constructor(private dataHandler: DataHandler) {}
 
   // Getters
+  watchFiles(projectId: string): Observable<File[]> {
+    // sync this service's files with the database
+    this.filesObservable = this.dataHandler.watchList('filesMap/' + projectId) as Observable<File[]>;
+
+    this.filesSub = this.filesObservable.subscribe(
+      files => this.files = files,
+      error => console.log(error)
+    );
+
+    // return the observable for outside subscription
+    return this.filesObservable;
+  }
+
+  getFilesTemp(projectId: string): File[] {
+    // make a deep copy of the files in their current state and return them for editing
+    this.filesTemp = JSON.parse(JSON.stringify(this.files));
+    return this.filesTemp;
+  }
+
   getIconForType(type: string, open?: boolean): IconDefinition | IconDefinition[] {
     switch (type) {
       case 'folder':
@@ -85,12 +114,8 @@ export class EditorService {
     }
   }
 
-  parseFileExtension(filename: string): string {
+  getFileExtension(filename: string): string {
     return filename.match(/\.[\w]+$/)[0].replace(/^./, '');
-  }
-
-  getFiles(projectId: string): Promise<File[]> {
-    return this.dataHandler.getList('filesMap/' + projectId) as Promise<File[]>;
   }
 
   // Data manipulation
@@ -105,6 +130,10 @@ export class EditorService {
           console.log('ERROR: Couldn\'t get content for file:', file, error);
         });
     }
+  }
+
+  destroyFile(file: File) {
+
   }
 
 }

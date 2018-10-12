@@ -89,7 +89,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.projects = this.projectsService.getProjectsTemp();
     } else {
       // Get projects from database
-      this.projectsObservable = this.projectsService.getProjectsFromDatabase();
+      this.projectsObservable = this.projectsService.watchProjects();
     }
   }
 

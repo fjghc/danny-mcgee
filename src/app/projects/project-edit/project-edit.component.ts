@@ -25,7 +25,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
   requiredValidator = [Validators.required];
   yearValidator = [
     Validators.required,
-    Validators.pattern(/(\d){4}/g)
+    Validators.pattern(/^(\d){4}$/)
   ];
   urlValidator = [
     Validators.required,
@@ -97,7 +97,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     } else {
       this.projectsService.editProject(this.project);
     }
-    this.projectsService.closeActiveProject.emit();
+    this.projectsService.closeActiveProject.next();
   }
 
   // Cleanup

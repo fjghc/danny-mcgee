@@ -20,7 +20,7 @@ import 'codemirror/addon/edit/matchtags';
 import 'codemirror/addon/scroll/simplescrollbars';
 
 // App imports
-import { File } from './file.model';
+import { createFile, File } from './file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
 import { AuthService } from '../../auth/auth.service';
@@ -35,8 +35,7 @@ import { AuthService } from '../../auth/auth.service';
 export class EditorComponent implements OnInit, OnDestroy {
 
   // Data
-  // @Input() files: File[];
-  @Input() storageRef: string;
+  @Input() projectId: string;
   files: File[];
   tabs: Tab[] = [];
   icons = {
@@ -55,6 +54,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   resizeStartPos: number;
 
   // Subs
+  filesSub: Subscription;
   fileTreeClickSub: Subscription;
 
   // Services
@@ -65,6 +65,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   // Init
   ngOnInit() {
+    this.filesSub = this.editorService.watchFiles(this.projectId).subscribe(
+      files => this.files = files
+    );
+    this.editorService.watchFiles(this.projectId);
     this.fileTreeClickSub = this.editorService.fileTreeClick.subscribe(
       file => {
         if (file) {
@@ -74,9 +78,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
       }
     );
-    this.editorService.getFiles(this.storageRef)
-      .then(files => this.files = files)
-      .catch(error => console.log(error));
   }
 
   // Events
@@ -94,10 +95,10 @@ export class EditorComponent implements OnInit, OnDestroy {
         path = parentFile.path;
       }
     } else {
-      path = this.storageRef + '/';
+      path = this.projectId + '/';
       parent = this.files;
     }
-    const newFile = new File(
+    const newFile = createFile(
       '',
       isFolder ? 'folder' : null,
       [],

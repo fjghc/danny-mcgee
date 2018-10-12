@@ -92,13 +92,16 @@
     }
     .cm-meta {
       color: $orange;
+      // text-shadow: 0 0 0 $orange;
     }
     .cm-comment {
       color: $blue-bold;
+      // text-shadow: 0 0 0 $blue-bold;
       font-style: italic;
     }
     .cm-keyword, .cm-type, .cm-atom {
       color: $blue-light;
+      // text-shadow: none;
       font-style: italic;
     }
     .cm-operator {
@@ -107,37 +110,47 @@
       line-height: 14px;
       position: relative;
       bottom: -1px;
-      font-feature-settings: "calt" 1;
-      font-variant-ligatures: contextual;
+      //font-feature-settings: "calt" 1;
+      //font-variant-ligatures: contextual;
       color: $gray-lighter;
+      // text-shadow: none;
     }
     .cm-string {
       color: $green;
+      // text-shadow: 0 0 0 $green;
     }
     .cm-number {
       color: $turquoise;
+      // text-shadow: none;
     }
     .cm-variable {
       color: $pink;
+      // text-shadow: 0 0 0 $pink;
     }
     .cm-variable-2, .cm-def {
       color: $pink-light;
+      // text-shadow: none;
     }
     .cm-property {
       color: $pink;
+      // text-shadow: 0 0 0 $pink;
     }
     .cm-tag {
       color: $red;
+      // text-shadow: 0 0 0 $red;
       &.cm-bracket {
         color: $gray-lighter;
+        // text-shadow: none;
       }
     }
     .cm-attribute {
       color: $yellow;
       font-style: italic;
+      // text-shadow: none;
     }
     .cm-func {
       color: $turquoise;
+      // text-shadow: none;
     }
   }
 }

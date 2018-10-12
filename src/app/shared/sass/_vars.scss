@@ -95,12 +95,12 @@ $editor-tab-height: 36px;
 }
 
 @mixin operator-mono($weight) {
-  font-family: 'Operator Mono SSm A', 'Operator Mono SSm B', 'Consolas', courier-new, monospace, mono;
+  font-family: 'Operator Mono SSm A', 'Operator Mono SSm B', 'Consolas', courier-new, monospace;
   font-weight: $weight;
 }
 
 @mixin fira-code($weight) {
-  font-family: 'Fira Code', 'Consolas', courier-new, monospace, mono;
+  font-family: 'Fira Code', 'Consolas', courier-new, monospace;
   font-weight: $weight;
 }
 

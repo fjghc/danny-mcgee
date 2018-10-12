@@ -21,7 +21,7 @@
 
     <button
       *ngIf="projectsService.editMode.getValue()"
-      (click)="projectsService.newProject.emit()"
+      (click)="projectsService.newProject.next()"
       class="btn btn-primary btn-sm"
       role="button"
       tabindex="2"
@@ -29,7 +29,7 @@
 
     <button
       *ngIf="projectsService.editMode.getValue()"
-      (click)="projectsService.saveChanges.emit()"
+      (click)="projectsService.saveChanges.next()"
       class="btn btn-sm btn-success"
       role="button"
       tabindex="2"

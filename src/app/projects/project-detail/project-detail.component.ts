@@ -50,7 +50,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   }
 
   onClose() {
-    this.projectsService.closeActiveProject.emit('close');
+    this.projectsService.closeActiveProject.next('close');
   }
 
   ngOnDestroy() {

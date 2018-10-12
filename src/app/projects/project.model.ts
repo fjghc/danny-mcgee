@@ -1,5 +1,4 @@
 export interface Project {
-
   id: string;
   name: string;
   year: number;
@@ -8,7 +7,6 @@ export interface Project {
   needsRefresh?: boolean;
   personal?: boolean;
   order?: number;
-
 }
 
 export function createProject(

@@ -1,8 +1,8 @@
 // Angular imports
-import { EventEmitter, Injectable, OnDestroy, Output } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 // Dependency imports
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 
 // App imports
 import { DataHandler } from '../shared/data-handler.service';
@@ -17,10 +17,10 @@ export class ProjectsService implements OnDestroy {
   projectsTemp: Project[];
   private projects: Project[];
 
-  // Event emitters
-  @Output() closeActiveProject = new EventEmitter();
-  @Output() newProject = new EventEmitter();
-  @Output() saveChanges = new EventEmitter();
+  // Event Subjects
+  closeActiveProject = new Subject();
+  newProject = new Subject();
+  saveChanges = new Subject();
 
   // State
   editMode = new BehaviorSubject<boolean>(false);
@@ -32,22 +32,20 @@ export class ProjectsService implements OnDestroy {
   constructor(private dataHandler: DataHandler) {}
 
   // Getters
-  getProjectsFromDatabase(): Observable<Project[]> {
+  watchProjects(): Observable<Project[]> {
     // Sync this service's data with the database
-    this.projectsObservable = this.dataHandler.fetchCollection('projects') as Observable<Project[]>;
+    this.projectsObservable = this.dataHandler.watchCollection('projects') as Observable<Project[]>;
 
     this.dbSub = this.projectsObservable.subscribe(
-      projects => {
-        this.projects = projects;
-      }
+      projects => this.projects = projects
     );
 
-    // return the observable for outside subscriptions
+    // return the observable for outside subscription
     return this.projectsObservable;
   }
 
   getProjectsTemp(): Project[] {
-    // return a copy of the projects in their current state from the database
+    // make a copy of the projects in their current state and return them for editing
     this.projectsTemp = [];
     for (const project of this.projects) {
       this.projectsTemp.push({ ...project });
@@ -105,7 +103,7 @@ export class ProjectsService implements OnDestroy {
         }
       } else {
         // this is a new project
-        this.dataHandler.setDocument('projects', project.id, project);
+        this.dataHandler.addDocument('projects', project.id, project);
       }
     }
   }

@@ -81,7 +81,7 @@ export class FileComponent implements OnInit, OnDestroy {
       this.onCommitNewFile(this.newFileNameInput.nativeElement.value);
     }
     if ($event.key === 'Escape') {
-      this.onCancelNewFile();
+      this.onDelete();
     }
   }
 
@@ -90,10 +90,13 @@ export class FileComponent implements OnInit, OnDestroy {
       // Name the new file
       console.log('file named: ' + name);
       this.file.name = name;
+      this.file.path += name;
 
       if (this.file.type !== 'folder') {
+        this.file.path += '/';
+
         // Set the file type
-        const extension = this.editorService.parseFileExtension(name);
+        const extension = this.editorService.getFileExtension(name);
         if (extension) {
           console.log('setting type to ' + extension);
           this.file.type = extension;
@@ -108,6 +111,7 @@ export class FileComponent implements OnInit, OnDestroy {
       }
 
       // Let the EditorService know
+      // TODO: Simplify by calling newFile with no argument
       this.editorService.newFileCommitted.next(this.file);
 
       // Clear the new file
@@ -115,8 +119,9 @@ export class FileComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCancelNewFile() {
+  onDelete() {
     console.log('new file cancelled!');
+    this.editorService.destroyFile(this.file);
   }
 
   // Cleanup

@@ -1,9 +1,19 @@
-export class File {
-  constructor(
-    public name: string,
-    public type: string,
-    public contents?: File[] | string,
-    public initialContent?: string,
-    public path?: string
-  ) {}
+export interface File {
+  name: string;
+  type: string;
+  contents?: File[] | string;
+  initialContent?: string;
+  path?: string;
+}
+
+export function createFile(
+  name?: string,
+  type?: string,
+  contents?: File[] | string,
+  initialContent?: string,
+  path?: string
+) {
+  return {
+    name, type, contents, initialContent, path
+  };
 }

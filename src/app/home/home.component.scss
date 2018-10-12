@@ -1,0 +1,8 @@
+@import '../shared/sass/vars';
+
+.test pre {
+  @include operator-mono(400);
+  background-color: $gray-darker;
+  color: $pink;
+  font-size: 14px;
+}

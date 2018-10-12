@@ -3,14 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 // Dependency imports
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
-// App imports
-import { File } from './editor/file.model';
 
 // Service config
 @Injectable({ providedIn: 'root' })
@@ -25,11 +22,11 @@ export class DataHandler {
   ) {}
 
   // Firebase Cloud Firestore methods
-  fetchCollection(path: string): Observable<any> {
+  watchCollection(path: string): Observable<any> {
     return this.afs.collection(path, ref => ref.orderBy('order')).valueChanges();
   }
 
-  setDocument(collection: string, document: string, content: {}) {
+  addDocument(collection: string, document: string, content: {}) {
     this.afs.collection(collection).doc(document).set(content)
       .then(() => {
         console.log(`${collection}/${document} set with content:`);
@@ -46,20 +43,8 @@ export class DataHandler {
   }
 
   // Firebase Realtime Database methods
-  getList(path: string): Promise<{}[]> {
-    return new Promise((resolve, reject) => {
-      const sub = this.rtdb.list(path).valueChanges()
-        .subscribe(
-          response => {
-            sub.unsubscribe();
-            resolve(response);
-          },
-          error => {
-            sub.unsubscribe();
-            reject(error);
-          }
-        );
-    });
+  watchList(path: string): Observable<any[]> {
+    return this.rtdb.list(path).valueChanges();
   }
 
   // Firebase Storage methods

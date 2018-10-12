@@ -1,3 +1,5 @@
+// TODO: Remove all async pipes from the entire app and stop setting object properties to promises or observables
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { Subscription } from 'rxjs';

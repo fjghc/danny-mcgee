@@ -86,7 +86,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.editMode = mode;
     if (mode) {
       // Create a temporary copy of the projects for editing
-      this.projects = this.projectsService.getProjectsTemp();
+      this.projects = this.projectsService.getProjectsCopy();
     } else {
       // Get projects from database
       this.projectsObservable = this.projectsService.watchProjects();

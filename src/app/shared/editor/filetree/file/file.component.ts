@@ -121,7 +121,7 @@ export class FileComponent implements OnInit, OnDestroy {
 
   onDelete() {
     console.log('new file cancelled!');
-    this.editorService.destroyFile(this.file);
+    this.editorService.deleteFile(this.file);
   }
 
   // Cleanup

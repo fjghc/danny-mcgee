@@ -17,13 +17,13 @@ export class ProjectsService implements OnDestroy {
   projectsTemp: Project[];
   private projects: Project[];
 
+  // State
+  editMode = new BehaviorSubject<boolean>(false);
+
   // Event Subjects
   closeActiveProject = new Subject();
   newProject = new Subject();
   saveChanges = new Subject();
-
-  // State
-  editMode = new BehaviorSubject<boolean>(false);
 
   // Subs
   dbSub: Subscription;
@@ -44,7 +44,7 @@ export class ProjectsService implements OnDestroy {
     return this.projectsObservable;
   }
 
-  getProjectsTemp(): Project[] {
+  getProjectsCopy(): Project[] {
     // make a copy of the projects in their current state and return them for editing
     this.projectsTemp = [];
     for (const project of this.projects) {

@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 
 // Dependency imports
-import { Observable, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCaretDown, faCaretRight, faFolder, faFolderOpen, faFilePlus, faFolderPlus } from '@fortawesome/pro-solid-svg-icons';
 import { faCss3, faHtml5, faJs } from '@fortawesome/free-brands-svg-icons';
@@ -10,35 +10,41 @@ import { faFile } from '@fortawesome/pro-light-svg-icons';
 
 // App imports
 import { DataHandler } from '../data-handler.service';
-import { File } from './file.model';
+import { createFile, File } from './file.model';
 
 // Service config
 @Injectable()
 export class EditorService {
 
   // Data
-  // Files
-  filesObservable: Observable<File[]>;
-  filesTemp: File[];
-  private files: File[];
+    // Project
+    projectId: string;
 
-  // Icons
-  icons = {
-    files: {
-      folder: faFolder,
-      folderOpen: faFolderOpen,
-      angle: faCaretRight,
-      angleOpen: faCaretDown,
-      unknownFile: faFile,
-      html: faHtml5,
-      css: faCss3,
-      js: faJs
-    },
-    ui: {
-      newFile: faFilePlus,
-      newFolder: faFolderPlus
-    }
-  };
+    // Files
+    filesObservable: Observable<File[]>;
+    filesTemp: File[];
+    private files: File[];
+
+    // Icons
+    icons = {
+      files: {
+        folder: faFolder,
+        folderOpen: faFolderOpen,
+        angle: faCaretRight,
+        angleOpen: faCaretDown,
+        unknownFile: faFile,
+        html: faHtml5,
+        css: faCss3,
+        js: faJs
+      },
+      ui: {
+        newFile: faFilePlus,
+        newFolder: faFolderPlus
+      }
+    };
+
+  // State
+  editMode = new BehaviorSubject<boolean>(false);
 
   // Event Subjects
   fileTreeClick = new Subject<File>();
@@ -53,6 +59,8 @@ export class EditorService {
 
   // Getters
   watchFiles(projectId: string): Observable<File[]> {
+    this.projectId = projectId;
+
     // sync this service's files with the database
     this.filesObservable = this.dataHandler.watchList('filesMap/' + projectId) as Observable<File[]>;
 
@@ -65,10 +73,25 @@ export class EditorService {
     return this.filesObservable;
   }
 
-  getFilesTemp(projectId: string): File[] {
+  getFiles(): File[] {
+    return this.files;
+  }
+
+  getFilesCopy(): File[] {
     // make a deep copy of the files in their current state and return them for editing
     this.filesTemp = JSON.parse(JSON.stringify(this.files));
+    console.log('comparison:');
+    console.log(this.files);
+    console.log(this.filesTemp);
     return this.filesTemp;
+  }
+
+  getFile(path: string, filesRef: 'temp' | 'db') {
+    for (const file of this.resolveFilesRef(filesRef)) {
+      if (file.path === path) {
+        return file;
+      }
+    }
   }
 
   getIconForType(type: string, open?: boolean): IconDefinition | IconDefinition[] {
@@ -132,8 +155,58 @@ export class EditorService {
     }
   }
 
-  destroyFile(file: File) {
+  createFileOrFolder(isFolder: boolean, selectedFile?: File) {
+    let parent: File[];
+    let path: string;
 
+    if (selectedFile) {
+      if (selectedFile.type === 'folder') {
+        parent = selectedFile.contents as File[];
+        path = selectedFile.path;
+      } else {
+        const parentFolder = this.findParentOfFile(selectedFile, this.filesTemp);
+        parent = parentFolder.contents as File[];
+        path = parentFolder.path;
+      }
+    } else {
+      path = this.projectId + '/';
+      parent = this.filesTemp;
+    }
+    const newFile = createFile(
+      '',
+      isFolder ? 'folder' : null,
+      isFolder ? [] : null,
+      null,
+      path
+    );
+    parent.push(newFile);
+    setTimeout(() => this.newFile.next(newFile));
+  }
+
+  deleteFile(file: File) {
+
+  }
+
+  // Helper functions
+  resolveFilesRef(ref: 'temp' | 'db'): File[] {
+    if (ref === 'temp') {
+      return this.filesTemp;
+    }
+    if (ref === 'db') {
+      return this.files;
+    }
+  }
+
+  findParentOfFile(needle: File, haystack: File | File[]): File {
+    const haystackContents = haystack instanceof Array ? haystack : haystack.contents as File[];
+
+    for (const hay of haystackContents) {
+      if (hay === needle) {
+        return haystack as File;
+      } else if (hay.contents instanceof Array) {
+        return this.findParentOfFile(needle, hay);
+      }
+    }
   }
 
 }

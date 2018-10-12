@@ -7,14 +7,31 @@
       <h6>Explorer</h6>
       <div
         class="btn-container"
-        *ngIf="authService.isAuthenticated()"
+        *ngIf="authService.isAuthenticated() && !editMode"
       >
+        <button
+          class="btn btn-tiny btn-secondary"
+          (click)="onActivateEditMode()"
+        >Edit</button>
+      </div>
+      <div
+        class="btn-container"
+        *ngIf="editMode"
+      >
+        <button
+          class="btn btn-tiny btn-warning"
+          (click)="onDiscardChanges()"
+        >Discard</button>
+        <button
+          class="btn btn-tiny btn-success"
+          (click)="onSaveChanges()"
+        >Save</button>
         <fa-icon
-          (click)="onNewFile(true)"
+          (click)="onNewFileOrFolder(true)"
           [icon]="editorService.icons.ui.newFolder"
         ></fa-icon>
         <fa-icon
-          (click)="onNewFile()"
+          (click)="onNewFileOrFolder()"
           [icon]="editorService.icons.ui.newFile"
         ></fa-icon>
       </div>

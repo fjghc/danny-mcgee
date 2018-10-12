@@ -1,5 +1,5 @@
 // Angular imports
-import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 
 // Dependency imports
 import { Subscription } from 'rxjs';
@@ -20,7 +20,7 @@ import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
   import 'codemirror/addon/scroll/simplescrollbars';
 
 // App imports
-import { createFile, File } from './file.model';
+import { File } from './file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
 import { AuthService } from '../../auth/auth.service';
@@ -45,17 +45,20 @@ export class EditorComponent implements OnInit, OnDestroy {
   };
 
   // State
+  @HostBinding('class.edit-mode') editMode: boolean;
   activeTab: Tab;
   justOpenedFile: File;
   selectedFile: File;
-  sidebarWidth = 300;
-  sidebarStartingWidth: number;
-  resizing = false;
-  resizeStartPos: number;
+    // Sidebar
+    sidebarWidth = 300;
+    sidebarStartingWidth: number;
+    resizing = false;
+    resizeStartPos: number;
 
   // Subs
   filesSub: Subscription;
   fileTreeClickSub: Subscription;
+  editModeSub: Subscription;
 
   // Services
   constructor(
@@ -65,10 +68,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   // Init
   ngOnInit() {
-    this.filesSub = this.editorService.watchFiles(this.projectId).subscribe(
-      files => this.files = files
-    );
     this.editorService.watchFiles(this.projectId);
+    this.editModeSub = this.editorService.editMode.subscribe(
+      mode => this.onEditModeChange(mode)
+    );
     this.fileTreeClickSub = this.editorService.fileTreeClick.subscribe(
       file => {
         if (file) {
@@ -80,34 +83,47 @@ export class EditorComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Events
-  onNewFile(isFolder = false) {
-    let parent: File[];
-    let path: string;
 
-    if (this.selectedFile) {
-      if (this.selectedFile.type === 'folder') {
-        parent = this.selectedFile.contents as File[];
-        path = this.selectedFile.path;
-      } else {
-        const parentFile = this.findFileParent(this.selectedFile);
-        parent = parentFile.contents as File[];
-        path = parentFile.path;
-      }
+  // Events
+
+  // Edit Mode changes
+
+  onEditModeChange(editMode: boolean) {
+    this.editMode = editMode;
+    if (editMode) {
+      this.files = this.editorService.getFilesCopy();
+      this.filesSub.unsubscribe();
     } else {
-      path = this.projectId + '/';
-      parent = this.files;
+      this.filesSub = this.editorService.watchFiles(this.projectId).subscribe(
+        files => this.files = files
+      );
     }
-    const newFile = createFile(
-      '',
-      isFolder ? 'folder' : null,
-      [],
-      null,
-      path
-    );
-    parent.push(newFile);
-    setTimeout(() => this.editorService.newFile.next(newFile));
+    this.updateTabsForMode(editMode);
   }
+
+  onActivateEditMode() {
+    this.editorService.editMode.next(true);
+  }
+
+  onDiscardChanges() {
+    if (confirm('Are you sure you want to discard your changes?')) {
+      this.editorService.editMode.next(false);
+    }
+  }
+
+  onSaveChanges() {
+    console.log('save changes!');
+  }
+
+  updateTabsForMode(editMode: boolean) {
+    const filesRef = editMode ? 'temp' : 'db';
+    for (const tab of this.tabs) {
+      tab.file = this.editorService.getFile(tab.file.path, filesRef);
+    }
+  }
+
+
+  // Tabs manipulation
 
   onFileTreeClick(file: File) {
     this.selectedFile = file;
@@ -197,6 +213,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  // File editing
+
+  onNewFileOrFolder(isFolder = false) {
+    this.editorService.createFileOrFolder(isFolder, this.selectedFile);
+  }
+
   onEditorChange($event, tab: Tab) {
     tab.file.contents = $event;
     if (tab.type === 'temp') {
@@ -204,7 +227,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Simple file tree resizing
+
+  // Sidebar resizing
+
   onResizeStart($event: MouseEvent) {
     if ($event.button === 0) {
       this.resizing = true;
@@ -232,18 +257,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Helper functions
-  findFileParent(needle: File, haystack?: File): File {
-    const haystackContents = haystack ? haystack.contents as File[] : this.files;
 
-    for (const hay of haystackContents) {
-      if (hay === needle) {
-        return haystack;
-      } else if (hay.contents instanceof Array) {
-        return this.findFileParent(needle, hay);
-      }
-    }
-  }
+  // Helper functions
 
   getEditorOptionsForTab(tab: Tab): {} {
     return {
@@ -256,10 +271,11 @@ export class EditorComponent implements OnInit, OnDestroy {
       autoCloseTags: true,
       matchTags: { bothTags: true },
       scrollbarStyle: 'overlay',
-      readOnly: !this.authService.isAuthenticated(),
+      readOnly: !this.editMode,
       mode: this.editorService.getModeForType(tab.file.type)
     };
   }
+
 
   // Cleanup
   ngOnDestroy() {

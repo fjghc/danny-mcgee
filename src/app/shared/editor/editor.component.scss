@@ -64,6 +64,17 @@
   }
 }
 
+.btn-tiny {
+  background-color: $gray-light;
+  border: 0;
+  color: $gray-darkest;
+
+  .btn-container & {
+    align-self: center;
+    margin-bottom: 0;
+  }
+}
+
 .editor-col {
   overflow-x: auto;
 }

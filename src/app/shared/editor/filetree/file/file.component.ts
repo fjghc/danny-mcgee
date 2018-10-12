@@ -1,9 +1,15 @@
+// Angular imports
 import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { File } from '../../file.model';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { EditorService } from '../../editor.service';
-import { Subscription } from 'rxjs';
 
+// Dependency imports
+import { Subscription } from 'rxjs';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+
+// App imports
+import { File } from '../../file.model';
+import { EditorService } from '../../editor.service';
+
+// Component config
 @Component({
   selector: 'dm-file',
   templateUrl: './file.component.html',
@@ -67,7 +73,6 @@ export class FileComponent implements OnInit, OnDestroy {
   }
 
   onFileTreeClick() {
-    console.log('file tree click');
     this.editorService.fileTreeClick.next(this.file);
     this.lastClicked = true;
   }
@@ -88,17 +93,13 @@ export class FileComponent implements OnInit, OnDestroy {
   onCommitNewFile(name: string) {
     if (name.length > 0) {
       // Name the new file
-      console.log('file named: ' + name);
       this.file.name = name;
       this.file.path += name;
 
       if (this.file.type !== 'folder') {
-        this.file.path += '/';
-
         // Set the file type
         const extension = this.editorService.getFileExtension(name);
         if (extension) {
-          console.log('setting type to ' + extension);
           this.file.type = extension;
           this.setIcons();
         } else {
@@ -108,11 +109,16 @@ export class FileComponent implements OnInit, OnDestroy {
         // Initialize contents
         this.file.contents = '\n';
         this.file.initialContent = '\n';
+      } else {
+        this.file.path += '/';
       }
 
+      console.log('New file committed:', this.file);
+
       // Let the EditorService know
-      // TODO: Simplify by calling newFile with no argument
-      this.editorService.newFileCommitted.next(this.file);
+      this.editorService.sortParentArrayOfFile(this.file);
+      this.editorService.newFile.next();
+      console.log('\n\n\n');
 
       // Clear the new file
       this.newFile = false;
@@ -120,8 +126,10 @@ export class FileComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-    console.log('new file cancelled!');
-    this.editorService.deleteFile(this.file);
+    if (this.newFile || confirm(`Are you sure you want to delete ${this.file.name}?`)) {
+      this.editorService.deleteFile(this.file);
+      this.editorService.newFile.next();
+    }
   }
 
   // Cleanup

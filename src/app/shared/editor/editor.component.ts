@@ -2,7 +2,7 @@
 import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 
 // Dependency imports
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
 
 // CodeMirror
@@ -70,7 +70,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.editorService.watchFiles(this.projectId);
     this.editModeSub = this.editorService.editMode.subscribe(
-      mode => this.onEditModeChange(mode)
+      editMode => this.onEditModeChange(editMode)
     );
     this.fileTreeClickSub = this.editorService.fileTreeClick.subscribe(
       file => {
@@ -91,13 +91,14 @@ export class EditorComponent implements OnInit, OnDestroy {
   onEditModeChange(editMode: boolean) {
     this.editMode = editMode;
     if (editMode) {
-      this.files = this.editorService.getFilesCopy();
       this.filesSub.unsubscribe();
+      this.files = this.editorService.getFilesCopy();
     } else {
       this.filesSub = this.editorService.watchFiles(this.projectId).subscribe(
         files => this.files = files
       );
     }
+    // this.files = editMode ? this.editorService.getFilesCopy() : this.editorService.getFiles();
     this.updateTabsForMode(editMode);
   }
 
@@ -221,9 +222,28 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   onEditorChange($event, tab: Tab) {
+    console.log('onEditorChange called');
     tab.file.contents = $event;
     if (tab.type === 'temp') {
       tab.type = 'perm';
+    }
+  }
+
+  onDeleteSelectedFile() {
+    const isFolder = this.selectedFile.type === 'folder';
+    const confirmMessage =
+      'Are you sure you want to delete ' +
+      (isFolder ? 'folder ' : '') +
+      `'${this.selectedFile.name}'` +
+      (isFolder ? ' and all of its contents?' : '?');
+
+    if (confirm(confirmMessage)) {
+      for (const tab of this.tabs) {
+        if (tab.file.path === this.selectedFile.path) {
+          this.onCloseTab(tab);
+        }
+      }
+      this.editorService.deleteFile(this.selectedFile);
     }
   }
 
@@ -279,7 +299,11 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   // Cleanup
   ngOnDestroy() {
+    if (this.filesSub) {
+      this.filesSub.unsubscribe();
+    }
     this.fileTreeClickSub.unsubscribe();
+    this.editModeSub.unsubscribe();
   }
 
 }

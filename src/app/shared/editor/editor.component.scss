@@ -41,6 +41,23 @@
         &:hover {
           color: $gray-lighter;
         }
+
+        &.delete {
+
+          &.disabled {
+            color: $gray-mid;
+            pointer-events: none;
+          }
+
+          &:hover {
+            color: $danger;
+          }
+        }
+      }
+
+      &.btn-container-left {
+        margin-left: -6px;
+        margin-right: 15px;
       }
     }
   }
@@ -65,7 +82,7 @@
 }
 
 .btn-tiny {
-  background-color: $gray-light;
+  background-color: $gray-lighter;
   border: 0;
   color: $gray-darkest;
 

@@ -13,10 +13,8 @@
     margin-right: $editor-icon-margin;
     font-size: 16px;
     text-align: center;
+    color: $gray-lighter;
 
-    &.folder {
-      color: $gray-lighter;
-    }
     &.html {
       color: $red;
     }

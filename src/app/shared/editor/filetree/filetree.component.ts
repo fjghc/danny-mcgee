@@ -21,7 +21,7 @@ export class FiletreeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.newFileSub = this.editorService.newFile.subscribe(
-      () => this.hasNewFile = true
+      file => this.hasNewFile = !!file
     );
     this.nweFileCommittedSub = this.editorService.newFileCommitted.subscribe(
       () => this.hasNewFile = false

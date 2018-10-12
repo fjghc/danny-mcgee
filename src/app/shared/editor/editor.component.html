@@ -65,24 +65,11 @@
         class="tabs-content-item"
         [ngClass]="{ 'active': activeTab === tab }"
       >
-        <dm-loading></dm-loading>
         <ngx-codemirror
           [name]="tab.file.name"
           [ngModel]="tab.file.contents"
           (ngModelChange)="onEditorChange($event, tab)"
-          [options]="{
-            theme: 'dm',
-            lineNumbers: true,
-            styleActiveLine: true,
-            indentWithTabs: true,
-            tabSize: 2,
-            autoCloseBrackets: true,
-            autoCloseTags: true,
-            matchTags: { bothTags: true },
-            scrollbarStyle: 'overlay',
-            readOnly: !authService.isAuthenticated(),
-            mode: editorService.getModeForType(tab.file.type)
-          }"
+          [options]="getEditorOptionsForTab(tab)"
         ></ngx-codemirror>
       </div>
     </div>

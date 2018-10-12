@@ -6,18 +6,18 @@ import { Subscription } from 'rxjs';
 import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
 
 // CodeMirror
-// Languages
-import './languages/javascript';
-import './languages/htmlmixed';
-import 'codemirror/mode/css/css';
-import 'codemirror/mode/sass/sass';
+  // Languages
+  import './languages/javascript';
+  import './languages/htmlmixed';
+  import 'codemirror/mode/css/css';
+  import 'codemirror/mode/sass/sass';
 
-// Addons
-import 'codemirror/addon/selection/active-line';
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/addon/edit/closetag';
-import 'codemirror/addon/edit/matchtags';
-import 'codemirror/addon/scroll/simplescrollbars';
+  // Addons
+  import 'codemirror/addon/selection/active-line';
+  import 'codemirror/addon/edit/closebrackets';
+  import 'codemirror/addon/edit/closetag';
+  import 'codemirror/addon/edit/matchtags';
+  import 'codemirror/addon/scroll/simplescrollbars';
 
 // App imports
 import { createFile, File } from './file.model';
@@ -243,6 +243,22 @@ export class EditorComponent implements OnInit, OnDestroy {
         return this.findFileParent(needle, hay);
       }
     }
+  }
+
+  getEditorOptionsForTab(tab: Tab): {} {
+    return {
+      theme: 'dm',
+      lineNumbers: true,
+      styleActiveLine: true,
+      indentWithTabs: true,
+      tabSize: 2,
+      autoCloseBrackets: true,
+      autoCloseTags: true,
+      matchTags: { bothTags: true },
+      scrollbarStyle: 'overlay',
+      readOnly: !this.authService.isAuthenticated(),
+      mode: this.editorService.getModeForType(tab.file.type)
+    };
   }
 
   // Cleanup

@@ -1,10 +1,10 @@
-import { File } from './file.model';
+import { EditorFile } from './file.model';
 
 export interface Tab {
   type: 'temp' | 'perm';
-  file: File;
+  file: EditorFile;
 }
 
-export function createTab(type: 'temp' | 'perm', file: File): Tab {
+export function createTab(type: 'temp' | 'perm', file: EditorFile): Tab {
   return { type, file };
 }

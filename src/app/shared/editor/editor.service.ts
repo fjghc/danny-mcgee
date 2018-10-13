@@ -18,7 +18,7 @@ import { faCss3, faHtml5, faJs } from '@fortawesome/free-brands-svg-icons';
 
 // App imports
 import { DataHandler } from '../data-handler.service';
-import { createFile, File } from './file.model';
+import { createFile, EditorFile } from './file.model';
 
 // Service config
 @Injectable()
@@ -29,9 +29,10 @@ export class EditorService {
     projectId: string;
 
     // Files
-    filesObservable: Observable<File[]>;
-    filesTemp: File[];
-    private files: File[];
+    filesObservable: Observable<EditorFile[]>;
+    filesTemp: EditorFile[];
+    private files: EditorFile[];
+    filesToDelete: EditorFile[];
 
     // Icons
     icons = {
@@ -56,9 +57,9 @@ export class EditorService {
   editMode = new BehaviorSubject<boolean>(false);
 
   // Event Subjects
-  fileTreeClick = new Subject<File>();
-  newFile = new Subject<File>();
-  newFileCommitted = new Subject<File>();
+  fileTreeClick = new Subject<EditorFile>();
+  newFile = new Subject<EditorFile>();
+  newFileCommitted = new Subject<EditorFile>();
 
   // Subs
   filesSub: Subscription;
@@ -69,12 +70,12 @@ export class EditorService {
 
   // Getters
 
-  watchFiles(projectId: string): Observable<File[]> {
+  watchFiles(projectId: string): Observable<EditorFile[]> {
     this.projectId = projectId;
     console.log('watching files for project ' + projectId);
 
     // sync this service's files with the database
-    this.filesObservable = this.dataHandler.watchList('filesMap/' + projectId) as Observable<File[]>;
+    this.filesObservable = this.dataHandler.watchList('filesMap/' + projectId) as Observable<EditorFile[]>;
 
     this.filesSub = this.filesObservable.subscribe(
       files => this.files = files,
@@ -85,22 +86,10 @@ export class EditorService {
     return this.filesObservable;
   }
 
-  getFiles(): File[] {
-    return this.files;
-  }
-
-  getFilesCopy(): File[] {
+  getFilesCopy(): EditorFile[] {
     // make a deep copy of the files in their current state and return them for editing
     this.filesTemp = JSON.parse(JSON.stringify(this.files));
     return this.filesTemp;
-  }
-
-  getFile(path: string, filesRef: 'temp' | 'db') {
-    for (const file of this.resolveFilesRef(filesRef)) {
-      if (file.path === path) {
-        return file;
-      }
-    }
   }
 
   // FIXME: Try to avoid using getter methods for property binding
@@ -132,19 +121,14 @@ export class EditorService {
     switch (type) {
       case 'html':
         return 'htmlmixed';
-
       case 'css':
         return 'css';
-
       case 'js':
         return 'javascript';
-
       case 'ts':
         return 'application/typescript';
-
       default:
-        console.log('Mode not found for type ' + type);
-        break;
+        return 'text/plain';
     }
   }
 
@@ -155,7 +139,7 @@ export class EditorService {
 
   // Data manipulation
 
-  setupFileContent(file: File) {
+  setupFileContent(file: EditorFile) {
     if (!file.contents) {
       this.dataHandler.readFile(file.path)
         .then(content => {
@@ -173,18 +157,23 @@ export class EditorService {
    * @param isFolder Indicates the 'type' property of the created file
    * @param selectedFile The currently selected file in the filetree
    */
-  createFileOrFolder(isFolder: boolean, selectedFile?: File) {
-    let parent: File[];
+  createFileOrFolder(isFolder: boolean, selectedFile?: EditorFile) {
+    let parent: EditorFile[];
     let path: string;
 
     if (selectedFile) {
       if (selectedFile.type === 'folder') {
-        parent = selectedFile.contents as File[];
+        parent = selectedFile.contents as EditorFile[];
         path = selectedFile.path;
       } else {
-        const parentFolder = this.findParentOfFile(selectedFile, this.filesTemp) as File;
-        parent = parentFolder.contents as File[];
-        path = parentFolder.path;
+        // FIXME: This is no longer working when a file instead of a folder is selected
+        // FIXME: This is no longer working if the root "directory" is selected
+        const _parent = this.findParentOfFile(selectedFile, this.filesTemp) as EditorFile;
+        if (_parent instanceof Array) {
+          parent = _parent;
+        }
+        // parent = parentFolder.contents as EditorFile[];
+        // path = parentFolder.path;
       }
     } else {
       path = this.projectId + '/';
@@ -201,37 +190,105 @@ export class EditorService {
     setTimeout(() => this.newFile.next(newFile));
   }
 
-  deleteFile(file: File) {
+  deleteFile(file: EditorFile) {
     console.log('deleting file:', file);
     const parent = this.findParentOfFile(file, this.filesTemp);
-    const parentArray = parent instanceof Array ? parent : parent.contents as File[];
+    const parentArray = parent instanceof Array ? parent : parent.contents as EditorFile[];
     parentArray.splice(this.indexOf(file.path, parentArray), 1);
+  }
+
+  addFileToDeleteList(file: EditorFile) {
+    this.filesToDelete.push(file);
+  }
+
+  async commitChangesToDatabase() {
+    // Get a clean, flat list of the files without the folders included
+    const flatFilesArray = this.flattenFilesArray([this.filesTemp]);
+
+    // Process the delete list
+    if (this.filesToDelete) {
+      for (const file of this.filesToDelete) {
+        // TODO: Implement deleting files from storage
+        console.log(`deleting file ${file.name} from storage...`);
+      }
+    }
+
+    // Upload any new or modified files
+    let errorsOccurred = false;
+    if (flatFilesArray) {
+      for (const _file of flatFilesArray) {
+        if (_file.isNewOrModified) {
+          const mimeType = this.getMimeTypeForExt(this.getFileExtension(_file.name));
+          console.log('mimeType: ' + mimeType);
+          // NOTE: File() constructor doesn't work in Edge
+          const file = new File([_file.contents as string], _file.name, { type: mimeType });
+          await this.dataHandler.uploadFileToStorage(file, _file.path)
+            .then(() => {
+              console.log('Upload complete!');
+            })
+            .catch(error => {
+              console.log('ERROR:', error);
+              errorsOccurred = true;
+            });
+        }
+      }
+    }
+
+    if (!errorsOccurred) {
+      console.log('Uploads completed successfully!');
+
+      // Clean up the file map before uploading
+      if (flatFilesArray) {
+        for (const file of flatFilesArray) {
+          delete file.contents;
+          delete file.initialContent;
+          delete file.isNewOrModified;
+        }
+      }
+
+      // Upload new filesMap to the Realtime Database
+      await this.dataHandler.uploadFilesMapForProject(this.projectId, this.filesTemp)
+        .then(() => console.log('filesMap updated!'))
+        .catch(error => {
+          console.log('ERROR: ' + error);
+          errorsOccurred = true;
+        });
+
+      if (!errorsOccurred) {
+        // Perform cleanup
+        this.filesToDelete = null;
+        this.filesTemp = null;
+
+        // Turn off edit mode
+        this.editMode.next(false);
+
+        // Clear filesTemp
+        this.filesTemp = null;
+      }
+    }
   }
 
   /**
    * Sort's the given file's parent folder (folders to the top, then alphabetical)
    */
-  sortParentArrayOfFile(file: File) {
+  sortParentArrayOfFile(file: EditorFile) {
     // Find the parent array
     const parent = this.findParentOfFile(file, this.filesTemp);
     console.log('parent is:', parent);
-    const parentArray = parent instanceof Array ? parent : parent.contents as File[];
+    const parentArray = parent instanceof Array ? parent : parent.contents as EditorFile[];
 
     // Sort it
-    parentArray.sort((a: File, b: File) => {
+    parentArray.sort((a: EditorFile, b: EditorFile) => {
       // Make the comparison case insensitive
       const aName = a.name.toUpperCase();
       const bName = b.name.toUpperCase();
 
       // If both folders or both not folders, sort alphabetically
       if (a.type === 'folder' && b.type === 'folder' || a.type !== 'folder' && b.type !== 'folder') {
-        console.log(`Sorting ${a.name} and ${b.name} alphabetically`);
         if (aName < bName) {
-          console.log(`${a.name} < ${b.name}`);
           return -1;
         }
         if (aName > bName) {
-          console.log(`${b.name} < ${a.name}`);
           return 1;
         }
         // Names are equal (this should never happen)
@@ -241,11 +298,9 @@ export class EditorService {
 
       // Otherwise, sort folders to the top
       if (a.type === 'folder' && b.type !== 'folder') {
-        console.log(`Sorting ${a.name} to the top because it's a folder`);
         return -1;
       }
       if (a.type !== 'folder' && b.type === 'folder') {
-        console.log(`Sorting ${b.name} to the top because it's a folder`);
         return 1;
       }
 
@@ -263,7 +318,9 @@ export class EditorService {
    * @param needle The file whose parent we're trying to find
    * @param haystack Can be a file with type: folder, an array of files, or an array of an array of files
    */
-  private findParentOfFile(needle: File, haystack: File | File[] | File[][]): File | File[] {
+  private findParentOfFile(needle: EditorFile, haystack: EditorFile | EditorFile[] | EditorFile[][]): EditorFile | EditorFile[] {
+    // FIXME: Can't I just use the file path to make this easier?
+    console.log(`Searching for ${needle.name} in...`);
 
     // Prepare the haystack(s)
     let arrayToSearch;
@@ -272,27 +329,32 @@ export class EditorService {
 
     if (haystack instanceof Array) {
       if (haystack[0] instanceof Array) {
-        // this is an array of an array of files
+        console.log('an array of arrays');
+        // this is an array of arrays of files
         haystackOfHaystacks = true;
         arrayToSearch = haystack;
         loopsToRun = haystack.length;
       } else {
+        console.log('an array of files');
         // this is an array of files
         arrayToSearch = haystack;
         loopsToRun = 1;
       }
     } else {
+      console.log(`folder ${haystack.name}`);
       // this is just a folder
-      arrayToSearch = haystack.contents as File[];
+      arrayToSearch = haystack.contents as EditorFile[];
       loopsToRun = 1;
     }
 
     // Setup a fallback array of arrays
-    const fallbackHaystacks: File[][] = [];
+    const fallbackHaystacks: EditorFile[][] = [];
 
     // Start looping
+    console.log('Loops to run = ' + loopsToRun);
     for (let i = 0; i < loopsToRun; i++) {
 
+      console.log('Current haystack:');
       let currentHaystack;
       if (haystackOfHaystacks) {
         // Search the array of the array
@@ -301,45 +363,91 @@ export class EditorService {
         // Search the array itself
         currentHaystack = arrayToSearch;
       }
+      console.log(arrayToSearch);
 
       for (const hay of currentHaystack) {
+        console.log(`Comparing ${hay.name} to ${needle.name}`);
         // Make the comparison
         if (hay === needle) {
+          console.log('Match found!');
           // It's a match! Return the current haystack
+          // FIXME: This should ALWAYS return a folder unless the parent is the root directory
           return currentHaystack;
         } else if (hay.contents instanceof Array) {
+          console.log(`No match, but ${hay.name} is a folder, so adding its contents to the fallbacks`);
           // No match, but this is a folder, so add it to the list of fallbacks
           fallbackHaystacks.push(hay.contents);
         }
       }
     }
+    console.log(`Made it all the way through the haystack(s), trying the fallbacks:`, fallbackHaystacks);
     // Made it all the way through the haystack and didn't find the needle, so try the fallbacks
     return this.findParentOfFile(needle, fallbackHaystacks);
   }
 
-  /**
-   * Finds a file with the given path string and returns its index in the array
-   * @param path The path to search for
-   * @param files The array to search
-   */
-  private indexOf(path: string, files: File[]): number {
-    // search the array
-    for (const file of files) {
-      if (file.path === path) {
-        // if project is found, return the index
-        return files.indexOf(file);
+  flattenFilesArray(source: EditorFile[][], _dest?: EditorFile[]): EditorFile[] {
+    const arraysToFlatten: EditorFile[][] = [];
+    const dest: EditorFile[] = _dest === undefined ? [] : _dest;
+
+    for (const array of source) {
+      for (const file of array) {
+        if (file.contents instanceof Array) {
+          arraysToFlatten.push(file.contents);
+        } else {
+          dest.push(file);
+        }
       }
     }
-    // if we get this far, there's no project matching that id
-    // return false;
+
+    if (arraysToFlatten.length > 0) {
+      return this.flattenFilesArray(arraysToFlatten, dest);
+    } else {
+      return dest;
+    }
   }
 
-  private resolveFilesRef(ref: 'temp' | 'db'): File[] {
-    if (ref === 'temp') {
-      return this.filesTemp;
+  getMimeTypeForExt(extension: string): string {
+    switch (extension) {
+      case 'bin':
+        return 'application/octet-stream';
+      case 'csh':
+        return 'application/x-csh';
+      case 'css':
+        return 'text/css';
+      case 'csv':
+        return 'text/csv';
+      case 'es':
+        return 'application/ecmascript';
+      case 'htm':
+        return 'text/html';
+      case 'html':
+        return 'text/html';
+      case 'js':
+        return 'application/javascript';
+      case 'json':
+        return 'application/json';
+      case 'sh':
+        return 'application/x-sh';
+      case 'svg':
+        return 'image/svg+xml';
+      case 'ts':
+        return 'application/typescript';
+      case 'txt':
+        return 'text/plain';
+      case 'xhtml':
+        return 'application/xhtml+xml';
+      case 'xml':
+        return 'application/xml';
+      default:
+        return 'text/plain';
     }
-    if (ref === 'db') {
-      return this.files;
+  }
+
+  private indexOf(path: string, files: EditorFile[]): number {
+    for (const file of files) {
+      if (file.path === path) {
+        return files.indexOf(file);
+      }
     }
   }
 

@@ -2,7 +2,7 @@
 import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 
 // Dependency imports
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
 
 // CodeMirror
@@ -20,7 +20,7 @@ import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
   import 'codemirror/addon/scroll/simplescrollbars';
 
 // App imports
-import { File } from './file.model';
+import { EditorFile } from './file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
 import { AuthService } from '../../auth/auth.service';
@@ -36,7 +36,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   // Data
   @Input() projectId: string;
-  files: File[];
+  files: EditorFile[];
   tabs: Tab[] = [];
   icons = {
     close: faTimes,
@@ -47,8 +47,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   // State
   @HostBinding('class.edit-mode') editMode: boolean;
   activeTab: Tab;
-  justOpenedFile: File;
-  selectedFile: File;
+  justOpenedFile: EditorFile;
+  selectedFile: EditorFile;
     // Sidebar
     sidebarWidth = 300;
     sidebarStartingWidth: number;
@@ -68,7 +68,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   // Init
   ngOnInit() {
-    this.editorService.watchFiles(this.projectId);
+    // this.editorService.watchFiles(this.projectId);
     this.editModeSub = this.editorService.editMode.subscribe(
       editMode => this.onEditModeChange(editMode)
     );
@@ -98,8 +98,9 @@ export class EditorComponent implements OnInit, OnDestroy {
         files => this.files = files
       );
     }
-    // this.files = editMode ? this.editorService.getFilesCopy() : this.editorService.getFiles();
-    this.updateTabsForMode(editMode);
+    // Nuke the current tabs since they point to the wrong files and updating them is complicated
+    this.tabs = [];
+    this.activeTab = null;
   }
 
   onActivateEditMode() {
@@ -113,20 +114,15 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   onSaveChanges() {
-    console.log('save changes!');
-  }
-
-  updateTabsForMode(editMode: boolean) {
-    const filesRef = editMode ? 'temp' : 'db';
-    for (const tab of this.tabs) {
-      tab.file = this.editorService.getFile(tab.file.path, filesRef);
+    if (confirm('Save changes and commit them to the database? Any existing files data will be overwritten!')) {
+      this.editorService.commitChangesToDatabase();
     }
   }
 
 
   // Tabs manipulation
 
-  onFileTreeClick(file: File) {
+  onFileTreeClick(file: EditorFile) {
     this.selectedFile = file;
 
     // Don't open folders as tabs
@@ -134,7 +130,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // If this is is a double click, make the temp tab permanent
+    // If this is a double click, make the temp tab permanent
     if (file === this.justOpenedFile) {
       for (const tab of this.tabs) {
         if (tab.file === file) {
@@ -198,6 +194,9 @@ export class EditorComponent implements OnInit, OnDestroy {
         if (this.tabs[i].file.contents !== this.tabs[i].file.initialContent) {
           if (!confirm('Close this file? Unsaved changes will be lost!')) {
             return;
+          } else {
+            // reset the file back to its initial content
+            this.tabs[i].file.contents = this.tabs[i].file.initialContent;
           }
         }
 
@@ -226,6 +225,17 @@ export class EditorComponent implements OnInit, OnDestroy {
     tab.file.contents = $event;
     if (tab.type === 'temp') {
       tab.type = 'perm';
+    }
+  }
+
+  onKeyDown($event, tab: Tab) {
+    if ($event.key === 's' && $event.ctrlKey === true) {
+      // Save the file
+      $event.stopPropagation();
+      $event.preventDefault();
+      tab.file.initialContent = tab.file.contents as string;
+      // Saves us from re-uploading unchanged files
+      tab.file.isNewOrModified = true;
     }
   }
 

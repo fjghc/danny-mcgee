@@ -95,6 +95,7 @@
           [name]="tab.file.name"
           [ngModel]="tab.file.contents"
           (ngModelChange)="onEditorChange($event, tab)"
+          (keydown)="onKeyDown($event, tab)"
           [options]="getEditorOptionsForTab(tab)"
         ></ngx-codemirror>
       </div>

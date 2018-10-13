@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 // App imports
-import { File } from '../../file.model';
+import { EditorFile } from '../../file.model';
 import { EditorService } from '../../editor.service';
 
 // Component config
@@ -18,7 +18,7 @@ import { EditorService } from '../../editor.service';
 export class FileComponent implements OnInit, OnDestroy {
 
   // Data
-  @Input() file: File;
+  @Input() file: EditorFile;
   icon: IconDefinition | IconDefinition[];
   angleIcon: IconDefinition;
   @ViewChild('newFileNameInput') newFileNameInput: ElementRef;
@@ -109,6 +109,7 @@ export class FileComponent implements OnInit, OnDestroy {
         // Initialize contents
         this.file.contents = '\n';
         this.file.initialContent = '\n';
+        this.file.isNewOrModified = true;
       } else {
         this.file.path += '/';
       }
@@ -128,6 +129,9 @@ export class FileComponent implements OnInit, OnDestroy {
   onDelete() {
     if (this.newFile || confirm(`Are you sure you want to delete ${this.file.name}?`)) {
       this.editorService.deleteFile(this.file);
+      if (!this.newFile) {
+        this.editorService.addFileToDeleteList(this.file);
+      }
       this.editorService.newFile.next();
     }
   }

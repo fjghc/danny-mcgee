@@ -47,9 +47,28 @@ export class DataHandler {
     return this.rtdb.list(path).valueChanges();
   }
 
+  uploadFilesMapForProject(projectId: string, filesMap: any[]): Promise<any> {
+    const list = this.rtdb.list('filesMap/');
+    return list.set(projectId, filesMap);
+  }
+
   // Firebase Storage methods
   private getDownloadUrlForRef(ref: string): Observable<string> {
     return this.storage.ref(ref).getDownloadURL();
+  }
+
+  uploadFileToStorage(file: File, path: string): Promise<any> {
+    const task = this.storage.upload(path, file);
+    return new Promise((resolve, reject) => {
+      task.percentageChanges().subscribe(
+        value => {
+          console.log('Uploading file: ' + value + '%');
+          if (value === 100) {
+            resolve('Done!');
+          }
+        }
+      );
+    });
   }
 
   // HTTP methods

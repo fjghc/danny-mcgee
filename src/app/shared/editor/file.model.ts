@@ -1,19 +1,21 @@
-export interface File {
+export interface EditorFile {
   name: string;
   type: string;
-  contents?: File[] | string;
+  contents?: EditorFile[] | string;
   initialContent?: string;
   path?: string;
+  isNewOrModified?: boolean;
 }
 
 export function createFile(
   name?: string,
   type?: string,
-  contents?: File[] | string,
+  contents?: EditorFile[] | string,
   initialContent?: string,
-  path?: string
+  path?: string,
+  isNewOrModified?: boolean
 ) {
   return {
-    name, type, contents, initialContent, path
+    name, type, contents, initialContent, path, isNewOrModified
   };
 }

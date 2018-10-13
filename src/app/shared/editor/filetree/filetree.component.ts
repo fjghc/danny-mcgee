@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { File } from '../file.model';
+import { EditorFile } from '../file.model';
 import { EditorService } from '../editor.service';
 import { Subscription } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class FiletreeComponent implements OnInit, OnDestroy {
 
-  @Input() files: File[];
+  @Input() files: EditorFile[];
   hasNewFile = false;
 
   // Subs

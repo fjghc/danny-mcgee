@@ -166,14 +166,9 @@ export class EditorService {
         parent = selectedFile.contents as EditorFile[];
         path = selectedFile.path;
       } else {
-        // FIXME: This is no longer working when a file instead of a folder is selected
-        // FIXME: This is no longer working if the root "directory" is selected
-        const _parent = this.findParentOfFile(selectedFile, this.filesTemp) as EditorFile;
-        if (_parent instanceof Array) {
-          parent = _parent;
-        }
-        // parent = parentFolder.contents as EditorFile[];
-        // path = parentFolder.path;
+        const parentFolder = this.findParentOfFile(selectedFile, this.filesTemp) as EditorFile;
+        parent = parentFolder.contents as EditorFile[];
+        path = parentFolder.path;
       }
     } else {
       path = this.projectId + '/';
@@ -314,75 +309,33 @@ export class EditorService {
   // Helper functions
 
   /**
-   * Returns the parent of a given file as either a file with type: folder, or an array of files
+   * Returns the parent folder of a given file, or the root files array if it has no parent folder
    * @param needle The file whose parent we're trying to find
-   * @param haystack Can be a file with type: folder, an array of files, or an array of an array of files
+   * @param haystack A flat array of files to search
    */
-  private findParentOfFile(needle: EditorFile, haystack: EditorFile | EditorFile[] | EditorFile[][]): EditorFile | EditorFile[] {
-    // FIXME: Can't I just use the file path to make this easier?
-    console.log(`Searching for ${needle.name} in...`);
+  private findParentOfFile(needle: EditorFile, haystack: EditorFile[]): EditorFile | EditorFile[] {
+    // Set up a list of fallbacks to check if we don't find a match on the first pass
+    const fallbackHaystack: EditorFile[] = [];
 
-    // Prepare the haystack(s)
-    let arrayToSearch;
-    let haystackOfHaystacks = false;
-    let loopsToRun: number;
-
-    if (haystack instanceof Array) {
-      if (haystack[0] instanceof Array) {
-        console.log('an array of arrays');
-        // this is an array of arrays of files
-        haystackOfHaystacks = true;
-        arrayToSearch = haystack;
-        loopsToRun = haystack.length;
-      } else {
-        console.log('an array of files');
-        // this is an array of files
-        arrayToSearch = haystack;
-        loopsToRun = 1;
-      }
-    } else {
-      console.log(`folder ${haystack.name}`);
-      // this is just a folder
-      arrayToSearch = haystack.contents as EditorFile[];
-      loopsToRun = 1;
-    }
-
-    // Setup a fallback array of arrays
-    const fallbackHaystacks: EditorFile[][] = [];
-
-    // Start looping
-    console.log('Loops to run = ' + loopsToRun);
-    for (let i = 0; i < loopsToRun; i++) {
-
-      console.log('Current haystack:');
-      let currentHaystack;
-      if (haystackOfHaystacks) {
-        // Search the array of the array
-        currentHaystack = arrayToSearch[i];
-      } else {
-        // Search the array itself
-        currentHaystack = arrayToSearch;
-      }
-      console.log(arrayToSearch);
-
-      for (const hay of currentHaystack) {
-        console.log(`Comparing ${hay.name} to ${needle.name}`);
-        // Make the comparison
-        if (hay === needle) {
-          console.log('Match found!');
-          // It's a match! Return the current haystack
-          // FIXME: This should ALWAYS return a folder unless the parent is the root directory
-          return currentHaystack;
-        } else if (hay.contents instanceof Array) {
-          console.log(`No match, but ${hay.name} is a folder, so adding its contents to the fallbacks`);
-          // No match, but this is a folder, so add it to the list of fallbacks
-          fallbackHaystacks.push(hay.contents);
+    for (const hay of haystack) {
+      if (hay === needle) {
+        // We must be on the top level, so just return the haystack
+        return haystack;
+      } else if (hay.contents instanceof Array) {
+        // hay is a folder, so search inside of it
+        for (const _hay of hay.contents) {
+          if (_hay === needle) {
+            // found the match; hay is the parent folder
+            return hay;
+          } else if (_hay.contents instanceof Array) {
+            // hay isn't the parent, but might be the parent of the parent, so add it to the fallback array
+            fallbackHaystack.push(_hay);
+          }
         }
       }
     }
-    console.log(`Made it all the way through the haystack(s), trying the fallbacks:`, fallbackHaystacks);
-    // Made it all the way through the haystack and didn't find the needle, so try the fallbacks
-    return this.findParentOfFile(needle, fallbackHaystacks);
+    // Made it all the way through without finding the match, so try the fallbacks
+    return this.findParentOfFile(needle, fallbackHaystack);
   }
 
   flattenFilesArray(source: EditorFile[][], _dest?: EditorFile[]): EditorFile[] {

@@ -18,8 +18,14 @@
     &.html {
       color: $red;
     }
-    &.css {
+    &.php {
+      color: $purple;
+    }
+    &.css, &.less {
       color: $blue-bold;
+    }
+    &.sass {
+      color: $purple;
     }
     &.js {
       color: $yellow;

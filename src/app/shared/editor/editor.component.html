@@ -58,6 +58,8 @@
       class="tabs-nav"
       [ngClass]="{ 'empty': tabs.length === 0 }"
       [perfectScrollbar]="{ suppressScrollY: true, useBothWheelAxes: true }"
+      dragula="tabs"
+      [(dragulaModel)]="tabs"
     >
       <a
         class="tabs-nav-item"
@@ -82,7 +84,6 @@
 
     <div class="tabs-content">
       <div class="splash">
-        <!--<fa-icon [icon]="icons.splash"></fa-icon>-->
         <dm-logo></dm-logo>
         <p>Open a file on the left to start browsing</p>
       </div>

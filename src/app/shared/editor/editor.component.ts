@@ -7,10 +7,13 @@ import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
 
 // CodeMirror
   // Languages
+  import 'codemirror/mode/clike/clike';
   import './languages/javascript';
   import './languages/htmlmixed';
+  import 'codemirror/mode/xml/xml';
   import 'codemirror/mode/css/css';
   import 'codemirror/mode/sass/sass';
+  import './languages/php';
 
   // Addons
   import 'codemirror/addon/selection/active-line';
@@ -123,15 +126,19 @@ export class EditorComponent implements OnInit, OnDestroy {
   // Tabs manipulation
 
   onFileTreeClick(file: EditorFile) {
+    console.log(`fileTreeClick: ${file.name}`);
     this.selectedFile = file;
 
     // Don't open folders as tabs
     if (file.type === 'folder') {
+      console.log(`It's a folder, so return`);
       return;
     }
 
     // If this is a double click, make the temp tab permanent
+    console.log(`Checking justOpenedFile: ${this.justOpenedFile ? this.justOpenedFile.name : ''}`);
     if (file === this.justOpenedFile) {
+      console.log(`It's a double click, so make it permanent`);
       for (const tab of this.tabs) {
         if (tab.file === file) {
           tab.type = 'perm';
@@ -141,11 +148,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     // Set this as the just-opened file to detect for double clicks
+    console.log(`Setting ${file.name} to justOpenedFile`);
     this.justOpenedFile = file;
 
     // If this file is already open in a tab, make it active
     for (const tab of this.tabs) {
       if (file === tab.file) {
+        console.log(`File is already open, so making it active`);
         this.activeTab = tab;
         return;
       }
@@ -153,11 +162,13 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     // If we've made it this far, this file hasn't been opened yet
     // Set up the file contents
+    console.log(`Getting content (if it doesn't exist already)`);
     this.editorService.setupFileContent(file);
 
     // If there's already a temp tab open, replace its file with this one and make it active
     for (const tab of this.tabs) {
       if (tab.type === 'temp') {
+        console.log(`Already a temp tab open, so replace it with ${file.name}`);
         tab.file = file;
         this.activeTab = tab;
         return;
@@ -165,11 +176,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     // Create a new tab and make it active
+    console.log(`Creating a new tab and making it active`);
     this.tabs.push(createTab('temp', file));
     this.activeTab = this.tabs[this.tabs.length - 1];
 
     // Set a timeout to watch for double clicks
+    console.log(`Setting the double-click timeout`);
     setTimeout(() => {
+      console.log(`Timeout! Clearing the justOpenedFile`);
       this.justOpenedFile = null;
     }, 250);
   }
@@ -253,6 +267,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           this.onCloseTab(tab);
         }
       }
+      this.editorService.addFileToDeleteList(this.selectedFile);
       this.editorService.deleteFile(this.selectedFile);
     }
   }

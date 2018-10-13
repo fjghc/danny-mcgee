@@ -14,7 +14,7 @@ import {
   faFolderPlus,
   faTrash
 } from '@fortawesome/pro-solid-svg-icons';
-import { faCss3, faHtml5, faJs } from '@fortawesome/free-brands-svg-icons';
+import { faCss3, faHtml5, faJs, faLess, faPhp, faSass } from '@fortawesome/free-brands-svg-icons';
 
 // App imports
 import { DataHandler } from '../data-handler.service';
@@ -44,7 +44,10 @@ export class EditorService {
         unknownFile: faFile,
         html: faHtml5,
         css: faCss3,
-        js: faJs
+        less: faLess,
+        sass: faSass,
+        js: faJs,
+        php: faPhp
       },
       ui: {
         newFile: faFilePlus,
@@ -101,16 +104,18 @@ export class EditorService {
         } else {
           return [this.icons.files.folder, this.icons.files.angle];
         }
-
       case 'html':
         return this.icons.files.html;
-
+      case 'php':
+        return this.icons.files.php;
       case 'css':
         return this.icons.files.css;
-
+      case 'sass':
+        return this.icons.files.sass;
+      case 'less':
+        return this.icons.files.less;
       case 'js':
         return this.icons.files.js;
-
       default:
         return this.icons.files.unknownFile;
     }
@@ -121,8 +126,14 @@ export class EditorService {
     switch (type) {
       case 'html':
         return 'htmlmixed';
+      case 'php':
+        return 'php';
       case 'css':
         return 'css';
+      case 'sass':
+        return 'sass';
+      case 'less':
+        return 'text/x-less';
       case 'js':
         return 'javascript';
       case 'ts':
@@ -186,87 +197,101 @@ export class EditorService {
   }
 
   deleteFile(file: EditorFile) {
-    console.log('deleting file:', file);
+    console.log(`Deleting file ${file.name} from filesMap`);
     const parent = this.findParentOfFile(file, this.filesTemp);
     const parentArray = parent instanceof Array ? parent : parent.contents as EditorFile[];
     parentArray.splice(this.indexOf(file.path, parentArray), 1);
   }
 
   addFileToDeleteList(file: EditorFile) {
+    if (!this.filesToDelete) {
+      this.filesToDelete = [];
+    }
     this.filesToDelete.push(file);
   }
 
+  /**
+   * Saves changes made in edit mode by:
+   * - Deleting any files in the delete list from Firebase Storage
+   * - Constructing File objects for any new or modified files
+   * - Uploading them to Firebase Storage
+   * - Updating the filesMap in Firebase Realtime Database
+   */
   async commitChangesToDatabase() {
+
     // Get a clean, flat list of the files without the folders included
     const flatFilesArray = this.flattenFilesArray([this.filesTemp]);
 
     // Process the delete list
     if (this.filesToDelete) {
       for (const file of this.filesToDelete) {
-        // TODO: Implement deleting files from storage
         console.log(`deleting file ${file.name} from storage...`);
+        await this.dataHandler.deleteFileFromStorage(file.path)
+          .then(response => console.log(response))
+          .catch(error => {
+            console.log('ERROR DELETING FILE:', error);
+            return;
+          });
       }
     }
 
     // Upload any new or modified files
-    let errorsOccurred = false;
     if (flatFilesArray) {
       for (const _file of flatFilesArray) {
         if (_file.isNewOrModified) {
+
+          // construct the file for upload (NOTE: File() constructor doesn't work in Edge/IE)
           const mimeType = this.getMimeTypeForExt(this.getFileExtension(_file.name));
-          console.log('mimeType: ' + mimeType);
-          // NOTE: File() constructor doesn't work in Edge
           const file = new File([_file.contents as string], _file.name, { type: mimeType });
+
+          // upload the file
           await this.dataHandler.uploadFileToStorage(file, _file.path)
-            .then(() => {
-              console.log('Upload complete!');
-            })
+            .then(response => console.log(response))
             .catch(error => {
-              console.log('ERROR:', error);
-              errorsOccurred = true;
+              console.log('ERROR UPLOADING FILE:', error);
+              return;
             });
         }
       }
     }
 
-    if (!errorsOccurred) {
-      console.log('Uploads completed successfully!');
+    console.log('File uploads completed!');
 
-      // Clean up the file map before uploading
-      if (flatFilesArray) {
-        for (const file of flatFilesArray) {
-          delete file.contents;
-          delete file.initialContent;
-          delete file.isNewOrModified;
-        }
-      }
-
-      // Upload new filesMap to the Realtime Database
-      await this.dataHandler.uploadFilesMapForProject(this.projectId, this.filesTemp)
-        .then(() => console.log('filesMap updated!'))
-        .catch(error => {
-          console.log('ERROR: ' + error);
-          errorsOccurred = true;
-        });
-
-      if (!errorsOccurred) {
-        // Perform cleanup
-        this.filesToDelete = null;
-        this.filesTemp = null;
-
-        // Turn off edit mode
-        this.editMode.next(false);
-
-        // Clear filesTemp
-        this.filesTemp = null;
+    // Clean up the file map before uploading
+    if (flatFilesArray) {
+      console.log('Cleaning up flatFilesArray');
+      for (const file of flatFilesArray) {
+        delete file.contents;
+        delete file.initialContent;
+        delete file.isNewOrModified;
       }
     }
+
+    // Upload new filesMap to the Realtime Database
+    console.log(`Uploading to realtime database with projectId ${this.projectId}, filesMap:`, this.filesTemp);
+    await this.dataHandler.uploadFilesMapForProject(this.projectId, this.filesTemp)
+      .then(() => console.log('filesMap updated!'))
+      .catch(error => {
+        console.log('ERROR UPLOADING FILESMAP: ' + error);
+        return;
+      });
+
+    // Perform cleanup
+    this.filesToDelete = null;
+    this.filesTemp = null;
+
+    // Turn off edit mode
+    this.editMode.next(false);
+
+    // Clear filesTemp
+    this.filesTemp = null;
   }
 
   /**
    * Sort's the given file's parent folder (folders to the top, then alphabetical)
    */
   sortParentArrayOfFile(file: EditorFile) {
+
     // Find the parent array
     const parent = this.findParentOfFile(file, this.filesTemp);
     console.log('parent is:', parent);
@@ -274,6 +299,7 @@ export class EditorService {
 
     // Sort it
     parentArray.sort((a: EditorFile, b: EditorFile) => {
+
       // Make the comparison case insensitive
       const aName = a.name.toUpperCase();
       const bName = b.name.toUpperCase();
@@ -286,6 +312,7 @@ export class EditorService {
         if (aName > bName) {
           return 1;
         }
+
         // Names are equal (this should never happen)
         console.log(`ERROR: Couldn't sort ${a.name} from ${b.name}!`);
         return 0;
@@ -314,6 +341,7 @@ export class EditorService {
    * @param haystack A flat array of files to search
    */
   private findParentOfFile(needle: EditorFile, haystack: EditorFile[]): EditorFile | EditorFile[] {
+
     // Set up a list of fallbacks to check if we don't find a match on the first pass
     const fallbackHaystack: EditorFile[] = [];
 
@@ -328,7 +356,7 @@ export class EditorService {
             // found the match; hay is the parent folder
             return hay;
           } else if (_hay.contents instanceof Array) {
-            // hay isn't the parent, but might be the parent of the parent, so add it to the fallback array
+            // hay's child is not the match, but it is a folder, so add it to the fallback array
             fallbackHaystack.push(_hay);
           }
         }
@@ -379,6 +407,10 @@ export class EditorService {
         return 'application/javascript';
       case 'json':
         return 'application/json';
+      case 'less':
+        return 'text/x-less';
+      case 'php':
+        return 'application/x-httpd-php';
       case 'sh':
         return 'application/x-sh';
       case 'svg':

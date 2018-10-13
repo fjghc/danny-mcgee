@@ -61,12 +61,20 @@ export class DataHandler {
     const task = this.storage.upload(path, file);
     return new Promise((resolve, reject) => {
       task.percentageChanges().subscribe(
-        value => {
-          console.log('Uploading file: ' + value + '%');
-          if (value === 100) {
-            resolve('Done!');
-          }
-        }
+        value => console.log('Uploading file: ' + value + '%'),
+        error => reject(error),
+        () => resolve('File uploaded successfully!')
+      );
+    });
+  }
+
+  deleteFileFromStorage(path: string): Promise<any> {
+    const task = this.storage.ref(path).delete();
+    return new Promise((resolve, reject) => {
+      task.subscribe(
+        () => {},
+        error => reject(error),
+        () => resolve('File deleted successfully!')
       );
     });
   }

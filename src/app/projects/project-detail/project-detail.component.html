@@ -45,18 +45,20 @@
   [ngSwitch]="true"
   class="project-window"
 >
-  <dm-loading></dm-loading>
   <div
     *ngSwitchCase="activeTab === 'desktop' || activeTab === 'tablet' || activeTab === 'mobile'"
     class="project-content"
     [ngClass]="activeTab"
   >
+    <dm-loading></dm-loading>
     <iframe [src]="bypassedUrl" #iframe></iframe>
   </div>
   <div
     *ngSwitchCase="activeTab === 'code'"
     class="project-content"
   >
-    <h2>Code View</h2>
+    <dm-editor
+      [projectId]="project.id"
+    ></dm-editor>
   </div>
 </div>

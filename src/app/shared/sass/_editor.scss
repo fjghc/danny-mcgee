@@ -55,7 +55,7 @@
     }
 
     .CodeMirror-gutters {
-      width: 60px;
+      width: 70px;
       background-color: $gray-darker;
       border-color: transparent;
     }
@@ -80,8 +80,15 @@
       background-color: transparent;
 
       &.cm-tag:not(.cm-bracket) {
+        display: inline-block;
         background-color: $gray;
       }
+    }
+
+    .CodeMirror-matchingbracket {
+      display: inline-block;
+      background-color: $gray;
+      color: #fff;
     }
 
     // Tokens
@@ -95,17 +102,15 @@
       background-color: lighten($gray-dark, 2%);
     }
     .cm-meta {
-      color: $orange;
-      // text-shadow: 0 0 0 $orange;
+      color: $purple;
+      font-style: italic;
     }
     .cm-comment {
       color: $blue-bold;
-      // text-shadow: 0 0 0 $blue-bold;
       font-style: italic;
     }
     .cm-keyword, .cm-type, .cm-atom {
       color: $blue-light;
-      // text-shadow: none;
       font-style: italic;
     }
     .cm-operator {
@@ -114,47 +119,59 @@
       line-height: 14px;
       position: relative;
       bottom: -1px;
-      //font-feature-settings: "calt" 1;
-      //font-variant-ligatures: contextual;
+      font-feature-settings: "calt" 1;
+      font-variant-ligatures: contextual;
       color: $gray-lighter;
-      // text-shadow: none;
     }
     .cm-string {
       color: $green;
-      // text-shadow: 0 0 0 $green;
+    }
+    .cm-string-2 {
+      color: $gray-light;
     }
     .cm-number {
       color: $turquoise;
-      // text-shadow: none;
     }
     .cm-variable {
       color: $pink;
-      // text-shadow: 0 0 0 $pink;
     }
     .cm-variable-2, .cm-def {
       color: $pink-light;
-      // text-shadow: none;
     }
     .cm-property {
       color: $pink;
-      // text-shadow: 0 0 0 $pink;
     }
     .cm-tag {
       color: $red;
-      // text-shadow: 0 0 0 $red;
       &.cm-bracket {
         color: $gray-lighter;
-        // text-shadow: none;
       }
     }
     .cm-attribute {
       color: $yellow;
       font-style: italic;
-      // text-shadow: none;
     }
     .cm-func {
       color: $turquoise;
-      // text-shadow: none;
+    }
+    .cm-m-css {
+      &.cm-qualifier {
+        color: $pink;
+      }
+      &.cm-builtin {
+        color: $blue-light;
+      }
+      &.cm-property {
+        color: $yellow;
+      }
+      &.cm-variable-3 {
+        color: $yellow;
+        font-style: italic;
+      }
+      &.cm-def {
+        color: $purple;
+        font-style: italic;
+      }
     }
   }
 }

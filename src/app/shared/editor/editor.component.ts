@@ -20,6 +20,7 @@ import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
   import 'codemirror/addon/edit/closebrackets';
   import 'codemirror/addon/edit/closetag';
   import 'codemirror/addon/edit/matchtags';
+  import 'codemirror/addon/edit/matchbrackets';
   import 'codemirror/addon/scroll/simplescrollbars';
 
 // App imports
@@ -315,9 +316,12 @@ export class EditorComponent implements OnInit, OnDestroy {
       autoCloseBrackets: true,
       autoCloseTags: true,
       matchTags: { bothTags: true },
+      matchBrackets: true,
       scrollbarStyle: 'overlay',
       readOnly: !this.editMode,
-      mode: this.editorService.getModeForType(tab.file.type)
+      mode: this.editorService.getModeForType(tab.file.type),
+      addModeClass: true,
+      extraKeys: { 'Shift-Tab': 'indentLess' }
     };
   }
 

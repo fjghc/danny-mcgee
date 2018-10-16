@@ -79,11 +79,6 @@
         state.tokenize = tokenString(ch);
         return state.tokenize(stream, state);
 
-      // } else if (ch === "@" && stream.match(/^[A-Z]+[A-Za-z\d]*\(/)) {
-      //   // FIXME: This breaks the context
-      //   stream.backUp(1);
-      //   return ret("decorator", "decorator", stream.current());
-
       } else if (ch === "." && stream.match(/^\d+(?:[eE][+\-]?\d+)?/)) {
         return ret("number", "number");
 
@@ -363,7 +358,7 @@
               if (isUpperCamelCase.test(stream.current())) {
                 cx.marked = classOrInterface(stream.current());
               }
-              else if (stream.match(/^( *)?\(|^( *)?=( *)?(function( *)?\()|^( *)?=( *)?(\([\w, ]*?\)|[\w]+)( *)=>/i, false)) {
+              else if (stream.match(/^(\s*)?\(|^(\s*)?=(\s*)?(function(\s*)?\()|^(\s*)?=(\s*)?(\([\w,\s]*?\)|[\w]+)(\s*)=>/i, false)) {
                 cx.marked += ' func func-def';
               }
             }

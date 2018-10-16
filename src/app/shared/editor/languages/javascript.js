@@ -79,7 +79,7 @@
         state.tokenize = tokenString(ch);
         return state.tokenize(stream, state);
 
-      } else if (ch === "@" && stream.match(/^[A-Z]+[\w]+[\s]*\(/)) {
+      } else if (ch === "@" && stream.match(/^[A-Z]+[A-Za-z\d]*\(/)) {
         stream.backUp(1);
         return ret("decorator", "decorator");
 
@@ -197,6 +197,7 @@
           state.tokenize = tokenBase;
           break;
         }
+
         escaped = !escaped && next === "\\";
       }
       return ret("quasi", "string-2", stream.current());
@@ -268,6 +269,17 @@
       'jsonld-keyword': true
     };
 
+    const ngClasses = {
+      'ActivatedRoute': true,
+      'FormGroup': true,
+      'Validators': true,
+      'Router': true,
+      'Subject': true,
+      'BehaviorSubject': true,
+      'Observable': true,
+      'Subscription': true
+    };
+
     function JSLexical(indented, column, type, align, prev, info) {
       this.indented = indented;
       this.column = column;
@@ -287,6 +299,17 @@
         for (let v = cx.vars; v; v = v.next)
           if (v.name === varname)
             return true;
+    }
+
+    function classOrInterface(varname) {
+      if (ngClasses.hasOwnProperty(varname))
+        return 'class';
+      if (varname === "NgModule")
+        return 'interface';
+      if (/^[A-Z]+[A-Za-z\d]*(Service|er|Component|Directive|Module)$/.test(varname))
+        return 'class';
+
+      return 'interface';
     }
 
     function parseJS(state, style, type, content, stream) {
@@ -316,18 +339,15 @@
               if (stream.peek() === '(')
                 cx.marked += ' func func-call';
 
-            // TODO: Try and distinguish between a class and an interface
             if (cx.marked === 'def')
               if (isUpperCamelCase.test(stream.current()))
-                cx.marked = 'class';
+                cx.marked = classOrInterface(stream.current());
               else if (stream.match(/^( *)?\(|^( *)?=( *)?(function( *)?\()|^( *)?=( *)?(\([\w, ]*?\)|[\w]+)( *)=>/i, false))
                 cx.marked += ' func func-def';
 
             if (cx.marked === 'type')
               if (isUpperCamelCase.test(stream.current()))
-                // If this is in UpperCamelCase and consists only of alphanumeric
-                // characters, it's a pretty safe bet this is a class or interface
-                cx.marked = 'interface';
+                cx.marked = classOrInterface(stream.current());
 
             return cx.marked;
           }
@@ -343,7 +363,7 @@
               returnValue += " func func-call";
             }
             if (isUpperCamelCase.test(stream.current())) {
-              returnValue = "class";
+              returnValue = classOrInterface(stream.current());
             }
             return returnValue;
           }

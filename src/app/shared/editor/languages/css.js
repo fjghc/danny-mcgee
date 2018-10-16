@@ -29,6 +29,7 @@
       valueKeywords = parserConfig.valueKeywords || {},
       functionKeywords = parserConfig.functionKeywords || {},
       allowNested = parserConfig.allowNested,
+      allowMath = parserConfig.allowMath,
       isSass = parserConfig.isSass || false,
       isLess = parserConfig.isLess || false,
       lineComment = parserConfig.lineComment,
@@ -52,7 +53,7 @@
         stream.eatWhile(/[\w\\\-]/);
         return ret("def", stream.current());
 
-      } else if (ch === "=" || ch === "!" || (ch === "~" || ch === "|") && stream.eat("=")) {
+      } else if (/[=~|^$*!]/.test(ch) && stream.eat("=")) {
         return ret("operator", "compare");
 
       } else if (ch === "\"" || ch === "'") {
@@ -63,32 +64,43 @@
         stream.eatWhile(/[\w\\\-]/);
         return ret("atom", "hash");
 
-      } else if (ch === "!" && stream.match(/^\s*(important)/)) {
+      } else if (ch === "!" && stream.match(/^\s*(important|optional|default)/)) {
         return ret("important", "important");
-
-      // FIXME: Probably not the best place to do this?
-      } else if (ch === "*" || ch === "^") {
-        stream.eat("=");
-        return ret("operator", "wildcard");
 
       } else if (/\d/.test(ch) || ch === "." && stream.eat(/\d/)) {
         stream.eatWhile(/[\w.%]/);
         return ret("number", "unit");
 
       } else if (ch === "-") {
+
+        if (stream.peek() === " ") {
+          return ret("operator", "operator");
+        }
+
         if (/[\d.]/.test(stream.peek())) {
           stream.eatWhile(/[\w.%]/);
+          console.log("I think this is a unit");
           return ret("number", "unit");
+
         } else if (stream.match(/^-[\w\\\-]+/)) {
           stream.eatWhile(/[\w\\\-]/);
+
           if (stream.match(/^\s*:/, false))
             return ret("variable-2", "variable-definition");
+
           return ret("variable-2", "variable");
+
+        } else if (stream.eat(/^(webkit-|moz-|ms-)$/)) {
+          return ret("vendor", "meta"); // vendor prefix
+
         } else if (stream.match(/^\w+-/)) {
           return ret("meta", "meta");
         }
 
-      } else if (/[,+>*\/]/.test(ch)) {
+      } else if (/[+>*\/]/.test(ch)) {
+        return ret("operator", "select-op");
+
+      } else if (ch === ",") {
         return ret(null, "select-op");
 
       } else if (ch === "." && stream.match(/^-?[_a-z][_a-z0-9-]*/i)) {
@@ -114,9 +126,21 @@
     }
 
     function tokenString(quote) {
+      // console.log('tokenString!');
+      // console.log('quote: ', quote);
       return function(stream, state) {
         var escaped = false, ch;
         while ((ch = stream.next()) != null) {
+          // TODO: Make this recognize interpolation
+          // console.log('stream: ', stream);
+          // console.log('ch: ', ch);
+          // console.log('peek: ', stream.peek());
+          // if (ch === "#" && stream.peek() === "{")
+          //   console.log('\n\n\n');
+          //   console.log('interpolation found!');
+          //   console.log('\n\n\n');
+          //   return ret("string-2", "interpolation");
+          // TODO: ^^
           if (ch === quote && !escaped) {
             if (quote === ")") stream.backUp(1);
             break;
@@ -146,6 +170,13 @@
     }
 
     function pushContext(state, stream, type, indent) {
+      // console.log('\n\n\n');
+      // console.log('---------pushContext called!--------');
+      // console.log('state: ', state);
+      // console.log('stream: ', stream);
+      // console.log('type: ', type);
+      // console.log('indent: ', indent);
+      // console.log('\n\n\n');
       state.context = new Context(type, stream.indentation() + (indent === false ? 0 : indentUnit), state.context);
       return type;
     }
@@ -182,6 +213,11 @@
     var states = {};
 
     states.top = function(type, stream, state) {
+      // console.log('\n\n');
+      // console.log('states.top!');
+      // console.log('type: ', type);
+      // console.log('stream: ', stream);
+      // console.log('state: ', state);
 
       if (type === "{") {
         return pushContext(state, stream, "block");
@@ -190,7 +226,7 @@
         return popContext(state);
 
       } else if (type === "[") {
-        return pushContext(state, stream, "attSelector");
+        return pushContext(state, stream, "attrSelector");
 
       } else if (type === "]" && state.context.prev) {
         return popContext(state);
@@ -221,9 +257,6 @@
       } else if (type && type.charAt(0) === "@") {
         return pushContext(state, stream, "at");
 
-      } else if (type === "wildcard") {
-        override = "operator";
-
       } else if (type === "hash") {
         override = "builtin";
 
@@ -245,15 +278,20 @@
       return state.context.type;
     };
 
-    states.attSelector = function(type, stream, state) {
+    states.attrSelector = function(type, stream, state) {
+      // console.log('attrSelector!');
+      // console.log('type: ', type);
 
       if (type === "word") {
         override = "attribute";
-        return "attSelector";
+        return "attrSelector";
 
-      } else {
-        return states.top(type, stream, state);
+      } else if (type === "compare" || stream.current() === "=") {
+        override = "operator";
+
       }
+      // return states.top(type, stream, state);
+      return popContext(state);
     };
 
     states.block = function(type, stream, state) {
@@ -274,6 +312,9 @@
           return "block";
 
         } else {
+          console.log('error added!');
+          console.log('stream: ', stream);
+          console.log('state: ', state);
           override += " error";
           return "maybeprop";
         }
@@ -295,12 +336,20 @@
     };
 
     states.prop = function(type, stream, state) {
+      console.log('states.prop!');
+      console.log('type: ', type);
+      console.log('stream current: ', stream.current());
+      // console.log('stream: ', stream);
+      console.log('\n\n\n');
       if (type === ";") return popContext(state);
       if (type === "{" && allowNested) return pushContext(state, stream, "propBlock");
       if (type === "}" || type === "{") return popAndPass(type, stream, state);
       if (type === "(") return pushContext(state, stream, "parens");
 
       if (type === "hash" && !/^#([0-9a-fA-f]{3,4}|[0-9a-fA-f]{6}|[0-9a-fA-f]{8})$/.test(stream.current())) {
+        console.log('error added!');
+        console.log('stream: ', stream);
+        console.log('state: ', state);
         override += " error";
 
       } else if (type === "word") {
@@ -316,6 +365,10 @@
       if (type === "}") return popContext(state);
       if (type === "word") { override = "property"; return "maybeprop"; }
       return state.context.type;
+    };
+
+    states.string = function(type, stream, state, quote) {
+      // TODO: Interpolation??
     };
 
     states.parens = function(type, stream, state) {
@@ -471,10 +524,14 @@
     };
 
     states.interpolation = function(type, stream, state) {
-      if (type === "}") return popContext(state);
+      if (type === "}") {
+        override = "string-2";
+        return popContext(state);
+      }
       if (type === "{" || type === ";") return popAndPass(type, stream, state);
       if (type === "word") override = "variable";
-      else if (type !== "variable" && type !== "(" && type !== ")") override = "error";
+      // FIXME: More things should be allowed in interpolation
+      // else if (type !== "variable" && type !== "(" && type !== ")") override = "error";
       return "interpolation";
     };
 
@@ -795,6 +852,7 @@
     "xx-large", "xx-small", "rotate", "rotate3d", "rotateX", "rotateY", "rotateZ",
     "scale", "scale3d", "scaleX", "scaleY", "scaleZ",
     "translate", "translate3d", "translateX", "translateY", "translateZ",
+    "comma", "space"
   ], valueKeywords = keySet(valueKeywords_);
 
   var functionKeywords_ = [
@@ -867,6 +925,7 @@
     functionKeywords: sassFunctionKeywords,
     fontProperties: fontProperties,
     allowNested: true,
+    allowMath: true,
     isSass: true,
     lineComment: "//",
     tokenHooks: {
@@ -894,7 +953,7 @@
       },
       "#": function(stream) {
         if (!stream.eat("{")) return false;
-        return [null, "interpolation"];
+        return ["string-2", "interpolation"];
       },
       "&": function() {
         return ["atom", "atom"];
@@ -915,6 +974,7 @@
     functionKeywords: lessFunctionKeywords,
     fontProperties: fontProperties,
     allowNested: true,
+    allowMath: true,
     isLess: true,
     lineComment: "//",
     tokenHooks: {

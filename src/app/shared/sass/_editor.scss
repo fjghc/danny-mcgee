@@ -152,7 +152,7 @@
     }
     // RegEx
     .cm-string-2 {
-      color: $gray-light;
+      color: darken($gray-lighter, 10%);
     }
     // HTML/XML tags
     .cm-tag {
@@ -170,13 +170,13 @@
     // CSS
     // TODO: Fix SASS syntax highlighting
     .cm-m-css {
-      animation: error-flash 0.5s infinite linear;
+      // animation: error-flash 0.5s infinite linear;
       // DEBUG
       &.cm-atom, &.cm-important, &.cm-variable, &.cm-variable-2, &.cm-variable-3,
       &.cm-qualifier, &.cm-builtin, &.cm-keyword, &.cm-property, &.cm-def,
       &.cm-unit, &.cm-operator, &.cm-attribute, &.cm-tag, &.cm-bracket, &.cm-func,
-      &.cm-string, &.cm-number, &.cm-type, &.cm-comment, &.cm-tab {
-        animation: none !important;
+      &.cm-string, &.cm-number, &.cm-type, &.cm-comment, &.cm-tab, &.cm-string-2 {
+        // animation: none !important;
       }
       // Property value default
       &.cm-atom {
@@ -206,10 +206,6 @@
       &.cm-def {
         color: $purple;
         font-style: italic;
-      }
-      // SASS units
-      &.cm-unit {
-        color: $blue-light;
       }
     }
 

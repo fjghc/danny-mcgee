@@ -45,6 +45,7 @@
 
     const isOperatorChar = /[+\-*&%=<>!?|~^@]/;
     const isJsonldKeyword = /^@(context|id|value|language|type|container|list|set|reverse|index|base|vocab|graph)"/;
+    const isUpperCamelCase = /^[A-Z]+[A-Za-z0-9]+$/;
 
     function readRegexp(stream) {
       let escaped = false;
@@ -73,33 +74,49 @@
     }
     function tokenBase(stream, state) {
       const ch = stream.next();
+
       if (ch === '"' || ch === "'") {
         state.tokenize = tokenString(ch);
         return state.tokenize(stream, state);
+
+      } else if (ch === "@" && stream.match(/^[A-Z]+[\w]+[\s]*\(/)) {
+        stream.backUp(1);
+        return ret("decorator", "decorator");
+
       } else if (ch === "." && stream.match(/^\d+(?:[eE][+\-]?\d+)?/)) {
         return ret("number", "number");
+
       } else if (ch === "." && stream.match("..")) {
         return ret("spread", "operator");
+
       } else if (/[\[\]{}(),;:.]/.test(ch)) {
         return ret(ch);
+
       } else if (ch === "=" && stream.eat(">")) {
         return ret("=>", "operator");
+
       } else if (ch === "0" && stream.match(/^(?:x[\da-f]+|o[0-7]+|b[01]+)n?/i)) {
         return ret("number", "number");
+
       } else if (/\d/.test(ch)) {
         stream.match(/^\d*(?:n|(?:\.\d*)?(?:[eE][+\-]?\d+)?)?/);
         return ret("number", "number");
+
       } else if (ch === "/") {
+
         if (stream.eat("*")) {
           state.tokenize = tokenComment;
           return tokenComment(stream, state);
+
         } else if (stream.eat("/")) {
           stream.skipToEnd();
           return ret("comment", "comment");
+
         } else if (expressionAllowed(stream, state, 1)) {
           readRegexp(stream);
           stream.match(/^\b(([gimyus])(?![gimyus]*\2))+\b/);
           return ret("regexp", "string-2");
+
         } else {
           stream.eat("=");
           return ret("operator", "operator", stream.current());
@@ -107,23 +124,33 @@
       } else if (ch === "`") {
         state.tokenize = tokenQuasi;
         return tokenQuasi(stream, state);
+
       } else if (ch === "#") {
         stream.skipToEnd();
         return ret("error", "error");
+
       } else if (isOperatorChar.test(ch)) {
+
         if (ch !== ">" || !state.lexical || state.lexical.type !== ">") {
+
           if (stream.eat("=")) {
+
             if (ch === "!" || ch === "=") stream.eat("=")
+
           } else if (/[<>*+\-]/.test(ch)) {
             stream.eat(ch);
+
             if (ch === ">") stream.eat(ch)
           }
         }
         return ret("operator", "operator", stream.current());
+
       } else if (wordRE.test(ch)) {
         stream.eatWhile(wordRE);
         const word = stream.current();
+
         if (state.lastType !== ".") {
+
           if (keywords.propertyIsEnumerable(word)) {
             const kw = keywords[word];
             return ret(kw.type, kw.style, word)
@@ -284,12 +311,24 @@
           while(cc.length && cc[cc.length - 1].lex)
             cc.pop()();
           if (cx.marked) {
+
             if (cx.marked === 'property')
               if (stream.peek() === '(')
                 cx.marked += ' func func-call';
+
+            // TODO: Try and distinguish between a class and an interface
             if (cx.marked === 'def')
-              if (stream.match(/^( *)?\(|^( *)?=( *)?(function( *)?\()|^( *)?=( *)?(\([\w, ]*?\)|[\w]+)( *)=>/i, false))
+              if (isUpperCamelCase.test(stream.current()))
+                cx.marked = 'class';
+              else if (stream.match(/^( *)?\(|^( *)?=( *)?(function( *)?\()|^( *)?=( *)?(\([\w, ]*?\)|[\w]+)( *)=>/i, false))
                 cx.marked += ' func func-def';
+
+            if (cx.marked === 'type')
+              if (isUpperCamelCase.test(stream.current()))
+                // If this is in UpperCamelCase and consists only of alphanumeric
+                // characters, it's a pretty safe bet this is a class or interface
+                cx.marked = 'interface';
+
             return cx.marked;
           }
           if (type === "variable") {
@@ -297,8 +336,14 @@
             if (inScope(state, content)) {
               returnValue += "-2";
             }
+            else if (inList(stream.current(), state.importVars)) {
+              returnValue += "-2";
+            }
             if (stream.match(/^( *)?\(/, false)) {
               returnValue += " func func-call";
+            }
+            if (isUpperCamelCase.test(stream.current())) {
+              returnValue = "class";
             }
             return returnValue;
           }
@@ -328,12 +373,14 @@
       pass.apply(null, arguments);
       return true;
     }
+
     function inList(name, list) {
       for (let v = list; v; v = v.next)
         if (v.name === name)
           return true;
       return false;
     }
+
     function register(varname) {
       const state = cx.state;
       cx.marked = "def";
@@ -354,6 +401,16 @@
       if (parserConfig.globalVars && !inList(varname, state.globalVars))
         state.globalVars = new Var(varname, state.globalVars)
     }
+
+    function registerImport(varname) {
+      const state = cx.state;
+
+      if (!inList(varname, state.importVars)) {
+        state.importVars = new Var(varname, state.importVars);
+      }
+      register(varname);
+    }
+
     function registerVarScoped(varname, context) {
       if (!context) {
         return null
@@ -392,6 +449,7 @@
       cx.state.context = cx.state.context.prev;
     }
     popcontext.lex = true;
+
     function pushlex(type, info) {
       const result = function () {
         const state = cx.state;
@@ -560,9 +618,7 @@
         return;
       if (type === "(")
         return contCommasep(expressionNoComma, ")", "call", me);
-      // TODO: Find out if this is a function?
       if (type === ".") {
-        // console.log(`maybeoperatorNoComma called, found a dot;\ntype: ${type}, value: ${value}, noComma: ${noComma}, me: ${me}`);
         return cont(property, me);
       }
       if (type === "[")
@@ -988,8 +1044,10 @@
     function importSpec(type, value) {
       if (type === "{")
         return contCommasep(importSpec, "}");
-      if (type === "variable")
-        register(value);
+      if (type === "variable") {
+        // register(value);
+        registerImport(value);
+      }
       if (value === "*")
         cx.marked = "keyword";
       return cont(maybeAs);
@@ -1044,6 +1102,7 @@
           cc: [],
           lexical: new JSLexical((basecolumn || 0) - indentUnit, 0, "block", false),
           localVars: parserConfig.localVars,
+          importVars: parserConfig.importVars,
           context: parserConfig.localVars && new Context(null, null, false),
           indented: basecolumn || 0
         };

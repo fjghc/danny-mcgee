@@ -211,6 +211,16 @@
       }
     }
 
+    // TypeScript / ES6
+    .cm-m-javascript {
+      &.cm-decorator, &.cm-class {
+        color: $yellow;
+      }
+      &.cm-interface {
+        color: $orange;
+      }
+    }
+
     // PHP
     .cm-m-clike {
       // Functions

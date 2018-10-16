@@ -1,17 +1,11 @@
 @import '../sass/vars';
 
 
-
 :host {
   display: block;
   position: relative;
   z-index: 1000;
 }
-
-//dm-logo {
-//  @include absolute(16px, null, null, $logo-offset);
-//  z-index: 2;
-//}
 
 .side-panel {
   display: block;
@@ -110,7 +104,6 @@
   z-index: 3;
   padding: 15px 0;
 }
-
 .menu-lock-section {
   z-index: 1;
   background-color: transparent;
@@ -128,19 +121,16 @@
   :host.expanded &, :host.hover & {
     color: $gray-lighter;
   }
-
   fa-icon {
     :host.expanded &, :host.hover & {
       color: $gray-lightest;
     }
   }
-
   span {
     flex-shrink: 0;
     display: inline-block;
     padding: 0 36px 0 15px;
   }
-
   &:hover {
     background-color: darken($primary, 10%);
     color: #fff !important;
@@ -150,28 +140,22 @@
       color: #fff;
     }
   }
-
   &.login:hover {
     background-color: darken($success, 15%);
-
     fa-icon {
       background-color: darken($success, 7%);
     }
   }
-
   &.logout:hover {
     background-color: desaturate(darken($danger, 10%), 20%);
-
     fa-icon {
       background-color: $danger;
     }
   }
-
   &.current {
     background-color: $gray-darkest !important;
     color: #fff !important;
     cursor: default;
-
     fa-icon {
       background-color: $gray-darkest !important;
       color: #fff !important;

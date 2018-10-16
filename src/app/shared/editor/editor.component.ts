@@ -8,11 +8,10 @@ import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
 // CodeMirror
   // Languages
   import 'codemirror/mode/clike/clike';
+  import 'codemirror/mode/xml/xml';
   import './languages/javascript';
   import './languages/htmlmixed';
-  import 'codemirror/mode/xml/xml';
-  import 'codemirror/mode/css/css';
-  import 'codemirror/mode/sass/sass';
+  import './languages/css';
   import './languages/php';
 
   // Addons

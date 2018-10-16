@@ -112,6 +112,8 @@ export class EditorService {
         return this.icons.files.css;
       case 'sass':
         return this.icons.files.sass;
+      case 'scss':
+        return this.icons.files.sass;
       case 'less':
         return this.icons.files.less;
       case 'js':
@@ -131,7 +133,9 @@ export class EditorService {
       case 'css':
         return 'css';
       case 'sass':
-        return 'sass';
+        return 'text/x-scss';
+      case 'scss':
+        return 'text/x-scss';
       case 'less':
         return 'text/x-less';
       case 'js':
@@ -411,6 +415,8 @@ export class EditorService {
         return 'text/x-less';
       case 'php':
         return 'application/x-httpd-php';
+      case 'scss':
+        return 'text/x-sass';
       case 'sh':
         return 'application/x-sh';
       case 'svg':

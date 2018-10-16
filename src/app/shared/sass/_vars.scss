@@ -63,6 +63,15 @@ $contrast-color: (
   "dark": $light
 );
 
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1600px
+);
+
 
 
 // Sizes
@@ -160,5 +169,17 @@ $editor-tab-height: 36px;
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes error-flash {
+  0% {
+    color: $red;
+  }
+  50% {
+    color: #fff;
+  }
+  100% {
+    color: $red;
   }
 }

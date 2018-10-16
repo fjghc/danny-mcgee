@@ -1,8 +1,12 @@
 <div class="row no-gutters">
+
+  <!-- Sidebar -->
   <div
     class="col filetree-col"
     [ngStyle]="{ 'flex-basis': sidebarWidth + 'px' }"
   >
+
+    <!-- Filetree Heading / Toolbar -->
     <div class="filetree-heading">
       <h6 *ngIf="!editMode">Explorer</h6>
       <div class="btn-container btn-container-left" *ngIf="editMode">
@@ -45,6 +49,8 @@
         ></fa-icon>
       </div>
     </div>
+
+    <!-- Filetree -->
     <dm-filetree
       [files]="files"
     ></dm-filetree>
@@ -52,12 +58,15 @@
       <fa-icon [icon]="icons.resizer"></fa-icon>
     </div>
   </div>
+
+  <!-- Main Column -->
   <div class="col editor-col">
 
+    <!-- Tabs -->
     <nav
       class="tabs-nav"
       [ngClass]="{ 'empty': tabs.length === 0 }"
-      [perfectScrollbar]="{ suppressScrollY: true, useBothWheelAxes: true }"
+      [perfectScrollbar]="{ suppressScrollY: true, useBothWheelAxes: true, wheelSpeed: 0.33 }"
       dragula="tabs"
       [(dragulaModel)]="tabs"
     >
@@ -82,6 +91,7 @@
       </a>
     </nav>
 
+    <!-- Editor Window -->
     <div class="tabs-content">
       <div class="splash">
         <dm-logo></dm-logo>

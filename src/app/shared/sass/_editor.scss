@@ -24,8 +24,8 @@
     &.css, &.less {
       color: $blue-bold;
     }
-    &.sass {
-      color: $purple;
+    &.sass, &.scss {
+      color: $pink;
     }
     &.js {
       color: $yellow;
@@ -39,8 +39,6 @@
   // Custom theme
   &.cm-s-dm {
     // Main
-    @include operator-mono(400);
-    font-size: 14px;
     background-color: $gray-darker;
     color: $gray-lightest;
 
@@ -91,7 +89,12 @@
       color: #fff;
     }
 
-    // Tokens
+    // Syntax highlighting
+    .CodeMirror-line {
+      @include operator-mono(400);
+      font-size: 14px;
+    }
+    // Tabs
     .cm-tab::before {
       content: ' ';
       display: inline-block;
@@ -101,6 +104,8 @@
       left: 2px;
       background-color: lighten($gray-dark, 2%);
     }
+
+    // Basic tokens
     .cm-meta {
       color: $purple;
       font-style: italic;
@@ -114,6 +119,7 @@
       font-style: italic;
     }
     .cm-operator {
+      // Use Fira Code's ligatures for operators
       @include fira-code(400);
       font-size: 16px;
       line-height: 14px;
@@ -126,51 +132,92 @@
     .cm-string {
       color: $green;
     }
-    .cm-string-2 {
-      color: $gray-light;
-    }
     .cm-number {
       color: $turquoise;
-    }
-    .cm-variable {
-      color: $pink;
-    }
-    .cm-variable-2, .cm-def {
-      color: $pink-light;
     }
     .cm-property {
       color: $pink;
     }
+    // Global vars
+    .cm-variable {
+      color: $pink;
+    }
+    // Local vars, args
+    .cm-variable-2, .cm-def {
+      color: $pink-light;
+    }
+    // Functions
+    .cm-func {
+      color: $turquoise;
+    }
+    // RegEx
+    .cm-string-2 {
+      color: $gray-light;
+    }
+    // HTML/XML tags
     .cm-tag {
       color: $red;
       &.cm-bracket {
         color: $gray-lighter;
       }
     }
+    // HTML/XML atts
     .cm-attribute {
       color: $yellow;
       font-style: italic;
     }
-    .cm-func {
-      color: $turquoise;
-    }
+
+    // CSS
+    // TODO: Fix SASS syntax highlighting
     .cm-m-css {
+      animation: error-flash 0.5s infinite linear;
+      // DEBUG
+      &.cm-atom, &.cm-important, &.cm-variable, &.cm-variable-2, &.cm-variable-3,
+      &.cm-qualifier, &.cm-builtin, &.cm-keyword, &.cm-property, &.cm-def,
+      &.cm-unit, &.cm-operator, &.cm-attribute, &.cm-tag, &.cm-bracket, &.cm-func,
+      &.cm-string, &.cm-number, &.cm-type, &.cm-comment, &.cm-tab {
+        animation: none !important;
+      }
+      // Property value default
+      &.cm-atom {
+        color: $blue-light;
+        font-style: normal;
+      }
+      // !important and pseudo-selectors
+      &.cm-important,
+      &.cm-variable-3 {
+        color: $orange;
+        font-style: italic;
+      }
+      // Class name selector
       &.cm-qualifier {
         color: $pink;
       }
-      &.cm-builtin {
+      // ID selector and Less/SASS keywords
+      &.cm-builtin, &.cm-keyword {
         color: $blue-light;
+        font-style: italic;
       }
+      // Properties
       &.cm-property {
         color: $yellow;
       }
-      &.cm-variable-3 {
-        color: $yellow;
-        font-style: italic;
-      }
+      // @media, @font-face, and Less/SASS functions
       &.cm-def {
         color: $purple;
         font-style: italic;
+      }
+      // SASS units
+      &.cm-unit {
+        color: $blue-light;
+      }
+    }
+
+    // PHP
+    .cm-m-clike {
+      // Functions
+      &.cm-builtin, &.cm-def {
+        color: $turquoise;
       }
     }
   }
@@ -182,6 +229,7 @@
 .ps__rail-x, .ps__rail-y,
 .ps__thumb-x, .ps__thumb-y {
   position: absolute;
+  z-index: 100;
 }
 .ps__thumb-x, .ps__thumb-y,
 .CodeMirror-overlayscroll-vertical > div, .CodeMirror-overlayscroll-horizontal > div {

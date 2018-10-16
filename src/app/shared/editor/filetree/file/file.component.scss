@@ -38,10 +38,6 @@
     }
   }
 
-  ::ng-deep.indent-1 {
-    padding-left: $editor-file-indent + 15;
-  }
-
   @for $i from 1 through 20 {
     ::ng-deep.indent-#{$i} & {
       padding-left: $editor-file-indent * $i + 15;

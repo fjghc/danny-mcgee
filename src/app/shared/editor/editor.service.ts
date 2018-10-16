@@ -14,7 +14,7 @@ import {
   faFolderPlus,
   faTrash
 } from '@fortawesome/pro-solid-svg-icons';
-import { faCss3, faHtml5, faJs, faLess, faPhp, faSass } from '@fortawesome/free-brands-svg-icons';
+import { faAngular, faCss3, faHtml5, faJs, faLess, faPhp, faSass } from '@fortawesome/free-brands-svg-icons';
 
 // App imports
 import { DataHandler } from '../data-handler.service';
@@ -41,6 +41,7 @@ export class EditorService {
         folderOpen: faFolderOpen,
         angle: faCaretRight,
         angleOpen: faCaretDown,
+        angular: faAngular,
         unknownFile: faFile,
         html: faHtml5,
         css: faCss3,
@@ -111,13 +112,18 @@ export class EditorService {
       case 'css':
         return this.icons.files.css;
       case 'sass':
-        return this.icons.files.sass;
       case 'scss':
         return this.icons.files.sass;
       case 'less':
         return this.icons.files.less;
       case 'js':
+      case 'ts':
         return this.icons.files.js;
+      case 'ng-module':
+      case 'ng-component':
+      case 'ng-service':
+      case 'ng-directive':
+        return this.icons.files.angular;
       default:
         return this.icons.files.unknownFile;
     }
@@ -141,6 +147,10 @@ export class EditorService {
       case 'js':
         return 'javascript';
       case 'ts':
+      case 'ng-module':
+      case 'ng-component':
+      case 'ng-service':
+      case 'ng-directive':
         return 'application/typescript';
       default:
         return 'text/plain';
@@ -149,6 +159,29 @@ export class EditorService {
 
   getFileExtension(filename: string): string {
     return filename.match(/\.[\w]+$/)[0].replace(/^./, '');
+  }
+
+  getFileType(filename: string): string {
+    console.log('getting type for ' + filename);
+    const extension = this.getFileExtension(filename);
+    console.log('extension: ' + extension);
+
+    if (extension !== 'ts') {
+      return extension;
+    }
+
+    const _filename = filename.replace(/.(ts)$/, '');
+    console.log('_filename: ' + _filename);
+    const suffix = this.getFileExtension(_filename);
+    console.log('suffix: ' + suffix);
+
+    switch (suffix) {
+      case 'module':    return 'ng-module';
+      case 'component': return 'ng-component';
+      case 'service':   return 'ng-service';
+      case 'directive': return 'ng-directive';
+      default:          return 'ts';
+    }
   }
 
 

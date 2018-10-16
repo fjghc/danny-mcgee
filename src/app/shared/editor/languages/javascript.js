@@ -79,9 +79,10 @@
         state.tokenize = tokenString(ch);
         return state.tokenize(stream, state);
 
-      } else if (ch === "@" && stream.match(/^[A-Z]+[A-Za-z\d]*\(/)) {
-        stream.backUp(1);
-        return ret("decorator", "decorator");
+      // } else if (ch === "@" && stream.match(/^[A-Z]+[A-Za-z\d]*\(/)) {
+      //   // FIXME: This breaks the context
+      //   stream.backUp(1);
+      //   return ret("decorator", "decorator", stream.current());
 
       } else if (ch === "." && stream.match(/^\d+(?:[eE][+\-]?\d+)?/)) {
         return ret("number", "number");
@@ -109,8 +110,10 @@
           return tokenComment(stream, state);
 
         } else if (stream.eat("/")) {
+          const todo = stream.match(/.*(TODO).*/);
+          const fixme = stream.match(/.*(FIXME).*/);
           stream.skipToEnd();
-          return ret("comment", "comment");
+          return ret("comment", todo ? "todo comment" : fixme ? "fixme comment" : "comment");
 
         } else if (expressionAllowed(stream, state, 1)) {
           readRegexp(stream);
@@ -143,7 +146,7 @@
             if (ch === ">") stream.eat(ch)
           }
         }
-        return ret("operator", "operator", stream.current());
+        return ret("operator", ch === "@" ? "decorator" : "operator", stream.current());
 
       } else if (wordRE.test(ch)) {
         stream.eatWhile(wordRE);
@@ -271,7 +274,26 @@
 
     const ngClasses = {
       'ActivatedRoute': true,
+      'Attribute': true,
+      'Component': true,
+      'ContentChild': true,
+      'ContentChildren': true,
+      'Directive': true,
       'FormGroup': true,
+      'Host': true,
+      'HostBinding': true,
+      'HostListener': true,
+      'Inject': true,
+      'Injectable': true,
+      'Input': true,
+      'NgModule': true,
+      'Optional': true,
+      'Output': true,
+      'Pipe': true,
+      'Self': true,
+      'SkipSelf': true,
+      'ViewChild': true,
+      'ViewChildren': true,
       'Validators': true,
       'Router': true,
       'Subject': true,
@@ -304,8 +326,6 @@
     function classOrInterface(varname) {
       if (ngClasses.hasOwnProperty(varname))
         return 'class';
-      if (varname === "NgModule")
-        return 'interface';
       if (/^[A-Z]+[A-Za-z\d]*(Service|er|Component|Directive|Module)$/.test(varname))
         return 'class';
 
@@ -339,11 +359,14 @@
               if (stream.peek() === '(')
                 cx.marked += ' func func-call';
 
-            if (cx.marked === 'def')
-              if (isUpperCamelCase.test(stream.current()))
+            if (cx.marked === 'def') {
+              if (isUpperCamelCase.test(stream.current())) {
                 cx.marked = classOrInterface(stream.current());
-              else if (stream.match(/^( *)?\(|^( *)?=( *)?(function( *)?\()|^( *)?=( *)?(\([\w, ]*?\)|[\w]+)( *)=>/i, false))
+              }
+              else if (stream.match(/^( *)?\(|^( *)?=( *)?(function( *)?\()|^( *)?=( *)?(\([\w, ]*?\)|[\w]+)( *)=>/i, false)) {
                 cx.marked += ' func func-def';
+              }
+            }
 
             if (cx.marked === 'type')
               if (isUpperCamelCase.test(stream.current()))
@@ -353,6 +376,7 @@
           }
           if (type === "variable") {
             let returnValue = type;
+            console.log('parsing var: ' + stream.current());
             if (inScope(state, content)) {
               returnValue += "-2";
             }

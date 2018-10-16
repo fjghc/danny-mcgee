@@ -34,7 +34,7 @@ export class FileComponent implements OnInit, OnDestroy {
   newFileSub: Subscription;
 
   // Services
-  constructor(private editorService: EditorService) {}
+  constructor(public editorService: EditorService) {}
 
   // Init
   ngOnInit() {
@@ -98,9 +98,10 @@ export class FileComponent implements OnInit, OnDestroy {
 
       if (this.file.type !== 'folder') {
         // Set the file type
-        const extension = this.editorService.getFileExtension(name);
-        if (extension) {
-          this.file.type = extension;
+        // const extension = this.editorService.getFileExtension(name);
+        const type = this.editorService.getFileType(name);
+        if (type) {
+          this.file.type = type;
           this.setIcons();
         } else {
           console.log('ERROR: no extension for filename ' + name);

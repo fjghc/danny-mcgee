@@ -30,6 +30,18 @@
     &.js {
       color: $yellow;
     }
+    &.ts, &.ng-component {
+      color: $blue-bold;
+    }
+    &.ng-module {
+      color: $red;
+    }
+    &.ng-service {
+      color: $yellow;
+    }
+    &.ng-directive {
+      color: $purple;
+    }
   }
 }
 
@@ -213,11 +225,19 @@
 
     // TypeScript / ES6
     .cm-m-javascript {
-      &.cm-decorator, &.cm-class {
+      &.cm-class, &.cm-decorator {
         color: $yellow;
       }
       &.cm-interface {
         color: $orange;
+      }
+      &.cm-todo {
+        color: $yellow;
+        font-weight: 500;
+      }
+      &.cm-fixme {
+        color: $red;
+        font-weight: 500;
       }
     }
 

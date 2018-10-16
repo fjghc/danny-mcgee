@@ -319,9 +319,6 @@ export class EditorService {
 
     // Turn off edit mode
     this.editMode.next(false);
-
-    // Clear filesTemp
-    this.filesTemp = null;
   }
 
   /**

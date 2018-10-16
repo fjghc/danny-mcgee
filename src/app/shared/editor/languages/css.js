@@ -79,7 +79,6 @@
 
         if (/[\d.]/.test(stream.peek())) {
           stream.eatWhile(/[\w.%]/);
-          console.log("I think this is a unit");
           return ret("number", "unit");
 
         } else if (stream.match(/^-[\w\\\-]+/)) {
@@ -103,8 +102,11 @@
       } else if (ch === ",") {
         return ret(null, "select-op");
 
-      } else if (ch === "." && stream.match(/^-?[_a-z][_a-z0-9-]*/i)) {
-        return ret("qualifier", "qualifier");
+      } else if (ch === ".") {
+        if (stream.match(/^-?[_a-z][_a-z0-9-]*/i))
+          return ret("qualifier", "qualifier");
+        else if (stream.match(/^../) && isSass)
+          return ret("operator", "spread");
 
       } else if (/[:;{}\[\]()]/.test(ch)) {
         return ret(null, ch);
@@ -158,13 +160,6 @@
     }
 
     function pushContext(state, stream, type, indent) {
-      // console.log('\n\n\n');
-      // console.log('---------pushContext called!--------');
-      // console.log('state: ', state);
-      // console.log('stream: ', stream);
-      // console.log('type: ', type);
-      // console.log('indent: ', indent);
-      // console.log('\n\n\n');
       state.context = new Context(type, stream.indentation() + (indent === false ? 0 : indentUnit), state.context);
       return type;
     }
@@ -235,6 +230,10 @@
 
       } else if (/^@(if|while)$/.test(type) && isSass) {
         return pushContext(state, stream, "sassConditional");
+
+      // TODO: Mixins
+      } else if (/^@(mixin|include|function|return)$/.test(type) && isSass) {
+        return pushContext(state, stream, "sassMixin");
 
       } else if (type && type.charAt(0) === "@") {
         return pushContext(state, stream, "at");
@@ -354,6 +353,7 @@
     };
 
     states.parens = function(type, stream, state) {
+      console.log('parens: ', type, stream, state);
       if (type === "{" || type === "}") return popAndPass(type, stream, state);
       if (type === ")") return popContext(state);
       if (type === "(") return pushContext(state, stream, "parens");
@@ -425,8 +425,11 @@
     // TODO: Fill this out
     states.sassConditional = function(type, stream, state) {
 
-      if (type === "{") return popContext(state) && pushContext(state, stream, "top");
-      if (stream.current() === "<" || stream.current() === ">") override = "operator";
+      if (type === "{") return pushContext(state, stream, "block");
+      else if (type === "}" && state.context.prev)  return popContext(state);
+      else if (type === "(") return pushContext(state, stream, "parens");
+
+      else if (stream.current() === "<" || stream.current() === ">") override = "operator";
 
       return state.context.type;
     };
@@ -434,13 +437,33 @@
     // TODO: Fill this out
     states.sassLoop = function(type, stream, state) {
 
-      if (type === "{") return popContext(state) && pushContext(state, stream, "top");
+      if (type === "{") return pushContext(state, stream, "block");
+      else if (type === "}" && state.context.prev)  return popContext(state);
+      else if (type === "(") return pushContext(state, stream, "parens");
 
-      if (type === "word") {
+      else if (type === "word") {
         var word = stream.current().toLowerCase();
 
         if (word === "from" || word === "through" || word === "in")
           override = "keyword";
+      }
+
+      return state.context.type;
+    };
+
+    // TODO: Fill this out
+    states.sassMixin = function(type, stream, state) {
+
+      if (type === "{") return pushContext(state, stream, "block");
+      else if (type === "}" && state.context.prev)  return popContext(state);
+      else if (type === "(") return pushContext(state, stream, "parens");
+      else if (type === ";") return popContext(state);
+
+      else if (type === "word") {
+        if (stream.peek() === "(")
+          override = "func";
+        else
+          override = "variable-2";
       }
 
       return state.context.type;
@@ -797,7 +820,7 @@
     "mix", "mongolian", "monospace", "move", "multiple", "multiply", "myanmar", "n-resize",
     "narrower", "ne-resize", "nesw-resize", "no-close-quote", "no-drop",
     "no-open-quote", "no-repeat", "none", "normal", "not-allowed", "nowrap",
-    "ns-resize", "numbers", "numeric", "nw-resize", "nwse-resize", "oblique", "octal", "opacity", "open-quote",
+    "ns-resize", "null", "numbers", "numeric", "nw-resize", "nwse-resize", "oblique", "octal", "opacity", "open-quote",
     "optimizeLegibility", "optimizeSpeed", "oriya", "oromo", "outset",
     "outside", "outside-shape", "overlay", "overline", "padding", "padding-box",
     "painted", "page", "paused", "persian", "perspective", "plus-darker", "plus-lighter",

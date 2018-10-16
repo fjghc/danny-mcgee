@@ -108,14 +108,20 @@
     multiLineStrings: true,
     hooks: {
       "$": function(stream) {
-        stream.eatWhile(/[\w\$_]/);
+        stream.eatWhile(/[\w$_]/);
         return "variable-2";
+      },
+      ".": function() {
+        return "operator";
+      },
+      ":": function() {
+        return "operator";
       },
       "<": function(stream, state) {
         var before;
         if (before = stream.match(/<<\s*/)) {
           var quoted = stream.eat(/['"]/);
-          stream.eatWhile(/[\w\.]/);
+          stream.eatWhile(/[\w.]/);
           var delim = stream.current().slice(before[0].length + (quoted ? 2 : 1));
           if (quoted) stream.eat(quoted);
           if (delim) {

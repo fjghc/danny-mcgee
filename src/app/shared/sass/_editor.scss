@@ -120,11 +120,9 @@
     }
     .cm-operator {
       // Use Fira Code's ligatures for operators
+      display: inline-block;
+      transform: scale(1.15) translateY(-0.25px);
       @include fira-code(400);
-      font-size: 16px;
-      line-height: 14px;
-      position: relative;
-      bottom: -1px;
       font-feature-settings: "calt" 1;
       font-variant-ligatures: contextual;
       color: $gray-lighter;
@@ -206,6 +204,10 @@
       &.cm-def {
         color: $purple;
         font-style: italic;
+      }
+      // Prefixes
+      &.cm-vendor {
+        opacity: 0.6;
       }
     }
 

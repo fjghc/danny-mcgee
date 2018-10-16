@@ -53,7 +53,7 @@
         stream.eatWhile(/[\w\\\-]/);
         return ret("def", stream.current());
 
-      } else if (/[=~|^$*!]/.test(ch) && stream.eat("=")) {
+      } else if (/[=~|^$*!<>]/.test(ch) && stream.eat("=")) {
         return ret("operator", "compare");
 
       } else if (ch === "\"" || ch === "'") {
@@ -90,8 +90,8 @@
 
           return ret("variable-2", "variable");
 
-        } else if (stream.eat(/^(webkit-|moz-|ms-)$/)) {
-          return ret("vendor", "meta"); // vendor prefix
+        } else if (stream.match(/^(webkit-|moz-|ms-|o-)/)) {
+          return ret("vendor", "vendor"); // vendor prefix
 
         } else if (stream.match(/^\w+-/)) {
           return ret("meta", "meta");
@@ -126,21 +126,9 @@
     }
 
     function tokenString(quote) {
-      // console.log('tokenString!');
-      // console.log('quote: ', quote);
       return function(stream, state) {
         var escaped = false, ch;
         while ((ch = stream.next()) != null) {
-          // TODO: Make this recognize interpolation
-          // console.log('stream: ', stream);
-          // console.log('ch: ', ch);
-          // console.log('peek: ', stream.peek());
-          // if (ch === "#" && stream.peek() === "{")
-          //   console.log('\n\n\n');
-          //   console.log('interpolation found!');
-          //   console.log('\n\n\n');
-          //   return ret("string-2", "interpolation");
-          // TODO: ^^
           if (ch === quote && !escaped) {
             if (quote === ")") stream.backUp(1);
             break;
@@ -213,11 +201,6 @@
     var states = {};
 
     states.top = function(type, stream, state) {
-      // console.log('\n\n');
-      // console.log('states.top!');
-      // console.log('type: ', type);
-      // console.log('stream: ', stream);
-      // console.log('state: ', state);
 
       if (type === "{") {
         return pushContext(state, stream, "block");
@@ -247,7 +230,6 @@
       } else if (/^@(-(moz|ms|o|webkit)-)?keyframes$/i.test(type)) {
         return "keyframes";
 
-        // TODO: SASS contexts
       } else if (/^@(for|each)$/i.test(type) && isSass) {
         return pushContext(state, stream, "sassLoop");
 
@@ -261,7 +243,12 @@
         override = "builtin";
 
       } else if (type === "word") {
-        override = "tag";
+        var word = stream.current().toLowerCase();
+        if (word === "from" || word === "to") {
+          override = "keyword";
+        } else {
+          override = "tag";
+        }
 
       } else if (type === "variable-definition") {
         return "maybeprop";
@@ -279,8 +266,6 @@
     };
 
     states.attrSelector = function(type, stream, state) {
-      // console.log('attrSelector!');
-      // console.log('type: ', type);
 
       if (type === "word") {
         override = "attribute";
@@ -312,12 +297,13 @@
           return "block";
 
         } else {
-          console.log('error added!');
-          console.log('stream: ', stream);
-          console.log('state: ', state);
           override += " error";
           return "maybeprop";
         }
+      } else if (type === "vendor") {
+        override += " property";
+        return "block";
+
       } else if (type === "meta") {
         return "block";
 
@@ -336,21 +322,16 @@
     };
 
     states.prop = function(type, stream, state) {
-      console.log('states.prop!');
-      console.log('type: ', type);
-      console.log('stream current: ', stream.current());
-      // console.log('stream: ', stream);
-      console.log('\n\n\n');
       if (type === ";") return popContext(state);
       if (type === "{" && allowNested) return pushContext(state, stream, "propBlock");
       if (type === "}" || type === "{") return popAndPass(type, stream, state);
       if (type === "(") return pushContext(state, stream, "parens");
 
       if (type === "hash" && !/^#([0-9a-fA-f]{3,4}|[0-9a-fA-f]{6}|[0-9a-fA-f]{8})$/.test(stream.current())) {
-        console.log('error added!');
-        console.log('stream: ', stream);
-        console.log('state: ', state);
         override += " error";
+
+      } else if (type === "vendor") {
+        override += " atom";
 
       } else if (type === "word") {
         wordAsValue(stream);
@@ -364,6 +345,7 @@
     states.propBlock = function(type, _stream, state) {
       if (type === "}") return popContext(state);
       if (type === "word") { override = "property"; return "maybeprop"; }
+      if (type === "vendor") { override += " property"; return "maybeprop"; }
       return state.context.type;
     };
 
@@ -444,6 +426,7 @@
     states.sassConditional = function(type, stream, state) {
 
       if (type === "{") return popContext(state) && pushContext(state, stream, "top");
+      if (stream.current() === "<" || stream.current() === ">") override = "operator";
 
       return state.context.type;
     };
@@ -787,7 +770,7 @@
     "ethiopic-halehame-sid-et", "ethiopic-halehame-so-et",
     "ethiopic-halehame-ti-er", "ethiopic-halehame-ti-et", "ethiopic-halehame-tig",
     "ethiopic-numeric", "ew-resize", "exclusion", "expanded", "extends", "extra-condensed",
-    "extra-expanded", "fantasy", "fast", "fill", "fixed", "flat", "flex", "flex-end", "flex-start", "footnotes",
+    "extra-expanded", "fantasy", "fast", "fill", "fixed", "flat", "flex", "box", "flexbox", "flex-end", "flex-start", "footnotes",
     "forwards", "from", "geometricPrecision", "georgian", "graytext", "grid", "groove",
     "gujarati", "gurmukhi", "hand", "hangul", "hangul-consonant", "hard-light", "hebrew",
     "help", "hidden", "hide", "higher", "highlight", "highlighttext",
@@ -856,7 +839,7 @@
   ], valueKeywords = keySet(valueKeywords_);
 
   var functionKeywords_ = [
-    "attr", "calc", "cubic-bezier", "hsl", "hsla", "linear-gradient", "radial-gradient",
+    "attr", "calc", "cubic-bezier", "hsl", "hsla", "gradient", "linear-gradient", "radial-gradient",
     "repeating-linear-gradient", "repeating-radial-gradient", "rgb", "rgba", "var"
   ], functionKeywords = keySet(functionKeywords_);
 

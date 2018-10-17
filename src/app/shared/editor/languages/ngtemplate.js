@@ -37,29 +37,17 @@
   };
 
   function maybeBackup(stream, pat, style) {
-    console.log('maybeBackup called with:', {
-      stream: stream,
-      pat: pat,
-      style: style
-    });
     var cur = stream.current();
     var close = cur.search(pat);
-    console.log('stream.current:', stream.current());
-    console.log('cur.length: ' + cur.length);
-    console.log('close = cur.search(pat):', close);
 
     if (close > -1) {
-      console.log('close > -1, so back up by cur.length - close');
       stream.backUp(cur.length - close);
     } else if (cur.match(/<\/?$/)) {
-      console.log('\'</\' matched on cur, so back up by cur.length');
       stream.backUp(cur.length);
       if (!stream.match(pat, false)) {
-        console.log('!stream.match(pat, false), so stream.match(cur)');
         stream.match(cur);
       }
     }
-    console.log('returning style:', style);
     return style;
   }
 
@@ -125,36 +113,48 @@
 
     function html(stream, state) {
 
-      // console.log('html called');
-
       var style = htmlMode.token(stream, state.htmlState);
-      var attr = style === 'attribute'; // /\battribute\b/.test(style);
+      var attr = style === 'attribute';
 
+      // Check if the attribute name starts with [, (, or *
       if (attr) {
         state.inNgAttr = /^[\[(*]/.test(stream.current());
       }
 
-      if (state.inNgAttr && stream.current() === "=") {
-        // We just started an attribute value that should be tokenized as Javascript
-        let quote;
-        if (stream.match(/^["'`]/, false)) {
+      // Tokenize the attribute value as Typescript
+      if (state.inNgAttr) {
 
-          // Deal with the opening quote somehow
-          quote = stream.peek();
+        // Eat the equals sign to prevent the HTML parser from getting stuck in attribute value state
+        if (stream.current() === '=') {
+          stream.backUp(1);
+          stream.eat('=');
+          return null;
+        }
 
-          var modeSpec = "application/typescript";
-          var mode = CodeMirror.getMode(config, modeSpec);
+        if (/^["'`]/.test(stream.current())) {
+          // Back up to the start of the attribute value
+          stream.backUp(stream.current().length);
+
+          // Note the character type so we can recognize when it closes
+          var quote = stream.peek();
           var endQuote = new RegExp(quote);
 
+          // Set the mode
+          var modeSpec = "application/typescript";
+          var mode = CodeMirror.getMode(config, modeSpec);
+
+          // Create the parser
           state.token = function (stream, state) {
             if (stream.match(endQuote)) {
-              if (state.ngBlockStarted) {
+              if (!state.ngBlockStarted) {
+                // Mark the opening quote as a string and start the ngBlock
+                state.ngBlockStarted = true;
+                return 'string';
+              } else {
+                // This must be the end quote, so mark it as a string and return to HTML mode
                 state.token = html;
                 state.localState = state.localMode = null;
                 state.ngBlockStarted = false;
-                return 'string';
-              } else {
-                state.ngBlockStarted = true;
                 return 'string';
               }
             }
@@ -166,72 +166,6 @@
         }
       }
 
-      // if (state.inNgAttr && style === 'string') {
-      //   console.log(stream.current());
-      //   console.log('I think this should be tokenized as Typescript^^^\n\n');
-      // }
-      //
-      // if (/\bbracket\b/.test(style) && state.inNgAttr) {
-      //   state.inNgAttr = false;
-      // }
-
-      var tag = /\btag\b/.test(style);
-      var tagName;
-
-      if (tag && !/[<>\s\/]/.test(stream.current())
-          && (tagName = state.htmlState.tagName && state.htmlState.tagName.toLowerCase())
-          && tags.hasOwnProperty(tagName)) {
-
-        state.inTag = tagName + " ";
-
-      } else if (state.inTag && tag && />$/.test(stream.current())) {
-
-        // We just started a <script> tag, so set the mode to Javascript
-        var inTag = /^([\S]+) (.*)/.exec(state.inTag);
-
-        state.inTag = null;
-        var modeSpec = stream.current() === ">" && findMatchingMode(tags[inTag[1]], inTag[2]);
-        var mode = CodeMirror.getMode(config, modeSpec);
-        var endTagA = getTagRegexp(inTag[1], true);
-        var endTag = getTagRegexp(inTag[1], false);
-
-        console.log('vars set:', {
-          modeSpec: modeSpec,
-          mode: mode,
-          endTagA: endTagA,
-          endTag: endTag
-        });
-
-        state.token = function (stream, state) {
-          console.log('(state.token function)', {
-            stream: stream,
-            state: state
-          });
-          if (stream.match(endTagA, false)) {
-            // We just closed the script tag, so reset mode to HTML
-            console.log('stream.match(endTagA)');
-            state.token = html;
-            state.localState = state.localMode = null;
-            console.log('setting state.token to html');
-            console.log('setting state.localState and state.localMode to null');
-
-            return null;
-          }
-          console.log('returning maybeBackup');
-          return maybeBackup(stream, endTag, state.localMode.token(stream, state.localState));
-        };
-
-        console.log('setting state.localMode to mode');
-        state.localMode = mode;
-        console.log('setting state.localState to CodeMirror.startState(mode, htmlMode.indent(state.htmlState, ""))');
-        state.localState = CodeMirror.startState(mode, htmlMode.indent(state.htmlState, ""));
-
-      } else if (state.inTag) {
-
-        state.inTag += stream.current();
-        if (stream.eol())
-          state.inTag += " ";
-      }
       return style;
     }
 

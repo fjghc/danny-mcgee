@@ -121,6 +121,7 @@ export class EditorService {
         return this.icons.files.js;
       case 'ng-module':
       case 'ng-component':
+      case 'ng-template':
       case 'ng-service':
       case 'ng-directive':
         return this.icons.files.angular;
@@ -134,6 +135,8 @@ export class EditorService {
     switch (type) {
       case 'html':
         return 'htmlmixed';
+      case 'ng-template':
+        return 'ngtemplate';
       case 'php':
         return 'php';
       case 'css':
@@ -158,7 +161,7 @@ export class EditorService {
   }
 
   getFileExtension(filename: string): string {
-    return filename.match(/\.[\w]+$/)[0].replace(/^./, '');
+    return filename.match(/\.[\w]+$/)[0].replace(/^\./, '');
   }
 
   getFileType(filename: string): string {
@@ -166,21 +169,36 @@ export class EditorService {
     const extension = this.getFileExtension(filename);
     console.log('extension: ' + extension);
 
-    if (extension !== 'ts') {
+    if (extension !== 'ts' && extension !== 'html') {
       return extension;
     }
 
-    const _filename = filename.replace(/.(ts)$/, '');
+    const _filename = filename.replace(/\.(ts|html)$/, '');
     console.log('_filename: ' + _filename);
-    const suffix = this.getFileExtension(_filename);
+
+    let suffix;
+    if (/\./g.test(_filename)) {
+      suffix = this.getFileExtension(_filename);
+    } else {
+      return extension;
+    }
     console.log('suffix: ' + suffix);
 
-    switch (suffix) {
-      case 'module':    return 'ng-module';
-      case 'component': return 'ng-component';
-      case 'service':   return 'ng-service';
-      case 'directive': return 'ng-directive';
-      default:          return 'ts';
+    if (extension === 'ts') {
+      switch (suffix) {
+        case 'module':    return 'ng-module';
+        case 'component': return 'ng-component';
+        case 'service':   return 'ng-service';
+        case 'directive': return 'ng-directive';
+        default:          return 'ts';
+      }
+    } else {
+      switch (suffix) {
+        case 'component':
+          return 'ng-template';
+        default:
+          return 'html';
+      }
     }
   }
 

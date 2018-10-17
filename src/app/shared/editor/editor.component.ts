@@ -11,6 +11,7 @@ import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
   import 'codemirror/mode/xml/xml';
   import './languages/javascript';
   import './languages/htmlmixed';
+  import './languages/ngtemplate';
   import './languages/css';
   import './languages/php';
 

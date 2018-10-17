@@ -177,7 +177,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     // Create a new tab and make it active
     // console.log(`Creating a new tab and making it active`);
-    this.tabs.push(createTab('temp', file));
+    this.tabs.push(createTab('temp', file, this.getEditorOptionsForFile(file)));
     this.activeTab = this.tabs[this.tabs.length - 1];
 
     // Set a timeout to watch for double clicks
@@ -305,8 +305,8 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   // Helper functions
 
-  getEditorOptionsForTab(tab: Tab): {} {
-    return {
+  getEditorOptionsForFile(file: EditorFile): {} {
+    const options = {
       theme: 'dm',
       lineNumbers: true,
       styleActiveLine: true,
@@ -318,10 +318,12 @@ export class EditorComponent implements OnInit, OnDestroy {
       matchBrackets: true,
       scrollbarStyle: 'overlay',
       readOnly: !this.editMode,
-      mode: this.editorService.getModeForType(tab.file.type),
+      mode: this.editorService.getModeForType(file.type),
       addModeClass: true,
       extraKeys: { 'Shift-Tab': 'indentLess' }
     };
+    console.log(options);
+    return options;
   }
 
 

@@ -1,3 +1,5 @@
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+
 export interface EditorFile {
   name: string;
   type: string;
@@ -5,6 +7,7 @@ export interface EditorFile {
   initialContent?: string;
   path?: string;
   isNewOrModified?: boolean;
+  icon?: IconDefinition;
 }
 
 export function createFile(
@@ -13,9 +16,10 @@ export function createFile(
   contents?: EditorFile[] | string,
   initialContent?: string,
   path?: string,
-  isNewOrModified?: boolean
+  isNewOrModified?: boolean,
+  icon?: IconDefinition
 ) {
   return {
-    name, type, contents, initialContent, path, isNewOrModified
+    name, type, contents, initialContent, path, isNewOrModified, icon
   };
 }

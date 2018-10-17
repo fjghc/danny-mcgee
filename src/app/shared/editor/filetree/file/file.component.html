@@ -11,7 +11,7 @@
       class="folder-toggle"
     ></fa-icon>
   </ng-container>
-  <fa-icon [icon]="icon" [class]="file.type === 'folder' ? file.name : ''" [ngClass]="file.type"></fa-icon>
+  <fa-icon [icon]="file.icon" [class]="file.type === 'folder' ? file.name : ''" [ngClass]="file.type"></fa-icon>
   <input
     class="new-file-name-input"
     (keydown)="onKeyDownNameInput($event)"

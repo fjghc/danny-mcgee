@@ -96,8 +96,8 @@ export class EditorService {
     return this.filesTemp;
   }
 
-  // FIXME: Try to avoid using getter methods for property binding
   getIconForType(type: string, open?: boolean): IconDefinition | IconDefinition[] {
+    console.log('getIconForType called!');
     switch (type) {
       case 'folder':
         if (open) {
@@ -129,8 +129,8 @@ export class EditorService {
     }
   }
 
-  // FIXME: Try to avoid using getter methods for property binding
   getModeForType(type: string): string {
+    console.log('getModeForType called!');
     switch (type) {
       case 'html':
         return 'htmlmixed';
@@ -301,6 +301,7 @@ export class EditorService {
         delete file.contents;
         delete file.initialContent;
         delete file.isNewOrModified;
+        delete file.icon;
       }
     }
 

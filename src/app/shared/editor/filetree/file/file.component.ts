@@ -59,10 +59,10 @@ export class FileComponent implements OnInit, OnDestroy {
   setIcons() {
     if (this.file.type === 'folder') {
       const icons = this.editorService.getIconForType(this.file.type, this.isOpen);
-      this.icon = icons[0];
+      this.file.icon = icons[0];
       this.angleIcon = icons[1];
     } else {
-      this.icon = this.editorService.getIconForType(this.file.type);
+      this.file.icon = this.editorService.getIconForType(this.file.type) as IconDefinition;
     }
   }
 

@@ -79,7 +79,7 @@
         <span class="filename">
           <fa-icon
             [class]="tab.file.type"
-            [icon]="editorService.getIconForType(tab.file.type)"
+            [icon]="tab.file.icon"
           ></fa-icon> {{ tab.file.name }}
         </span>
         <fa-icon
@@ -107,7 +107,7 @@
           [ngModel]="tab.file.contents"
           (ngModelChange)="onEditorChange($event, tab)"
           (keydown)="onKeyDown($event, tab)"
-          [options]="getEditorOptionsForTab(tab)"
+          [options]="tab.editorOptions"
         ></ngx-codemirror>
       </div>
     </div>

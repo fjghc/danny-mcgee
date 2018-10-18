@@ -36,6 +36,7 @@ import { EditorComponent } from './shared/editor/editor.component';
 import { FiletreeComponent } from './shared/editor/filetree/filetree.component';
 import { FileComponent } from './shared/editor/filetree/file/file.component';
 import { LoadingComponent } from './shared/loading/loading.component';
+import { ViewSourceComponent } from './view-source/view-source.component';
 
 // TODO: Please refactor me
 
@@ -59,7 +60,8 @@ import { LoadingComponent } from './shared/loading/loading.component';
     EditorComponent,
     FiletreeComponent,
     FileComponent,
-    LoadingComponent
+    LoadingComponent,
+    ViewSourceComponent
   ],
   imports: [
     BrowserModule,

@@ -77,7 +77,6 @@
   }
 
   CodeMirror.defineMode("ngtemplate", function (config, parserConfig) {
-    console.log('CodeMirror.defineMode called');
 
     var htmlMode = CodeMirror.getMode(config, {
       name: "xml",
@@ -121,9 +120,12 @@
 
         // Keep track of ngFor blocks so we can recognize local vars
         if (stream.current() === '*ngFor') {
-          state.ngForBlock.started = true;
-          state.ngForBlock.tagName = state.htmlState.tagName;
-          state.ngForBlock.indent = state.htmlState.tagStart;
+          state.ngForBlock = {
+            started: true,
+            tagName: state.htmlState.tagName,
+            indent: state.htmlState.tagStart,
+            vars: []
+          };
         }
 
         // Eat the equals sign to prevent the HTML parser from getting stuck in the attr value state

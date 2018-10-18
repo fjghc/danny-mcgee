@@ -5,16 +5,13 @@ import { HomeComponent } from './home/home.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailComponent } from './projects/project-detail/project-detail.component';
 import { ProjectEditComponent } from './projects/project-edit/project-edit.component';
+import { ViewSourceComponent } from './view-source/view-source.component';
 
 const appRoutes: Routes = [
   {
     path: '',
     component: HomeComponent,
     pathMatch: 'full'
-  },
-  {
-    path: 'login',
-    component: LoginComponent
   },
   {
     path: 'projects',
@@ -33,7 +30,15 @@ const appRoutes: Routes = [
         component: ProjectDetailComponent
       }
     ]
-  }
+  },
+  {
+    path: 'view-source',
+    component: ViewSourceComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
 ];
 
 @NgModule({

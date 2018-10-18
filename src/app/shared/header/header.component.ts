@@ -11,11 +11,6 @@ import { ProjectsService } from '../../projects/projects.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  urlTitleLookup = {
-    '/': 'Home',
-    '/projects': 'Projects',
-    '/login': 'Login'
-  };
   pageTitle: string;
   subscription: Subscription;
 
@@ -31,12 +26,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (event instanceof RoutesRecognized) {
           const url = event.url.toString();
 
-          if (this.urlTitleLookup[url]) {
-            this.pageTitle = this.urlTitleLookup[url];
-          }
+          this.pageTitle = this.getPageTitleForUrl(url);
         }
       }
     );
+  }
+
+  getPageTitleForUrl(url: string): string {
+    if (url === '/') {
+      return 'Home';
+    }
+    if (url === '/login') {
+      return 'Login';
+    }
+    if (/\bprojects\b/.test(url)) {
+      return 'Projects';
+    }
+    if (url === '/view-source') {
+      return 'View Source';
+    }
+    return null;
   }
 
   ngOnDestroy() {

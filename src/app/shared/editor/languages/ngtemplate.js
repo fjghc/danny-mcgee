@@ -36,9 +36,25 @@
     ]
   };
 
-  function maybeBackup(stream, pat, style) {
+  function tokenizeTypescript(stream, pat, style, state) {
     var cur = stream.current();
     var close = cur.search(pat);
+
+    // Special case: always style "of" as a keyword since this parser
+    // doesn't know the context and it gets used a lot in *ngFor statements
+    if (cur === 'of') {
+      return 'keyword';
+    }
+
+    // Keep track of local vars defined in ngFor blocks
+    if (style === 'def' && state.ngForBlock && state.ngForBlock.started) {
+      state.ngForBlock.vars.push(stream.current());
+    }
+    if (style === 'variable' && state.ngForBlock && state.ngForBlock.started) {
+      if (state.ngForBlock.vars.indexOf(stream.current()) !== -1) {
+        return 'variable-2';
+      }
+    }
 
     if (close > -1) {
       stream.backUp(cur.length - close);
@@ -51,36 +67,12 @@
     return style;
   }
 
-  var attrRegexpCache = {};
-
-  function getAttrRegexp(attr) {
-    var regexp = attrRegexpCache[attr];
-    if (regexp) return regexp;
-    return attrRegexpCache[attr] = new RegExp("\\s+" + attr + "\\s*=\\s*('|\")?([^'\"]+)('|\")?\\s*");
-  }
-
-  function getAttrValue(text, attr) {
-    var match = text.match(getAttrRegexp(attr))
-    return match ? /^\s*(.*?)\s*$/.exec(match[2])[1] : ""
-  }
-
-  function getTagRegexp(tagName, anchored) {
-    return new RegExp((anchored ? "^" : "") + "<\/\s*" + tagName + "\s*>", "i");
-  }
-
   function addTags(from, to) {
     for (var tag in from) {
       var dest = to[tag] || (to[tag] = []);
       var source = from[tag];
       for (var i = source.length - 1; i >= 0; i--)
         dest.unshift(source[i])
-    }
-  }
-
-  function findMatchingMode(tagInfo, tagText) {
-    for (var i = 0; i < tagInfo.length; i++) {
-      var spec = tagInfo[i];
-      if (!spec[0] || spec[1].test(getAttrValue(tagText, spec[0]))) return spec[2];
     }
   }
 
@@ -113,6 +105,9 @@
 
     function html(stream, state) {
 
+      // Get the Typescript mode for insertion
+      var tsMode = CodeMirror.getMode(config, "application/typescript");
+
       var style = htmlMode.token(stream, state.htmlState);
       var attr = style === 'attribute';
 
@@ -124,7 +119,14 @@
       // Tokenize the attribute value as Typescript
       if (state.inNgAttr) {
 
-        // Eat the equals sign to prevent the HTML parser from getting stuck in attribute value state
+        // Keep track of ngFor blocks so we can recognize local vars
+        if (stream.current() === '*ngFor') {
+          state.ngForBlock.started = true;
+          state.ngForBlock.tagName = state.htmlState.tagName;
+          state.ngForBlock.indent = state.htmlState.tagStart;
+        }
+
+        // Eat the equals sign to prevent the HTML parser from getting stuck in the attr value state
         if (stream.current() === '=') {
           stream.backUp(1);
           stream.eat('=');
@@ -135,35 +137,73 @@
           // Back up to the start of the attribute value
           stream.backUp(stream.current().length);
 
-          // Note the character type so we can recognize when it closes
-          var quote = stream.peek();
-          var endQuote = new RegExp(quote);
-
-          // Set the mode
-          var modeSpec = "application/typescript";
-          var mode = CodeMirror.getMode(config, modeSpec);
+          // Note the quote character so we can recognize when it closes
+          var quote = new RegExp(stream.peek());
 
           // Create the parser
           state.token = function (stream, state) {
-            if (stream.match(endQuote)) {
+            if (stream.match(quote)) {
               if (!state.ngBlockStarted) {
-                // Mark the opening quote as a string and start the ngBlock
+                // Style the opening quote as a string and start the ngBlock
                 state.ngBlockStarted = true;
                 return 'string';
               } else {
-                // This must be the end quote, so mark it as a string and return to HTML mode
+                // This must be the end quote, so style it as a string and return to HTML mode
                 state.token = html;
                 state.localState = state.localMode = null;
                 state.ngBlockStarted = false;
                 return 'string';
               }
             }
-            return maybeBackup(stream, endQuote, state.localMode.token(stream, state.localState));
+            return tokenizeTypescript(stream, quote, state.localMode.token(stream, state.localState), state);
           };
 
-          state.localMode = mode;
-          state.localState = CodeMirror.startState(mode, htmlMode.indent(state.htmlState, ""));
+          // Set the mode and start the local Typescript state
+          state.localMode = tsMode;
+          state.localState = CodeMirror.startState(tsMode, htmlMode.indent(state.htmlState, ""));
         }
+      }
+
+      // Close out any open ngFor blocks
+      if (state.ngForBlock && state.ngForBlock.started
+          && state.ngForBlock.indent === state.htmlState.indented
+          && /<\//.test(stream.current())
+          && stream.match(state.ngForBlock.tagName, false)) {
+        state.ngForBlock = {
+          started: false,
+          tagName: null,
+          indent: null,
+          vars: []
+        }
+      }
+
+      // Check for Typescript interpolation inside regular text
+      var interpStart = /{{/;
+      var interpStop = /}}/;
+      var interpPos = stream.current().search(interpStart);
+
+      if (interpPos !== -1) {
+        // Interpolator brackets found, so back up the stream to their start position
+        stream.backUp(stream.current().length - interpPos);
+
+        state.token = function(stream, state) {
+          if (stream.match(interpStart)) {
+            // Style the interp brackets
+            return 'operator-2';
+          }
+          if (stream.match(interpStop)) {
+            // Stop parsing Typescript
+            state.token = html;
+            state.localState = state.localMode = null;
+            // Style the closing brackets
+            return 'operator-2';
+          }
+          return tokenizeTypescript(stream, interpStop, state.localMode.token(stream, state.localState), state);
+        };
+
+        // Set the mode and start the local Typescript state
+        state.localMode = tsMode;
+        state.localState = CodeMirror.startState(tsMode, htmlMode.indent(state.htmlState, ""));
       }
 
       return style;
@@ -177,6 +217,12 @@
           inTag: null,
           inNgAttr: false,
           ngBlockStarted: false,
+          ngForBlock: {
+            started: false,
+            tagName: null,
+            indent: null,
+            vars: [],
+          },
           localMode: null,
           localState: null,
           htmlState: state

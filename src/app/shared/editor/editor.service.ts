@@ -76,7 +76,6 @@ export class EditorService {
 
   watchFiles(projectId: string): Observable<EditorFile[]> {
     this.projectId = projectId;
-    console.log('watching files for project ' + projectId);
 
     // sync this service's files with the database
     this.filesObservable = this.dataHandler.watchList('filesMap/' + projectId) as Observable<EditorFile[]>;

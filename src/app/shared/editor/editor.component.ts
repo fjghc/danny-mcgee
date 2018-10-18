@@ -321,9 +321,10 @@ export class EditorComponent implements OnInit, OnDestroy {
       readOnly: !this.editMode,
       mode: this.editorService.getModeForType(file.type),
       addModeClass: true,
-      extraKeys: { 'Shift-Tab': 'indentLess' }
+      extraKeys: { 'Shift-Tab': 'indentLess' },
+      workTime: 200,
+      workDelay: 1000
     };
-    console.log(options);
     return options;
   }
 

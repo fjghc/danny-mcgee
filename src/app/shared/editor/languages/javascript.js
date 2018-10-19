@@ -198,7 +198,7 @@
 
         escaped = !escaped && next === "\\";
       }
-      return ret("quasi", "string-2", stream.current());
+      return ret("quasi", "string", stream.current());
     }
 
     const brackets = "([{}])";
@@ -371,7 +371,6 @@
           }
           if (type === "variable") {
             let returnValue = type;
-            console.log('parsing var: ' + stream.current());
             if (inScope(state, content)) {
               returnValue += "-2";
             }
@@ -617,8 +616,9 @@
         return cont(pushlex("]"), arrayLiteral, poplex, maybeop);
       if (type === "{")
         return contCommasep(objprop, "}", null, maybeop);
-      if (type === "quasi")
+      if (type === "quasi") {
         return pass(quasi, maybeop);
+      }
       if (type === "new")
         return cont(maybeTarget(noComma));
       if (type === "import")
@@ -673,15 +673,17 @@
       }
     }
     function quasi(type, value) {
-      if (type !== "quasi")
+      if (type !== "quasi") {
         return pass();
-      if (value.slice(value.length - 2) !== "${")
+      }
+      if (value.slice(value.length - 2) !== "${") {
         return cont(quasi);
+      }
       return cont(expression, continueQuasi);
     }
     function continueQuasi(type) {
       if (type === "}") {
-        cx.marked = "string-2";
+        cx.marked = "string";
         cx.state.tokenize = tokenQuasi;
         return cont(quasi);
       }

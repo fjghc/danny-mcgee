@@ -1,16 +1,14 @@
 <a
-  (click)="newFile ? null : onFileTreeClick()"
   class="filename"
+  (click)="newFile ? null : onFileTreeClick()"
   [ngClass]="{ 'last-clicked': lastClicked }"
   tabindex="0"
 >
-  <ng-container *ngIf="file.type === 'folder' && !newFile">
-    <fa-icon
-      (click)="onToggleOpen()"
-      [icon]="angleIcon"
-      class="folder-toggle"
-    ></fa-icon>
-  </ng-container>
+  <fa-icon
+    class="folder-toggle"
+    *ngIf="file.type === 'folder' && !newFile"
+    [icon]="angleIcon"
+  ></fa-icon>
   <fa-icon [icon]="file.icon" [class]="file.type === 'folder' ? file.name : ''" [ngClass]="file.type"></fa-icon>
   <input
     class="new-file-name-input"

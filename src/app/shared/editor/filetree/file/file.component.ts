@@ -75,6 +75,9 @@ export class FileComponent implements OnInit, OnDestroy {
   onFileTreeClick() {
     this.editorService.fileTreeClick.next(this.file);
     this.lastClicked = true;
+    if (this.file.type === 'folder') {
+      this.onToggleOpen();
+    }
   }
 
   onNewFile() {
@@ -98,13 +101,10 @@ export class FileComponent implements OnInit, OnDestroy {
 
       if (this.file.type !== 'folder') {
         // Set the file type
-        // const extension = this.editorService.getFileExtension(name);
         const type = this.editorService.getFileType(name);
         if (type) {
           this.file.type = type;
           this.setIcons();
-        } else {
-          console.log('ERROR: no extension for filename ' + name);
         }
 
         // Initialize contents
@@ -117,12 +117,9 @@ export class FileComponent implements OnInit, OnDestroy {
         delete this.file.isNewOrModified;
       }
 
-      console.log('New file committed:', this.file);
-
       // Let the EditorService know
       this.editorService.sortParentArrayOfFile(this.file);
       this.editorService.newFile.next();
-      console.log('\n\n\n');
 
       // Clear the new file
       this.newFile = false;

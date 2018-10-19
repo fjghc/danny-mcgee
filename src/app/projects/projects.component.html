@@ -46,8 +46,8 @@
 
 </ng-container>
 <div
-  *ngIf="viewingSingle"
   class="modal"
+  [ngClass]="{ 'hidden': !viewingSingle }"
 >
   <div (click)="onDismissModal()" class="modal-backdrop"></div>
   <router-outlet></router-outlet>

@@ -15,12 +15,13 @@ export class ProjectsService implements OnDestroy {
   // Data
   projectsObservable: Observable<Project[]>;
   projectsTemp: Project[];
-  private projects: Project[];
+  projects: Project[];
 
   // State
   editMode = new BehaviorSubject<boolean>(false);
 
   // Event Subjects
+  viewProject = new Subject();
   closeActiveProject = new Subject();
   newProject = new Subject();
   saveChanges = new Subject();
@@ -54,13 +55,17 @@ export class ProjectsService implements OnDestroy {
   }
 
   getProject(id: string, projectsRef: 'temp' | 'db'): Project {
-    for (const project of this.resolveProjectsRef(projectsRef)) {
-      if (project.id === id) {
-        return project;
+    try {
+      for (const project of this.resolveProjectsRef(projectsRef)) {
+        if (project.id === id) {
+          return project;
+        }
       }
+      console.log(`ERROR: No project found with id ${id}`);
+      return null;
+    } catch {
+      return null;
     }
-
-    console.log(`ERROR: No project found with id ${id}`);
   }
 
   // State manipulation

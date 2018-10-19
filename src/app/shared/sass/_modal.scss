@@ -5,6 +5,10 @@
   align-items: center;
   justify-content: center;
 
+  &.hidden {
+    display: none;
+  }
+
   .modal-backdrop {
     background-color: transparentize($gray-darkest, 0.1);
     @include absolute(0, 0, 0, 0);

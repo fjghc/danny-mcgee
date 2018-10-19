@@ -31,6 +31,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   @HostBinding('class.edit-mode') editMode: boolean;
 
   // Subs
+  viewProjectSub: Subscription;
   closeProjectSub: Subscription;
   editModeSub: Subscription;
   newProjectSub: Subscription;
@@ -46,6 +47,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   // Init
   ngOnInit() {
+    this.viewProjectSub = this.projectsService.viewProject.subscribe(
+      () => this.viewingSingle = true
+    );
     this.closeProjectSub = this.projectsService.closeActiveProject.subscribe(
       () => this.onDismissModal()
     );
@@ -98,18 +102,17 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.projectsService.editMode.next(false);
   }
 
-  onDrag($event) {
+  onDrag() {
     this.projectsService.setProjects(this.projects);
-    console.log('Dragula event:', $event);
-    console.log('Projects component projects:', this.projects);
-    console.log('Projects Service projectsTemp:', this.projectsService.projectsTemp);
   }
 
   // Cleanup
   ngOnDestroy() {
+    this.viewProjectSub.unsubscribe();
     this.closeProjectSub.unsubscribe();
     this.editModeSub.unsubscribe();
     this.newProjectSub.unsubscribe();
+    this.saveChangesSub.unsubscribe();
   }
 
 }

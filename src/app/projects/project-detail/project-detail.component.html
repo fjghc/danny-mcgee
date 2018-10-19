@@ -1,64 +1,66 @@
-<div class="project-menu-bar">
+<ng-container *ngIf="project">
+  <div class="project-menu-bar">
 
-  <div class="project-info">
-    <span class="project-year">{{ project.year }}</span>
-    <h4 class="project-name">{{ project.name }}</h4>
+    <div class="project-info">
+      <span class="project-year">{{ project.year }}</span>
+      <h4 class="project-name">{{ project.name }}</h4>
+    </div>
+
+    <nav class="project-nav">
+      <a
+        (click)="onTab('desktop')"
+        class="menu-item"
+        [ngClass]="{ 'current' : activeTab === 'desktop' }"
+      >
+        <fa-icon [icon]="icons.desktop"></fa-icon>
+      </a>
+      <a
+        (click)="onTab('tablet')"
+        class="menu-item"
+        [ngClass]="{ 'current' : activeTab === 'tablet' }"
+      >
+        <fa-icon [icon]="icons.tablet"></fa-icon>
+      </a>
+      <a
+        (click)="onTab('mobile')"
+        class="menu-item"
+        [ngClass]="{ 'current' : activeTab === 'mobile' }"
+      >
+        <fa-icon [icon]="icons.mobile"></fa-icon>
+      </a>
+      <a
+        (click)="onTab('code')"
+        class="menu-item"
+        [ngClass]="{ 'current' : activeTab === 'code' }"
+      >
+        <fa-icon [icon]="icons.code"></fa-icon>
+      </a>
+    </nav>
+
+    <a (click)="onClose()" class="close">
+      <fa-icon [icon]="icons.close"></fa-icon>
+    </a>
   </div>
 
-  <nav class="project-nav">
-    <a
-      (click)="onTab('desktop')"
-      class="menu-item"
-      [ngClass]="{ 'current' : activeTab === 'desktop' }"
-    >
-      <fa-icon [icon]="icons.desktop"></fa-icon>
-    </a>
-    <a
-      (click)="onTab('tablet')"
-      class="menu-item"
-      [ngClass]="{ 'current' : activeTab === 'tablet' }"
-    >
-      <fa-icon [icon]="icons.tablet"></fa-icon>
-    </a>
-    <a
-      (click)="onTab('mobile')"
-      class="menu-item"
-      [ngClass]="{ 'current' : activeTab === 'mobile' }"
-    >
-      <fa-icon [icon]="icons.mobile"></fa-icon>
-    </a>
-    <a
-      (click)="onTab('code')"
-      class="menu-item"
-      [ngClass]="{ 'current' : activeTab === 'code' }"
-    >
-      <fa-icon [icon]="icons.code"></fa-icon>
-    </a>
-  </nav>
-
-  <a (click)="onClose()" class="close">
-    <fa-icon [icon]="icons.close"></fa-icon>
-  </a>
-</div>
-
-<div
-  [ngSwitch]="true"
-  class="project-window"
->
   <div
-    *ngSwitchCase="activeTab === 'desktop' || activeTab === 'tablet' || activeTab === 'mobile'"
-    class="project-content"
-    [ngClass]="activeTab"
+    [ngSwitch]="true"
+    class="project-window"
   >
-    <dm-loading></dm-loading>
-    <iframe [src]="bypassedUrl" #iframe></iframe>
+    <div
+      *ngSwitchCase="activeTab === 'desktop' || activeTab === 'tablet' || activeTab === 'mobile'"
+      class="project-content"
+      [ngClass]="activeTab"
+    >
+      <dm-loading></dm-loading>
+      <iframe [src]="bypassedUrl" #iframe></iframe>
+    </div>
+    <div
+      *ngSwitchCase="activeTab === 'code'"
+      class="project-content"
+    >
+      <dm-editor
+        [projectId]="project.id"
+      ></dm-editor>
+    </div>
   </div>
-  <div
-    *ngSwitchCase="activeTab === 'code'"
-    class="project-content"
-  >
-    <dm-editor
-      [projectId]="project.id"
-    ></dm-editor>
-  </div>
-</div>
+</ng-container>

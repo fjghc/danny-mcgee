@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ProjectsService } from '../projects.service';
 import { Project } from '../project.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { faCode, faDesktop, faMobile, faSpinnerThird, faTablet, faTimes } from '@fortawesome/pro-light-svg-icons';
 import { Subscription } from 'rxjs';
@@ -24,20 +24,24 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     close: faTimes,
     spinner: faSpinnerThird
   };
+  timeout: number;
   @ViewChild('iframe') iframe: ElementRef;
   subscription: Subscription;
 
   constructor(
     private projectsService: ProjectsService,
     private route: ActivatedRoute,
+    private router: Router,
     private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
-    this.subscription = this.route.params.subscribe(
-      params => {
-        this.project = this.projectsService.getProject(params['path'], 'db');
-        this.bypassedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.url);
+    this.subscription = this.route.paramMap.subscribe(
+      paramMap => {
+        console.log('paramMap:', paramMap);
+        if (paramMap.get('path')) {
+          this.resolveRoute(paramMap.get('path'));
+        }
       }
     );
   }
@@ -51,6 +55,24 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   onClose() {
     this.projectsService.closeActiveProject.next('close');
+  }
+
+  resolveRoute(path: string) {
+    const project = this.projectsService.getProject(path, 'db');
+    if (project !== null) {
+      clearTimeout(this.timeout);
+      this.project = project;
+      this.bypassedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.url);
+      this.projectsService.viewProject.next();
+    } else {
+      if (this.projectsService.projects === undefined) {
+        // We haven't received the projects from the db yet
+        this.timeout = setTimeout(() => this.resolveRoute(path), 100);
+      } else {
+        // We have the projects but there's none matching this id; must be 404
+        this.router.navigate(['/projects']);
+      }
+    }
   }
 
   ngOnDestroy() {

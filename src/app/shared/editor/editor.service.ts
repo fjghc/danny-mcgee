@@ -96,7 +96,6 @@ export class EditorService {
   }
 
   getIconForType(type: string, open?: boolean): IconDefinition | IconDefinition[] {
-    console.log('getIconForType called!');
     switch (type) {
       case 'folder':
         if (open) {
@@ -130,7 +129,6 @@ export class EditorService {
   }
 
   getModeForType(type: string): string {
-    console.log('getModeForType called!');
     switch (type) {
       case 'html':
         return 'htmlmixed';
@@ -164,16 +162,13 @@ export class EditorService {
   }
 
   getFileType(filename: string): string {
-    console.log('getting type for ' + filename);
     const extension = this.getFileExtension(filename);
-    console.log('extension: ' + extension);
 
     if (extension !== 'ts' && extension !== 'html') {
       return extension;
     }
 
     const _filename = filename.replace(/\.(ts|html)$/, '');
-    console.log('_filename: ' + _filename);
 
     let suffix;
     if (/\./g.test(_filename)) {
@@ -181,7 +176,6 @@ export class EditorService {
     } else {
       return extension;
     }
-    console.log('suffix: ' + suffix);
 
     if (extension === 'ts') {
       switch (suffix) {
@@ -251,7 +245,6 @@ export class EditorService {
   }
 
   deleteFile(file: EditorFile) {
-    console.log(`Deleting file ${file.name} from filesMap`);
     const parent = this.findParentOfFile(file, this.filesTemp);
     const parentArray = parent instanceof Array ? parent : parent.contents as EditorFile[];
     parentArray.splice(this.indexOf(file.path, parentArray), 1);
@@ -279,7 +272,6 @@ export class EditorService {
     // Process the delete list
     if (this.filesToDelete) {
       for (const file of this.filesToDelete) {
-        console.log(`deleting file ${file.name} from storage...`);
         await this.dataHandler.deleteFileFromStorage(file.path)
           .then(response => console.log(response))
           .catch(error => {
@@ -309,11 +301,8 @@ export class EditorService {
       }
     }
 
-    console.log('File uploads completed!');
-
     // Clean up the file map before uploading
     if (flatFilesArray) {
-      console.log('Cleaning up flatFilesArray');
       for (const file of flatFilesArray) {
         delete file.contents;
         delete file.initialContent;
@@ -323,7 +312,6 @@ export class EditorService {
     }
 
     // Upload new filesMap to the Realtime Database
-    console.log(`Uploading to realtime database with projectId ${this.projectId}, filesMap:`, this.filesTemp);
     await this.dataHandler.uploadFilesMapForProject(this.projectId, this.filesTemp)
       .then(() => console.log('filesMap updated!'))
       .catch(error => {
@@ -346,7 +334,6 @@ export class EditorService {
 
     // Find the parent array
     const parent = this.findParentOfFile(file, this.filesTemp);
-    console.log('parent is:', parent);
     const parentArray = parent instanceof Array ? parent : parent.contents as EditorFile[];
 
     // Sort it

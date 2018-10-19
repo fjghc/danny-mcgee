@@ -38,7 +38,6 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.paramMap.subscribe(
       paramMap => {
-        console.log('paramMap:', paramMap);
         if (paramMap.get('path')) {
           this.resolveRoute(paramMap.get('path'));
         }

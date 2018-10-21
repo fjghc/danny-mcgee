@@ -7,7 +7,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "firebase-update": "firebase deploy --only database && firebase deploy --only firestore && firebase deploy --only storage && firebase deploy --only functions",
+    "clean": "deltree dist && mkdir dist",
+    "deploy": "npm run clean && ng build --prod && firebase deploy --only hosting"
   },
   "private": true,
   "dependencies": {

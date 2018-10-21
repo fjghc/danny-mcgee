@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "filesMap": {
+      ".read": true,
+      ".write": "auth.uid === 'jbKAWIE1sTSJVwTzUgfmzG4CBPo2'"
+    }
+  }
+}

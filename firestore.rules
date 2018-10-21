@@ -1,0 +1,23 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  	function isAdmin() {
+    	return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin
+    }
+    
+    match /users/{user} {
+      allow read, write: if isAdmin();
+    }
+    
+    match /projects/{project} {
+    	allow read;
+      allow write: if isAdmin();
+    }
+    
+    match /projects-psl/{project} {
+    	allow read;
+      allow write: if isAdmin();
+    }
+    
+  }
+}

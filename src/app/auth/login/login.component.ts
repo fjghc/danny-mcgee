@@ -13,8 +13,10 @@ import { AuthService } from '../auth.service';
 export class LoginComponent implements OnInit {
 
   form: FormGroup;
-  emailValidators = [Validators.required, Validators.email];
-  passwordValidators = [Validators.required];
+  validators = {
+    required: Validators.required,
+    email: Validators.email
+  };
 
   icons = {
     lock: faLockAlt

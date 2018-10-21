@@ -1,0 +1,39 @@
+<form
+  class="minimal"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="form"
+>
+  <fa-icon class="icon" [icon]="icons.mail"></fa-icon>
+
+  <dm-input
+    label="Name"
+    id="name"
+    type="text"
+    [validators]="[validators.required]"
+    [form]="form"
+  ></dm-input>
+
+  <dm-input
+    label="Contact Information"
+    id="contactInfo"
+    type="text"
+    [validators]="[validators.required]"
+    [form]="form"
+  ></dm-input>
+  <!--<p class="help-block">Email address or phone number</p>-->
+
+  <dm-input
+    label="Message"
+    id="message"
+    type="textarea"
+    [validators]="[validators.required]"
+    [form]="form"
+  ></dm-input>
+
+  <div class="btn-container">
+    <button
+      class="btn btn-primary"
+      type="submit"
+    >Send</button>
+  </div>
+</form>

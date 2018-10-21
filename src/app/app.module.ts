@@ -14,6 +14,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DragulaModule } from 'ng2-dragula';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
 
 // App imports
 import { environment } from '../environments/environment';
@@ -37,6 +38,7 @@ import { FiletreeComponent } from './shared/editor/filetree/filetree.component';
 import { FileComponent } from './shared/editor/filetree/file/file.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { ViewSourceComponent } from './view-source/view-source.component';
+import { ContactComponent } from './contact/contact.component';
 
 // TODO: Please refactor me
 
@@ -61,7 +63,8 @@ import { ViewSourceComponent } from './view-source/view-source.component';
     FiletreeComponent,
     FileComponent,
     LoadingComponent,
-    ViewSourceComponent
+    ViewSourceComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +80,8 @@ import { ViewSourceComponent } from './view-source/view-source.component';
     AngularFireStorageModule,
     DragulaModule.forRoot(),
     CodemirrorModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    TextareaAutosizeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

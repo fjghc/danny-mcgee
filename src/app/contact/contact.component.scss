@@ -1,0 +1,28 @@
+@import '../shared/sass/vars';
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin-top: -$header-size;
+}
+
+form.minimal {
+  width: 650px;
+  max-width: 100%;
+
+  .icon {
+    display: block;
+    margin-bottom: 30px;
+    color: $gray-mid;
+    font-size: 120px;
+    text-align: center;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

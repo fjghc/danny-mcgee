@@ -42,6 +42,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (/\bprojects\b/.test(url)) {
       return 'Projects';
     }
+    if (url === '/contact') {
+      return 'Contact';
+    }
     if (url === '/view-source') {
       return 'View Source';
     }

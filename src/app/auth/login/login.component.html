@@ -9,7 +9,7 @@
     label="Email Address"
     id="email"
     type="email"
-    [validators]="emailValidators"
+    [validators]="[validators.required, validators.email]"
     [form]="form"
   ></dm-input>
 
@@ -17,7 +17,7 @@
     label="Password"
     id="password"
     type="password"
-    [validators]="passwordValidators"
+    [validators]="[validators.required]"
     [form]="form"
   ></dm-input>
 

@@ -6,6 +6,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailComponent } from './projects/project-detail/project-detail.component';
 import { ProjectEditComponent } from './projects/project-edit/project-edit.component';
 import { ViewSourceComponent } from './view-source/view-source.component';
+import { ContactComponent } from './contact/contact.component';
 
 const appRoutes: Routes = [
   {
@@ -30,6 +31,10 @@ const appRoutes: Routes = [
         component: ProjectDetailComponent
       }
     ]
+  },
+  {
+    path: 'contact',
+    component: ContactComponent
   },
   {
     path: 'view-source',

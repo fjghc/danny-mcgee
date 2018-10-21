@@ -50,4 +50,11 @@ export class InputComponent implements OnInit, AfterViewInit {
     this.isFocused = false;
     this.control.value ? this.isFilled = true : this.isFilled = false;
   }
+
+  // textareaResize($event) {
+  //   const elem = $event.srcElement;
+  //   setTimeout(() => {
+  //     elem.style = `height: ${elem.scrollHeight}px`;
+  //   });
+  // }
 }

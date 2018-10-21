@@ -48,6 +48,13 @@ form.minimal {
       font-size: 13px;
       line-height: 13px;
     }
+
+    & + .help-block {
+      margin-top: -15px;
+      margin-bottom: 30px;
+      font-size: 14px;
+      color: $gray-lighter;
+    }
   }
 
   .form-control {
@@ -85,6 +92,14 @@ form.minimal {
         @include transition(0.2s, ease-out, right, left);
       }
     }
+  }
+
+  textarea.form-control {
+    display: block;
+    height: 50px;
+    padding: 12px 0 14px;
+    overflow: hidden;
+    resize: none;
   }
 
   .checkbox {

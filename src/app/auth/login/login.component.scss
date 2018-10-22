@@ -4,8 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  margin-top: -$header-size;
+  min-height: calc(100vh - #{$header-size + $main-container-padding + 2});
 }
 
 form.minimal {

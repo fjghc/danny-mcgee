@@ -1,9 +1,13 @@
+// Angular imports
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+// Dependency imports
 import { faEnvelope } from '@fortawesome/pro-light-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/pro-solid-svg-icons';
 
+// Component config
 @Component({
   selector: 'dm-contact',
   templateUrl: './contact.component.html',
@@ -11,30 +15,37 @@ import { faEnvelope } from '@fortawesome/pro-light-svg-icons';
 })
 export class ContactComponent implements OnInit {
 
+  // Data
   form: FormGroup;
   validators = {
     required: Validators.required
   };
   icons = {
-    mail: faEnvelope
+    mail: faEnvelope,
+    sent: faCheck,
+    error: faTimes
   };
+
+  // State
   contactInfoType: 'email' | 'phone' | 'other' = null;
+  status: 'default' | 'sending' | 'sent' | 'error' = 'default';
 
-  constructor(private httpClient: HttpClient) {}
+  // Services
+  constructor(private http: HttpClient) {}
 
+  // Init
   ngOnInit() {
     this.form = new FormGroup({});
   }
 
+  // Events
   onSubmit() {
-    console.log(this.form.value);
+    this.status = 'sending';
 
     const fromEmail = this.contactInfoType === 'email' ? this.form.value.contactInfo : 'dannymcgee.io@gmail.com';
     const emailContent = `<p><b>Name:</b><br /> ${this.form.value.name}</p>`
       + `<p><b>Contact Info:</b><br /> ${this.form.value.contactInfo}</p>`
       + `<p><b>Message:</b><br />${this.form.value.message}</p>`;
-
-    console.log('Email body:', emailContent);
 
     const url = 'https://us-central1-danny-mcgee.cloudfunctions.net/sendMail';
     const httpOptions = {
@@ -52,9 +63,13 @@ export class ContactComponent implements OnInit {
       html: emailContent
     });
 
-    return this.httpClient.post(url, body, httpOptions).toPromise()
-      .then(response => console.log(response))
-      .catch(error => console.log('ERROR calling cloud function:', error));
+    return this.http.post(url, body, httpOptions).toPromise()
+      .then(response => {
+        this.status = 'sent';
+      })
+      .catch(error => {
+        this.status = 'error';
+      });
   }
 
 }

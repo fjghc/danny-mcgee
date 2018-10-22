@@ -4,8 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  margin-top: -$header-size;
+  min-height: calc(100vh - #{$header-size + $main-container-padding + 2});
 }
 
 form.minimal {
@@ -22,7 +21,106 @@ form.minimal {
 
   .btn-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
+  }
+}
+
+.error-alert {
+  border-left: 2px solid $danger;
+  padding-left: 15px;
+  margin-bottom: 36px;
+
+  p {
+    font-size: 14px;
+    color: $gray-lighter;
+
+    // TODO: Move this into global styling?
+    a {
+      color: $blue-light;
+      border-bottom: 1px solid transparent;
+      transition: all 0.07s linear;
+
+      &:hover, &:focus {
+        color: $gray-lightest;
+        text-decoration: none;
+        border-color: $primary;
+      }
+
+      &:focus {
+        background-color: $gray-dark;
+      }
+    }
+  }
+}
+
+.btn-primary {
+  transition: all 0.1s linear;
+
+  &::before {
+    transition: all 0.12s ease-in;
+  }
+  span {
+    transition: all 0.1s linear;
+  }
+  dm-loading {
+    transform: translateX(-50%) translateY(-50%) scale(0.65);
+    opacity: 0;
+    transition: all 0.1s linear;
+
+    &::ng-deep .icons {
+      color: $gray-lightest;
+    }
+  }
+  fa-icon {
+    opacity: 0;
+    @include absolute-center;
+    font-size: 24px;
+    transition: opacity 0.1s linear;
+  }
+
+  &.sending, &.sent, &.error {
+    pointer-events: none;
+    box-shadow: none !important;
+
+    span {
+      opacity: 0;
+    }
+  }
+
+  &.sent, &.error {
+    &::before {
+      width: 100%;
+      right: 0;
+      left: 0;
+    }
+    fa-icon {
+      opacity: 1;
+    }
+  }
+
+  &.sending {
+    &::before {
+      opacity: 0;
+    }
+    dm-loading {
+      opacity: 1;
+    }
+  }
+
+  &.sent {
+    border-color: darken($success, 5%);
+
+    &::before {
+      background-color: darken($success, 5%);
+    }
+  }
+
+  &.error {
+    border-color: darken($danger, 5%);
+
+    &::before {
+      background-color: darken($danger, 5%);
+    }
   }
 }

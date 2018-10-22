@@ -24,4 +24,11 @@
   />
   <span class="underline"></span>
 </ng-container>
+<p
+  *ngIf="validationMessage !== null"
+  class="help-block invalid-message"
+  [ngClass]="{ 'visible': !isValid }"
+>
+  {{ validationMessage }}
+</p>
 

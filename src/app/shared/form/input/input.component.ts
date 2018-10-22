@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit,  } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'dm-input',
@@ -14,7 +14,9 @@ export class InputComponent implements OnInit, AfterViewInit {
   @Input() type: string;
   @Input() validators: ValidatorFn[];
   @Input() form: FormGroup;
+  @Input() validationMessage: string;
   control: FormControl;
+  isValid = true;
 
   @HostBinding('class.filled') isFilled = false;
   @HostBinding('class.focus') isFocused = false;
@@ -24,6 +26,14 @@ export class InputComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.control = new FormControl(null, this.validators);
     this.form.addControl(this.id, this.control);
+
+    if (this.validators && !this.validationMessage) {
+      if (this.validators.indexOf(Validators.email) !== -1) {
+        this.validationMessage = 'Please enter a valid email address';
+      } else if (this.validators.indexOf(Validators.required) !== -1) {
+        this.validationMessage = 'This field is required';
+      }
+    }
   }
 
   ngAfterViewInit() {
@@ -49,12 +59,9 @@ export class InputComponent implements OnInit, AfterViewInit {
   onBlur() {
     this.isFocused = false;
     this.control.value ? this.isFilled = true : this.isFilled = false;
-  }
 
-  // textareaResize($event) {
-  //   const elem = $event.srcElement;
-  //   setTimeout(() => {
-  //     elem.style = `height: ${elem.scrollHeight}px`;
-  //   });
-  // }
+    if (this.control.touched) {
+      this.isValid = this.control.valid;
+    }
+  }
 }

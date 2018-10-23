@@ -39,6 +39,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (url === '/login') {
       return 'Login';
     }
+    if (url === '/skills') {
+      return 'Skills';
+    }
     if (/\bprojects\b/.test(url)) {
       return 'Projects';
     }

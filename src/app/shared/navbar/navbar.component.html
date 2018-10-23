@@ -25,14 +25,14 @@
     role="menu"
     aria-label="Site Navigation"
   >
-    <a
-      class="menu-item"
-      tabindex="1"
-      role="menuitem"
-    >
-      <fa-icon [icon]="icons.about"></fa-icon>
-      <span>About</span>
-    </a>
+    <!--<a-->
+      <!--class="menu-item"-->
+      <!--tabindex="1"-->
+      <!--role="menuitem"-->
+    <!--&gt;-->
+      <!--<fa-icon [icon]="icons.about"></fa-icon>-->
+      <!--<span>About</span>-->
+    <!--</a>-->
     <a
       class="menu-item"
       tabindex="1"
@@ -43,6 +43,8 @@
     </a>
     <a
       class="menu-item"
+      routerLink="/skills"
+      routerLinkActive="current"
       tabindex="1"
       role="menuitem"
     >
@@ -100,24 +102,25 @@
     </a>
   </nav>
 
-  <hr />
+  <hr *ngIf="authService.isAuthenticated()" />
 
   <nav
     class="menu-section"
+    *ngIf="authService.isAuthenticated()"
     role="menu"
     aria-label="Admin Menu"
   >
-    <a
-      *ngIf="!authService.isAuthenticated()"
-      class="menu-item login"
-      routerLink="/login"
-      routerLinkActive="current"
-      tabindex="1"
-      role="menuitem"
-    >
-      <fa-icon [icon]="icons.login"></fa-icon>
-      <span>Login</span>
-    </a>
+    <!--<a-->
+      <!--*ngIf="!authService.isAuthenticated()"-->
+      <!--class="menu-item login"-->
+      <!--routerLink="/login"-->
+      <!--routerLinkActive="current"-->
+      <!--tabindex="1"-->
+      <!--role="menuitem"-->
+    <!--&gt;-->
+      <!--<fa-icon [icon]="icons.login"></fa-icon>-->
+      <!--<span>Login</span>-->
+    <!--</a>-->
     <a
       *ngIf="authService.isAuthenticated()"
       (click)="onLogout()"

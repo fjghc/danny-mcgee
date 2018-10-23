@@ -7,12 +7,17 @@ import { ProjectDetailComponent } from './projects/project-detail/project-detail
 import { ProjectEditComponent } from './projects/project-edit/project-edit.component';
 import { ViewSourceComponent } from './view-source/view-source.component';
 import { ContactComponent } from './contact/contact.component';
+import { SkillsComponent } from './skills/skills.component';
 
 const appRoutes: Routes = [
   {
     path: '',
     component: HomeComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'skills',
+    component: SkillsComponent,
   },
   {
     path: 'projects',

@@ -6,13 +6,13 @@ export interface DmIconDefinition {
   icon: Array<any>;
 }
 
-export function createIconDefinition(iconName: string, svgPathData: string) {
+export function createIconDefinition(iconName: string, svgPathData: string, width: number = 512, height: number = 512) {
   return {
     prefix: common.prefix,
     iconName: iconName,
     icon: [
-      common.width,
-      common.height,
+      width,
+      height,
       common.ligatures,
       common.unicode,
       svgPathData

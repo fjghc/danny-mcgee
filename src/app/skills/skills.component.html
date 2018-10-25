@@ -1,3 +1,35 @@
-<p>
-  skills works!
-</p>
+<div class="row no-gutters">
+  <div class="col-lg-5 skill-graphs">
+    <div
+      class="skill-graph"
+      *ngFor="let graph of skillGraphs"
+    >
+      <h2 class="skill-graph-heading">{{ graph.heading }}</h2>
+      <ul class="graph">
+        <li
+          class="graph-item"
+          *ngFor="let skill of graph.skills"
+          [ngClass]="skill.class"
+        >
+          <span class="graph-label">{{ skill.label }}</span>
+          <b class="graph-rank" [ngClass]="'rank-' + skill.rank"></b>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-7 timeline">
+    <div class="timeline-milestone" *ngFor="let milestone of timelineMilestones">
+      <h2 class="milestone-year">{{ milestone.year }}</h2>
+      <div class="milestone-content">
+        <div class="icons">
+          <fa-icon
+            *ngFor="let icon of milestone.icons"
+            [ngClass]="icon.class"
+            [icon]="icon.iconDef"
+          ></fa-icon>
+        </div>
+        <p class="content" [innerHTML]="milestone.content"></p>
+      </div>
+    </div>
+  </div>
+</div>

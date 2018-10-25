@@ -1,0 +1,152 @@
+@import '../shared/sass/vars';
+
+
+// Page layout
+
+.row {
+  min-height: 100%;
+}
+.skill-graphs, .timeline {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.skill-graphs {
+  align-items: center;
+  padding-right: 12%;
+}
+
+
+// Skill graphs
+
+.skill-graph {
+  width: 100%;
+}
+.skill-graph-heading {
+  width: 78%;
+  margin: 0 0 14px;
+  font-size: 18px;
+  text-align: center;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+ul.graph {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+li.graph-item {
+  display: flex;
+  align-items: center;
+  padding: 7.5px 0;
+}
+.graph-label {
+  flex: 0 0 40%;
+  padding-right: 15px;
+  color: $gray-light;
+  font-size: 14px;
+  line-height: 1;
+  text-align: right;
+}
+.graph-rank {
+  flex: 0 0 60%;
+
+  &::before {
+    content: ' ';
+    display: block;
+    height: 3px;
+    background-color: $gray-lightest;
+
+    .js &, .firebase &, .illustrator & { background-color: $yellow; }
+    .ts &, .wordpress &, .photoshop &  { background-color: $blue-bold; }
+    .php &, .bootstrap &, .jetbrains & { background-color: $purple; }
+    .csharp &, .unity &                { background-color: $green; }
+    .html &, .angular &                { background-color: $red; }
+    .react &, .vscode &                { background-color: $blue-light; }
+  }
+
+  @for $i from 1 through 10 {
+    &.rank-#{$i}::before {
+      width: percentage($i / 10);
+    }
+  }
+}
+
+
+// Timeline
+
+.timeline {
+  position: relative;
+
+  &::before {
+    content: ' ';
+    display: block;
+    width: 1px;
+    @include absolute(0, null, 0, 85px);
+    background-color: $gray-dark;
+  }
+}
+
+.timeline-milestone {
+  display: flex;
+}
+.milestone-year {
+  flex: 0 0 85px;
+  padding-right: 25px;
+  position: relative;
+  font-size: 24px;
+  line-height: 1;
+  text-align: right;
+
+  &::after {
+    content: ' ';
+    display: block;
+    width: 5px;
+    height: 5px;
+    @include absolute(9px, -2.5px, null, null);
+    border-radius: 2.5px;
+    background-color: $gray-lighter;
+  }
+}
+.milestone-content {
+  flex: 1 0 auto;
+  width: calc(100% - 135px);
+  padding-left: 25px;
+
+  .icons {
+    height: 24px;
+    margin-bottom: 14px;
+
+    fa-icon {
+      font-size: 24px;
+      line-height: 1;
+
+      &:not(:last-child) {
+        margin-right: 14px;
+      }
+      &.photoshop              { color: #00c8ff }
+      &.illustrator            { color: #ff7c00 }
+      &.indesign               { color: #ff3f94 }
+      &.bootstrap              { color: #cdbfe3 }
+      &.wordpress              { color: #24baf1 }
+      &.nationbuilder, &.unity { color: #ffffff }
+      &.html, &.angular        { color: $red; }
+      &.css                    { color: $blue-bold }
+      &.javascript             { color: $yellow }
+      &.less, &.react          { color: $blue-light }
+      &.php                    { color: $purple }
+      &.csharp                 { color: $green }
+    }
+  }
+
+  .content {
+    max-width: 480px;
+    margin: 0;
+    color: $gray-light;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: -0.03em;
+  }
+}

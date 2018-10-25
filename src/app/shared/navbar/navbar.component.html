@@ -35,6 +35,8 @@
     <!--</a>-->
     <a
       class="menu-item"
+      routerLink="/resume"
+      routerLinkActive="current"
       tabindex="1"
       role="menuitem"
     >
@@ -110,17 +112,6 @@
     role="menu"
     aria-label="Admin Menu"
   >
-    <!--<a-->
-      <!--*ngIf="!authService.isAuthenticated()"-->
-      <!--class="menu-item login"-->
-      <!--routerLink="/login"-->
-      <!--routerLinkActive="current"-->
-      <!--tabindex="1"-->
-      <!--role="menuitem"-->
-    <!--&gt;-->
-      <!--<fa-icon [icon]="icons.login"></fa-icon>-->
-      <!--<span>Login</span>-->
-    <!--</a>-->
     <a
       *ngIf="authService.isAuthenticated()"
       (click)="onLogout()"

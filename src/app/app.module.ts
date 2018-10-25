@@ -40,6 +40,7 @@ import { LoadingComponent } from './shared/loading/loading.component';
 import { ViewSourceComponent } from './view-source/view-source.component';
 import { ContactComponent } from './contact/contact.component';
 import { SkillsComponent } from './skills/skills.component';
+import { ResumeComponent } from './resume/resume.component';
 
 // TODO: Please refactor me
 
@@ -66,7 +67,8 @@ import { SkillsComponent } from './skills/skills.component';
     LoadingComponent,
     ViewSourceComponent,
     ContactComponent,
-    SkillsComponent
+    SkillsComponent,
+    ResumeComponent
   ],
   imports: [
     BrowserModule,

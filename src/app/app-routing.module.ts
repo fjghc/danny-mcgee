@@ -8,6 +8,7 @@ import { ProjectEditComponent } from './projects/project-edit/project-edit.compo
 import { ViewSourceComponent } from './view-source/view-source.component';
 import { ContactComponent } from './contact/contact.component';
 import { SkillsComponent } from './skills/skills.component';
+import { ResumeComponent } from './resume/resume.component';
 
 const appRoutes: Routes = [
   {
@@ -16,8 +17,12 @@ const appRoutes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'resume',
+    component: ResumeComponent
+  },
+  {
     path: 'skills',
-    component: SkillsComponent,
+    component: SkillsComponent
   },
   {
     path: 'projects',

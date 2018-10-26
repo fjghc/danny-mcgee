@@ -24,7 +24,7 @@ import { faCode, faEllipsisV, faTimes } from '@fortawesome/pro-light-svg-icons';
   import 'codemirror/addon/scroll/simplescrollbars';
 
 // App imports
-import { EditorFile } from './file.model';
+import { EditorFile, createFile } from './file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
 import { AuthService } from '../../auth/auth.service';
@@ -169,8 +169,18 @@ export class EditorComponent implements OnInit, OnDestroy {
     // If there's already a temp tab open, replace its file with this one and make it active
     for (const tab of this.tabs) {
       if (tab.type === 'temp') {
-        // console.log(`Already a temp tab open, so replace it with ${file.name}`);
-        tab.file = file;
+        // If the new file content is empty, create a dummy file to clear the contents in the editor
+        // (Prevents the old code being shown with the wrong mode applied while waiting on the new file content)
+        if (!file.contents) {
+          tab.file = createFile(file.name, file.type, '\n');
+
+          // Replace the dummy file with the correct file
+          setTimeout(() => { tab.file = file; });
+        } else {
+          tab.file = file;
+        }
+
+        tab.editorOptions = this.getEditorOptionsForFile(file);
         this.activeTab = tab;
         return;
       }

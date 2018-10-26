@@ -159,6 +159,10 @@ $editor-tab-height: 36px;
   transition: $transition-list;
 }
 
+@mixin button-focus {
+  box-shadow: inset 0 0 0 4px transparentize($primary, 0.5);
+}
+
 
 
 // Animations

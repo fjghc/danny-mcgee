@@ -50,7 +50,7 @@
     background-color: transparent;
     color: $gray-lighter;
     font-size: 24px;
-    box-shadow: inset 0 0 0 0 transparent;
+    box-shadow: inset 0 0 0 0 transparentize($primary, 0.5);
     @include transition(0.1s, linear, background-color, color, box-shadow);
 
     :host.expanded &, :host.hover & {
@@ -67,7 +67,7 @@
 
   &:focus {
     fa-icon {
-      box-shadow: inset 0 0 0 4px transparentize($primary, 0.5);
+      @include button-focus;
     }
   }
 }

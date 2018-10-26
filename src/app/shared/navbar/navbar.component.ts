@@ -7,7 +7,10 @@ import {
   faBriefcase,
   faCode,
   faLockAlt,
-  faBars, faEnvelope, faSignOut
+  faBars,
+  faEnvelope,
+  faSignOut,
+  faDesktop
 } from '@fortawesome/pro-light-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from '../../auth/auth.service';
@@ -24,7 +27,7 @@ export class NavbarComponent implements OnInit {
     about: faUserCircle,
     resume: faFileAlt,
     skills: faChartBar,
-    portfolio: faBriefcase,
+    portfolio: faDesktop,
     contact: faEnvelope,
     github: faGithub,
     code: faCode,

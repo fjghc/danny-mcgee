@@ -1,0 +1,224 @@
+@import '../shared/sass/vars';
+
+
+// General
+
+h4, h5 {
+  font-size: 14px;
+  transition: color 0.1s linear;
+}
+h4 {
+  margin: 0 0 4px;
+  color: $gray-lighter;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+h5 {
+  margin: 0;
+  color: $gray-light;
+  font-weight: 300;
+}
+
+.row {
+  min-height: 100%;
+}
+
+
+// Employer details
+
+.employer-details {
+  display: flex;
+  align-items: center;
+  padding-right: 72px;
+
+  .active-employer {
+    flex: 0 0 100%;
+  }
+
+  .employer-name {
+    color: $gray-lightest;
+    font-size: 24px;
+    margin: 4px 0 8px;
+  }
+  .job-title {
+    color: $gray-lighter;
+    font-size: 18px;
+    font-weight: 300;
+
+    .dates {
+      display: inline-block;
+      margin-left: 8px;
+      color: $gray-light;
+    }
+  }
+
+  section {
+    margin: 36px 0;
+
+    h4 {
+      color: $gray-lighter;
+      margin-bottom: 12px;
+    }
+  }
+  .responsibilities {
+    ul {
+      margin: 0;
+      padding: 0;
+      color: $gray-light;
+      font-size: 14px;
+      line-height: 18px;
+      list-style: none;
+
+      li {
+        margin-bottom: 6px;
+        padding-left: 12px;
+        text-indent: -6px;
+
+        &::before {
+          content: '\2022';
+          display: inline-block;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  .icon-row {
+    fa-icon {
+      font-size: 24px;
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+
+      &.photoshop       { color: #00c8ff }
+      &.illustrator     { color: #ff7c00 }
+      &.inDesign        { color: #ff3f94 }
+      &.bootstrap       { color: #cdbfe3 }
+      &.wordpress       { color: #24baf1 }
+      &.cloud9          { color: #00a8e9 }
+      &.html, &.angular { color: $red }
+      &.css             { color: $blue-bold }
+      &.javascript      { color: $yellow }
+      &.less, &.react   { color: $blue-light }
+      &.php             { color: $purple }
+    }
+  }
+
+  .project {
+    display: block;
+    width: 100%;
+    height: 0;
+    padding-top: 56.25%;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 0 0 transparentize($primary, 0.5);
+    transition: box-shadow 0.1s linear;
+
+    &:focus {
+      box-shadow: 0 0 0 5px transparentize($primary, 0.5);
+    }
+  }
+}
+
+
+// Timeline
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: relative;
+
+  &::before {
+    content: ' ';
+    display: block;
+    width: 1px;
+    @include absolute(0, null, 0, 85px);
+    background-color: $gray-dark;
+  }
+}
+
+.year-container {
+  display: flex;
+  align-items: center;
+  flex: 0 0 24px;
+  max-height: 24px;
+  position: relative;
+  overflow: visible;
+
+  .year {
+    flex: 0 0 85px;
+    padding-right: 25px;
+    color: $gray-light;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: right;
+    @include transition(0.1s, linear, color, font-size);
+  }
+  &.active .year {
+    color: $gray-lighter;
+    font-size: 24px;
+  }
+  .employers {
+    display: flex;
+    flex: 0 0 auto;
+    width: auto;
+
+    &::after {
+      content: ' ';
+      display: block;
+      width: 4px;
+      height: 4px;
+      @include absolute(50%, null, null, 85px);
+      transform: translateX(-1.5px) translateY(-1.5px);
+      background-color: $gray-light;
+      border-radius: 2px;
+
+      @at-root {
+        .year-container.active .employers::after {
+          width: 5px;
+          height: 5px;
+          transform: translateX(-2px) translateY(-2px);
+          background-color: $gray-lighter;
+          border-radius: 2.5px;
+        }
+      }
+    }
+
+    .employer {
+      flex: 0 0 auto;
+      width: auto;
+      padding: 20px 25px;
+      cursor: pointer;
+      outline: none !important;
+      box-shadow: inset 0 0 0 0 transparentize($primary, 0.5);
+      transition: box-shadow 0.1s linear;
+
+      &.active {
+        pointer-events: none;
+        box-shadow: none !important;
+
+        .name  { color: #fff !important; }
+        .title { color: $blue-light !important; }
+      }
+      &:hover {
+        .name  { color: $gray-lightest; }
+        .title { color: $gray-lighter; }
+      }
+      &:not(:active):focus {
+        @include button-focus;
+      }
+
+      .duration-line {
+        display: block;
+        width: 1px;
+        height: 0;
+        @include absolute(null, null, 50%, 85px);
+        background-color: $gray-light;
+        transition: height 0.2s ease-out;
+      }
+    }
+  }
+}

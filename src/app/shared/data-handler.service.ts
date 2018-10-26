@@ -26,6 +26,27 @@ export class DataHandler {
     return this.afs.collection(path, ref => ref.orderBy('order')).valueChanges();
   }
 
+  getSubCollection(collection: string, document: string, subCollection: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const requested = this.afs.collection(collection).doc(document).collection(subCollection);
+      const sub = requested.valueChanges().subscribe(
+        response => {
+          if (response.length > 0) {
+            resolve(response);
+            sub.unsubscribe();
+          } else {
+            reject(`No items found for subcollection ${subCollection}`);
+            sub.unsubscribe();
+          }
+        },
+        error => {
+          reject(`ERROR fetching subcollection ${subCollection}: ` + error);
+          sub.unsubscribe();
+        }
+      );
+    });
+  }
+
   addDocument(collection: string, document: string, content: {}) {
     this.afs.collection(collection).doc(document).set(content)
       .then(() => {

@@ -18,6 +18,11 @@ service cloud.firestore {
     	allow read;
       allow write: if isAdmin();
     }
+
+    match /employment/{document=**} {
+      allow read;
+      allow write: if isAdmin();
+    }
     
   }
 }

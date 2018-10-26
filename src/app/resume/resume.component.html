@@ -1,3 +1,92 @@
-<p>
-  resume works!
-</p>
+<div class="row no-gutters">
+  <div class="col-lg-6 employer-details">
+    <div class="active-employer" *ngIf="activeEmployer">
+
+      <h2 class="employer-name">{{ activeEmployer.companyName }}</h2>
+      <h3 class="job-title">{{ activeEmployer.title }}
+        <span class="dates">
+          {{ activeEmployer.dateStart }}
+          {{ activeEmployer.dateEnd !== activeEmployer.dateStart ? ' - ' + activeEmployer.dateEnd : '' }}
+        </span>
+      </h3>
+
+      <section class="responsibilities" *ngIf="activeEmployer.responsibilities">
+        <h4>Responsibilities</h4>
+        <ul>
+          <li *ngFor="let responsibility of activeEmployer.responsibilities">{{ responsibility }}</li>
+        </ul>
+      </section>
+
+      <section class="tools" *ngIf="activeEmployer.tools || activeEmployer.languages">
+        <h4>Tools Used</h4>
+        <div class="icon-row tools" *ngIf="activeEmployer.tools">
+          <fa-icon
+            *ngFor="let tool of activeEmployer.tools"
+            [ngClass]="tool.class"
+            [icon]="tool.icon"
+          ></fa-icon>
+        </div>
+        <div class="icon-row languages" *ngIf="activeEmployer.languages">
+          <fa-icon
+            *ngFor="let language of activeEmployer.languages"
+            [ngClass]="language.class"
+            [icon]="language.icon"
+          ></fa-icon>
+        </div>
+      </section>
+
+      <section class="projects" *ngIf="activeEmployer.projects">
+        <h4>Featured Projects</h4>
+        <div class="row">
+          <div
+            class="col-sm-6"
+            *ngFor="let project of activeEmployer.projects"
+          >
+            <a
+              [routerLink]="'/projects/' + project.id"
+              [ngStyle]="{ backgroundImage: 'url(\'/assets/projects/' + project.id + '.' + project.imageFormat + '\')' }"
+              class="project"
+            ></a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+  <div class="col-lg-6 timeline">
+    <ng-container *ngIf="activeYear && activeEmployer">
+
+      <div
+        class="year-container"
+        *ngFor="let year of years"
+        [ngClass]="{ 'active': activeYear.year === year.year }"
+      >
+        <span class="year">{{ year.year }}</span>
+        <div class="employers" *ngIf="year.employers">
+          <div
+            class="employer"
+            *ngFor="let employer of year.employers"
+            [ngClass]="{ 'active': activeEmployer.id === employer.id }"
+            (click)="onSetActive(employer)"
+            (keydown.enter)="onSetActive(employer)"
+            (keydown.space)="onSetActive(employer)"
+            role="button"
+            tabindex="0"
+          >
+            <h4 class="name">{{ employer.companyName }}</h4>
+            <h5 class="title">{{ employer.title }}</h5>
+            <div
+              class="duration-line"
+              [ngStyle]="{
+                height: activeEmployer.id === employer.id
+                  ? (employer.dateEnd - employer.dateStart) * singleYearHeight + 'px'
+                  : '0'
+              }"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+  </div>
+</div>

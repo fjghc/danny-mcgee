@@ -8,6 +8,7 @@
 # dependencies
 /node_modules
 /functions/node_modules
+/src/assets/fonts/
 
 # IDEs and editors
 /.idea

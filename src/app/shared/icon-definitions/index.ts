@@ -7,3 +7,4 @@ export { dmInDesign } from './icons/dmInDesign';
 export { dmNationBuilder } from './icons/dmNationBuilder';
 export { dmBootstrap } from './icons/dmBootstrap';
 export { dmCSharp } from './icons/dmCSharp';
+export { dmCloud9 } from './icons/dmCloud9';

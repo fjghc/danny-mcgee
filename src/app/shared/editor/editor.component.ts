@@ -173,13 +173,11 @@ export class EditorComponent implements OnInit, OnDestroy {
         // (Prevents the old code being shown with the wrong mode applied while waiting on the new file content)
         if (!file.contents) {
           tab.file = createFile(file.name, file.type, '\n');
-
           // Replace the dummy file with the correct file
           setTimeout(() => { tab.file = file; });
         } else {
           tab.file = file;
         }
-
         tab.editorOptions = this.getEditorOptionsForFile(file);
         this.activeTab = tab;
         return;

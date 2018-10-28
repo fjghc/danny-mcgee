@@ -11,6 +11,24 @@ a {
   cursor: pointer;
 }
 
+p {
+  a {
+    color: $blue-light;
+    border-bottom: 1px solid transparent;
+    transition: all 0.07s linear;
+
+    &:hover, &:focus {
+      color: $gray-lightest;
+      text-decoration: none;
+      border-color: $primary;
+    }
+
+    &:focus {
+      background-color: $gray-dark;
+    }
+  }
+}
+
 .aria-only {
   display: none !important;
 }

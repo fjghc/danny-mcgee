@@ -1,10 +1,13 @@
 .btn {
+  display: inline-block;
   position: relative;
   z-index: 1;
   border: 2px solid transparent;
   border-radius: 0;
-  padding: 10px 30px;
+  padding: 14px 30px;
+  line-height: 1;
   font-weight: 400;
+  text-decoration: none !important;
   text-transform: uppercase;
   cursor: pointer;
   outline: none !important;
@@ -12,7 +15,7 @@
 
 .btn-sm {
   border-width: 1px;
-  padding: 8px 24px;
+  padding: 16px 24px;
   font-size: 14px;
 }
 

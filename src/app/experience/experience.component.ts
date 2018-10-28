@@ -32,11 +32,11 @@ import { ProjectsService } from '../projects/projects.service';
 
 // Component config
 @Component({
-  selector: 'dm-resume',
-  templateUrl: './resume.component.html',
-  styleUrls: ['./resume.component.scss']
+  selector: 'dm-experience',
+  templateUrl: './experience.component.html',
+  styleUrls: ['./experience.component.scss']
 })
-export class ResumeComponent implements OnInit, OnDestroy {
+export class ExperienceComponent implements OnInit, OnDestroy {
 
   // Data
   employers: Employer[] = [];

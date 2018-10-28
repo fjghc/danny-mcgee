@@ -34,13 +34,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   getPageTitleForUrl(url: string): string {
     if (url === '/') {
-      return 'Home';
+      return 'dannymcgee.io';
     }
     if (url === '/login') {
       return 'Login';
     }
-    if (url === '/resume') {
-      return 'Resume';
+    if (url === '/experience') {
+      return 'Experience';
     }
     if (url === '/skills') {
       return 'Skills';

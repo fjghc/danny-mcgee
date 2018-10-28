@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
   icons = {
     menu: faBars,
     about: faUserCircle,
-    resume: faFileAlt,
+    experience: faFileAlt,
     skills: faChartBar,
     projects: faDesktop,
     contact: faEnvelope,

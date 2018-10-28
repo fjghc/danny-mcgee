@@ -40,7 +40,7 @@ import { LoadingComponent } from './shared/loading/loading.component';
 import { ViewSourceComponent } from './view-source/view-source.component';
 import { ContactComponent } from './contact/contact.component';
 import { SkillsComponent } from './skills/skills.component';
-import { ResumeComponent } from './resume/resume.component';
+import { ExperienceComponent } from './experience/experience.component';
 import { MenuItemComponent } from './shared/navbar/menu-item/menu-item.component';
 
 // TODO: Please refactor me
@@ -69,7 +69,7 @@ import { MenuItemComponent } from './shared/navbar/menu-item/menu-item.component
     ViewSourceComponent,
     ContactComponent,
     SkillsComponent,
-    ResumeComponent,
+    ExperienceComponent,
     MenuItemComponent
   ],
   imports: [

@@ -19,60 +19,17 @@
   (mouseleave)="onBlur()"
   class="side-panel"
   role="navigation"
+  tabindex="-1"
 >
   <nav
     class="menu-section"
     role="menu"
     aria-label="Site Navigation"
   >
-    <!--<a-->
-      <!--class="menu-item"-->
-      <!--tabindex="1"-->
-      <!--role="menuitem"-->
-    <!--&gt;-->
-      <!--<fa-icon [icon]="icons.about"></fa-icon>-->
-      <!--<span>About</span>-->
-    <!--</a>-->
-    <a
-      class="menu-item"
-      routerLink="/resume"
-      routerLinkActive="current"
-      tabindex="1"
-      role="menuitem"
-    >
-      <fa-icon [icon]="icons.resume"></fa-icon>
-      <span>Resume</span>
-    </a>
-    <a
-      class="menu-item"
-      routerLink="/skills"
-      routerLinkActive="current"
-      tabindex="1"
-      role="menuitem"
-    >
-      <fa-icon [icon]="icons.skills"></fa-icon>
-      <span>Skills</span>
-    </a>
-    <a
-      class="menu-item"
-      routerLink="/projects"
-      routerLinkActive="current"
-      tabindex="1"
-      role="menuitem"
-    >
-      <fa-icon [icon]="icons.portfolio"></fa-icon>
-      <span>Projects</span>
-    </a>
-    <a
-      class="menu-item"
-      routerLink="/contact"
-      routerLinkActive="current"
-      tabindex="1"
-      role="menuitem"
-    >
-      <fa-icon [icon]="icons.contact"></fa-icon>
-      <span>Contact</span>
-    </a>
+    <dm-menu-item routerLink="/resume"   [icon]="icons.resume"   tabindex="-1">Resume</dm-menu-item>
+    <dm-menu-item routerLink="/skills"   [icon]="icons.skills"   tabindex="-1">Skills</dm-menu-item>
+    <dm-menu-item routerLink="/projects" [icon]="icons.projects" tabindex="-1">Projects</dm-menu-item>
+    <dm-menu-item routerLink="/contact"  [icon]="icons.contact"  tabindex="-1">Contact</dm-menu-item>
   </nav>
 
   <hr />
@@ -82,26 +39,8 @@
     role="menu"
     aria-label="Features"
   >
-    <a
-      class="menu-item"
-      routerLink="/view-source"
-      routerLinkActive="current"
-      tabindex="1"
-      role="menuitem"
-    >
-      <fa-icon [icon]="icons.code"></fa-icon>
-      <span>View Source</span>
-    </a>
-    <a
-      class="menu-item"
-      href="//github.com/dannymcgee"
-      target="_blank"
-      tabindex="1"
-      role="link"
-    >
-      <fa-icon [icon]="icons.github"></fa-icon>
-      <span>GitHub</span>
-    </a>
+    <dm-menu-item routerLink="/view-source"      [icon]="icons.code"   tabindex="-1">View Source</dm-menu-item>
+    <dm-menu-item link="//github.com/dannymcgee" [icon]="icons.github" tabindex="-1">GitHub</dm-menu-item>
   </nav>
 
   <hr *ngIf="authService.isAuthenticated()" />
@@ -113,7 +52,6 @@
     aria-label="Admin Menu"
   >
     <a
-      *ngIf="authService.isAuthenticated()"
       (click)="onLogout()"
       class="menu-item logout"
       tabindex="1"

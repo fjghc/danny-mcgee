@@ -1,0 +1,26 @@
+<ng-template #content><ng-content></ng-content></ng-template>
+
+<a
+  class="menu-item"
+  *ngIf="routerLink !== undefined"
+  [routerLink]="routerLink"
+  routerLinkActive="current"
+  #rla="routerLinkActive"
+  [tabindex]="rla.isActive ? '-1' : '1'"
+  role="menuitem"
+>
+  <fa-icon [icon]="icon"></fa-icon>
+  <span><ng-container *ngTemplateOutlet="content"></ng-container></span>
+</a>
+
+<a
+  class="menu-item"
+  *ngIf="link !== undefined"
+  [href]="link"
+  target="_blank"
+  tabindex="1"
+  role="menuitem"
+>
+  <fa-icon [icon]="icon"></fa-icon>
+  <span><ng-container *ngTemplateOutlet="content"></ng-container></span>
+</a>

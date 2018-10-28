@@ -71,7 +71,7 @@
             (keydown.enter)="onSetActive(employer)"
             (keydown.space)="onSetActive(employer)"
             role="button"
-            tabindex="0"
+            [tabindex]="activeEmployer.id === employer.id ? '-1' : '0'"
           >
             <h4 class="name">{{ employer.companyName }}</h4>
             <h5 class="title">{{ employer.title }}</h5>

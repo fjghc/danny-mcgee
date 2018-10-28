@@ -34,7 +34,7 @@
   }
 }
 
-.menu-item, .menu-lock {
+::ng-deep .menu-item, .menu-lock {
   background-color: transparent;
   color: $gray-light;
   @include transition(0.1s, linear, background-color, color);
@@ -65,7 +65,7 @@
     }
   }
 
-  &:focus {
+  &:focus:not(:active) {
     fa-icon {
       @include button-focus;
     }
@@ -114,7 +114,7 @@
   }
 }
 
-.menu-item {
+::ng-deep .menu-item {
   display: flex;
   align-items: center;
 
@@ -159,6 +159,7 @@
     fa-icon {
       background-color: $gray-darkest !important;
       color: #fff !important;
+      box-shadow: 0 0 0 0 transparent !important;
     }
   }
 }

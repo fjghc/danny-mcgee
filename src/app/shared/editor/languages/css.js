@@ -353,7 +353,6 @@
     };
 
     states.parens = function(type, stream, state) {
-      console.log('parens: ', type, stream, state);
       if (type === "{" || type === "}") return popAndPass(type, stream, state);
       if (type === ")") return popContext(state);
       if (type === "(") return pushContext(state, stream, "parens");

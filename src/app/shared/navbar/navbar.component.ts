@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
 
 import {
   faUserCircle,
@@ -33,6 +33,7 @@ export class NavbarComponent implements OnInit {
     login: faLockAlt,
     logout: faSignOut
   };
+  @ViewChild('menuLock') menuLock: ElementRef;
 
   @HostBinding('class.expanded') isLocked = false;
   @HostBinding('class.hover') isHovered = false;
@@ -41,14 +42,13 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {}
 
-  onLockMenu() {
+  onMenuLock() {
     this.isLocked = !this.isLocked;
   }
 
-  onKeyDownMenuLock($event) {
-    if ($event.key === 'Enter' || $event.key === ' ') {
-      this.onLockMenu();
-    }
+  onClickMenuLock() {
+    this.onMenuLock();
+    this.menuLock.nativeElement.blur();
   }
 
   onHover() {

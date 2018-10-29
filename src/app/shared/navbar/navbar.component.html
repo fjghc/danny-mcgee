@@ -3,9 +3,11 @@
   aria-hidden="true"
 >
   <a
-    (click)="onLockMenu()"
-    (keydown)="onKeyDownMenuLock($event)"
+    (click)="onClickMenuLock()"
+    (keydown.enter)="onMenuLock()"
+    (keydown.space)="onMenuLock()"
     class="menu-lock"
+    #menuLock
     tabindex="1"
   >
     <fa-icon [icon]="icons.menu"></fa-icon>

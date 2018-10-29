@@ -14,3 +14,26 @@
   padding: ($header-size + 2) $main-container-padding $main-container-padding;
   position: relative;
 }
+
+:host-context(.tablet) {
+  width: auto;
+  height: auto;
+  position: relative;
+
+  .row {
+    display: block;
+    position: relative;
+
+    .navbar {
+      @include fixed(0, null, 0, 0);
+      z-index: 1000;
+    }
+
+    .main {
+      max-height: none;
+      min-height: 100vh;
+      width: calc(100vw - #{$menu-width});
+      margin-left: $menu-width;
+    }
+  }
+}

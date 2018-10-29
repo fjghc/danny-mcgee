@@ -1,5 +1,5 @@
 // Angular imports
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Dependency imports
@@ -42,7 +42,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     private projectsService: ProjectsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private renderer: Renderer2
   ) {}
 
   // Init
@@ -68,6 +69,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   onViewProject(project: Project) {
     this.viewingSingle = true;
     this.router.navigate([project.id], { relativeTo: this.route });
+    this.renderer.addClass(document.body, 'modal-open');
   }
 
   onNewProject() {
@@ -84,6 +86,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   onDismissModal() {
     this.viewingSingle = false;
     this.router.navigate(['projects']);
+    this.renderer.removeClass(document.body, 'modal-open');
   }
 
   onEditModeChange(mode) {

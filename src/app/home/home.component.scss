@@ -8,7 +8,8 @@
 }
 
 .about-me {
-  flex: 0 0 800px;
+  flex: 0 0 100%;
+  max-width: 800px;
   color: $gray-lighter;
 }
 

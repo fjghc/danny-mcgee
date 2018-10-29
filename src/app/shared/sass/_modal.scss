@@ -1,3 +1,7 @@
+body.modal-open {
+  overflow: hidden;
+}
+
 .modal {
   @include fixed(0, 0, 0, 0);
   z-index: 2000;

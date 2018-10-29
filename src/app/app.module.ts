@@ -15,6 +15,7 @@ import { DragulaModule } from 'ng2-dragula';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 // App imports
 import { environment } from '../environments/environment';
@@ -87,7 +88,8 @@ import { MenuItemComponent } from './shared/navbar/menu-item/menu-item.component
     DragulaModule.forRoot(),
     CodemirrorModule,
     PerfectScrollbarModule,
-    TextareaAutosizeModule
+    TextareaAutosizeModule,
+    DeviceDetectorModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

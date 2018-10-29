@@ -5,6 +5,18 @@
   display: block;
   position: relative;
   z-index: 1000;
+
+  &::before {
+    content: ' ';
+    display: block;
+    width: 0;
+    height: 100vh;
+    @include fixed(0, null, null, 0);
+    z-index: -1;
+    background-color: $gray-darkest;
+    opacity: 0;
+    transition: opacity 0.15s linear;
+  }
 }
 
 .side-panel {
@@ -15,7 +27,7 @@
   background-color: $gray-darker;
   transition: width 0.15s ease-in;
 
-  :host.expanded &, :host.hover & {
+  :host.expanded &, .desktop :host.hover & {
     width: $menu-expanded-width;
   }
 
@@ -28,7 +40,7 @@
     background-color: $gray-darker;
     transition: background-color 0.15s linear;
 
-    :host.expanded &, :host.hover & {
+    :host.expanded &, .desktop :host.hover & {
       background-color: $gray-dark;
     }
   }
@@ -53,15 +65,17 @@
     box-shadow: inset 0 0 0 0 transparentize($primary, 0.5);
     @include transition(0.1s, linear, background-color, color, box-shadow);
 
-    :host.expanded &, :host.hover & {
+    :host.expanded &, .desktop :host.hover & {
       color: $gray-lightest;
     }
   }
 
   &:hover {
-    fa-icon {
-      background-color: $primary;
-      color: #fff !important;
+    ::ng-deep .desktop & {
+      fa-icon {
+        background-color: $primary;
+        color: #fff !important;
+      }
     }
   }
 
@@ -118,11 +132,11 @@
   display: flex;
   align-items: center;
 
-  :host.expanded &, :host.hover & {
+  :host.expanded &, .desktop :host.hover & {
     color: $gray-lighter;
   }
   fa-icon {
-    :host.expanded &, :host.hover & {
+    :host.expanded &, .desktop :host.hover & {
       color: $gray-lightest;
     }
   }
@@ -132,12 +146,14 @@
     padding: 0 36px 0 15px;
   }
   &:hover {
-    background-color: darken($primary, 10%);
-    color: #fff !important;
-    text-decoration: none;
+    ::ng-deep .desktop & {
+      background-color: darken($primary, 10%);
+      color: #fff !important;
+      text-decoration: none;
 
-    fa-icon {
-      color: #fff;
+      fa-icon {
+        color: #fff;
+      }
     }
   }
   &.login:hover {
@@ -169,4 +185,11 @@ hr {
   z-index: 1200;
   border-top: 2px solid $gray-darkest;
   margin: 0;
+}
+
+:host-context(.tablet), :host-context(.mobile) {
+  &.expanded::before {
+    width: 100vw;
+    opacity: 0.8;
+  }
 }

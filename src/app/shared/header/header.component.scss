@@ -8,6 +8,21 @@
   @include fixed(0, 17px, null, $menu-width);
   z-index: 1100;
   background-color: transparentize($gray-darkest, 0.1);
+
+  @media (max-width: map-get($grid-breakpoints, sm) - 1) {
+    height: 50px;
+    padding: 0 15px;
+    right: 0;
+  }
+}
+
+.page-title, .header-separator {
+  font-size: 30px;
+  font-weight: 200;
+
+  @media (max-width: map-get($grid-breakpoints, sm) - 1) {
+    font-size: 21px;
+  }
 }
 
 .header-separator {
@@ -16,15 +31,11 @@
   position: relative;
   top: -3px;
   color: $gray-light;
-  font-size: 30px;
-  font-weight: 200;
   letter-spacing: .1em;
 }
 
 .page-title {
   color: $gray-lighter;
-  font-size: 30px;
-  font-weight: 200;
   margin-bottom: 0;
 }
 

@@ -1,4 +1,4 @@
-<div class="row no-gutters">
+<div *ngIf="deviceDetector.isDesktop()" class="row no-gutters">
   <div class="col-lg-6 employer-details">
     <div class="active-employer" *ngIf="activeEmployer">
 
@@ -89,4 +89,62 @@
 
     </ng-container>
   </div>
+</div>
+
+<div class="employers-simple" *ngIf="!deviceDetector.isDesktop()">
+  <ng-container *ngFor="let employer of employers">
+    <div
+      class="employer"
+      [ngClass]="{ 'active': activeEmployer.id === employer.id }"
+      (click)="onSetActive(employer)"
+      (keydown.enter)="onSetActive(employer)"
+      (keydown.space)="onSetActive(employer)"
+      role="button"
+      [tabindex]="activeEmployer.id === employer.id ? '-1' : '0'"
+    >
+      <h4 class="name">{{ employer.companyName }}</h4>
+      <h5 class="title">
+        {{ employer.title }}
+        <span class="dates">
+        {{ employer.dateStart }}
+        {{ employer.dateEnd !== employer.dateStart ? ' - ' + employer.dateEnd : '' }}
+      </span>
+      </h5>
+    </div>
+    <div
+      class="employer-details"
+      [ngStyle]="{ 'height': activeEmployer.id === employer.id ? activeEmployerContentHeight + 'px' : 0 }"
+    >
+      <ng-container *ngIf="activeEmployer.id === employer.id">
+        <section class="loading" *ngIf="!activeEmployer.responsibilities">
+          <dm-loading></dm-loading>
+        </section>
+
+        <section class="responsibilities" *ngIf="activeEmployer.responsibilities">
+          <h4>Responsibilities</h4>
+          <ul>
+            <li *ngFor="let responsibility of activeEmployer.responsibilities">{{ responsibility }}</li>
+          </ul>
+        </section>
+
+        <section class="tools" *ngIf="activeEmployer.tools || activeEmployer.languages">
+          <h4>Tools Used</h4>
+          <div class="icon-row tools" *ngIf="activeEmployer.tools">
+            <fa-icon
+              *ngFor="let tool of activeEmployer.tools"
+              [ngClass]="tool.class"
+              [icon]="tool.icon"
+            ></fa-icon>
+          </div>
+          <div class="icon-row languages" *ngIf="activeEmployer.languages">
+            <fa-icon
+              *ngFor="let language of activeEmployer.languages"
+              [ngClass]="language.class"
+              [icon]="language.icon"
+            ></fa-icon>
+          </div>
+        </section>
+      </ng-container>
+    </div>
+  </ng-container>
 </div>

@@ -66,7 +66,7 @@ h5 {
       padding: 0;
       color: $gray-light;
       font-size: 14px;
-      line-height: 18px;
+      line-height: 21px;
       list-style: none;
 
       li {
@@ -218,6 +218,72 @@ h5 {
         @include absolute(null, null, 50%, 85px);
         background-color: $gray-light;
         transition: height 0.2s ease-out;
+      }
+    }
+  }
+}
+
+:host-context(.tablet), :host-context(.mobile) {
+  .employer {
+    padding: 10px 0;
+    margin: 0 0 10px;
+
+    .name {
+      @include transition(0.15s, linear, font-size, color);
+    }
+    .title {
+      transition: color 0.15s linear;
+    }
+    .dates {
+      display: inline-block;
+      margin-left: 8px;
+      color: $gray-light;
+      opacity: 0;
+      transition: opacity 0.15s linear;
+    }
+
+    &.active {
+      .name {
+        color: #fff;
+        font-size: 16px;
+      }
+      .title {
+        color: $blue-light;
+      }
+      .dates {
+        opacity: 1;
+      }
+      & + .employer-details {
+        padding: 5px 0 5px 15px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .employer-details {
+    display: block;
+    padding: 0;
+    border-left: 1px solid $gray-dark;
+    overflow: hidden;
+    transition: height 0.25s ease-out;
+
+    section {
+      margin: 0;
+      padding: 0 0 15px;
+
+      &:last-child {
+        padding: 0;
+      }
+    }
+    .loading {
+      position: relative;
+      height: 24px;
+
+      dm-loading {
+        left: 15px;
+
+        ::ng-deep .icons {
+          font-size: 24px;
+        }
       }
     }
   }

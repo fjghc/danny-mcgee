@@ -29,6 +29,7 @@ import {
   dmUnity
 } from '../shared/icon-definitions';
 import { ProjectsService } from '../projects/projects.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 // Component config
 @Component({
@@ -75,6 +76,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
   activeEmployer: Employer;
   activeYear: { year: number, employers?: Employer[] };
   singleYearHeight: number;
+  activeEmployerContentHeight = 24;
 
   // Subs
   dataSub: Subscription;
@@ -84,7 +86,8 @@ export class ExperienceComponent implements OnInit, OnDestroy {
     private dataHandler: DataHandler,
     private projectsService: ProjectsService,
     private renderer: Renderer2,
-    private elem: ElementRef
+    private elem: ElementRef,
+    public deviceDetector: DeviceDetectorService
   ) {}
 
   // Init
@@ -113,7 +116,9 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         datum.order
       ));
     }
-    this.addEmployersToYears();
+    if (this.deviceDetector.isDesktop()) {
+      this.addEmployersToYears();
+    }
     if (!this.activeEmployer) {
       this.onSetActive(this.employers[0]);
     }
@@ -141,6 +146,13 @@ export class ExperienceComponent implements OnInit, OnDestroy {
     });
   }
 
+  setActiveEmployerContentHeight() {
+    setTimeout(() => {
+      const elem = this.elem.nativeElement.querySelector('.employer.active + .employer-details');
+      this.activeEmployerContentHeight = elem.scrollHeight;
+    });
+  }
+
   fetchAdditionalEmployerData(employer: Employer) {
     const collRef = 'employment';
     const docRef = employer.firestoreKey.toString();
@@ -153,6 +165,9 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         for (const item of response) {
           employer.responsibilities.push(item.content);
         }
+        if (!this.deviceDetector.isDesktop()) {
+          this.setActiveEmployerContentHeight();
+        }
       })
       .catch(error => console.log(error));
 
@@ -164,6 +179,9 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         for (const item of response) {
           employer.tools.push({ class: item.class, icon: this.icons[item.class] });
         }
+        if (!this.deviceDetector.isDesktop()) {
+          this.setActiveEmployerContentHeight();
+        }
       })
       .catch(error => console.log(error));
 
@@ -174,6 +192,9 @@ export class ExperienceComponent implements OnInit, OnDestroy {
 
         for (const item of response) {
           employer.languages.push({ class: item.class, icon: this.icons[item.class] });
+        }
+        if (!this.deviceDetector.isDesktop()) {
+          this.setActiveEmployerContentHeight();
         }
       })
       .catch(error => console.log(error));
@@ -194,10 +215,15 @@ export class ExperienceComponent implements OnInit, OnDestroy {
   onSetActive(employer: Employer) {
     this.activeEmployer = employer;
     this.activeYear = null;
-    for (const year of this.years) {
-      if (employer.dateStart === year.year) {
-        this.activeYear = year;
+
+    if (this.deviceDetector.isDesktop()) {
+      for (const year of this.years) {
+        if (employer.dateStart === year.year) {
+          this.activeYear = year;
+        }
       }
+    } else {
+      this.setActiveEmployerContentHeight();
     }
     if (!employer.responsibilities) {
       this.fetchAdditionalEmployerData(employer);

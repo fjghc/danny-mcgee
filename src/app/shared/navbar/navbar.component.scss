@@ -77,11 +77,12 @@ hr {
 
 :host-context(.mobile) {
   padding-top: $menu-width;
+  left: $menu-width;
+  transition: left 0.15s ease-in;
 
   .side-panel {
-    transform: translateX($menu-width);
     box-shadow: 0 0 0 0 $gray-darkest;
-    @include transition(0.15s, ease-in, width, transform, box-shadow);
+    @include transition(0.15s, ease-in, width, box-shadow);
   }
   .menu-lock-section {
     padding: 0;
@@ -91,9 +92,7 @@ hr {
     background-color: $gray-darker;
   }
   &.peek, &.expanded {
-    .side-panel {
-      transform: translateX(0);
-    }
+    left: 0;
   }
   &.peek {
     .side-panel {

@@ -1,7 +1,7 @@
 <ng-template #content><ng-content></ng-content></ng-template>
 
 <a
-  class="menu-item"
+  class="menu-item {{ extraClass }}"
   *ngIf="routerLink !== undefined"
   [routerLink]="routerLink"
   routerLinkActive="current"
@@ -15,7 +15,7 @@
 </a>
 
 <a
-  class="menu-item"
+  class="menu-item {{ extraClass }}"
   *ngIf="link !== undefined"
   [href]="link"
   target="_blank"
@@ -24,4 +24,18 @@
 >
   <fa-icon [icon]="icon"></fa-icon>
   <span><ng-container *ngTemplateOutlet="content"></ng-container></span>
+</a>
+
+<a
+  class="menu-item {{ extraClass }}"
+  *ngIf="routerLink === undefined && link === undefined"
+  (click)="onClick()"
+  (keydown.enter)="onActivate()"
+  (keydown.space)="onActivate()"
+  #anchor
+  tabindex="1"
+  role="menuitem"
+>
+  <fa-icon [icon]="icon"></fa-icon>
+  <span *ngIf="extraClass !== 'menu-lock'"><ng-container *ngTemplateOutlet="content"></ng-container></span>
 </a>

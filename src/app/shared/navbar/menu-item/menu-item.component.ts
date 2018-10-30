@@ -1,5 +1,5 @@
 // Angular imports
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 // Dependency imports
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -17,9 +17,12 @@ export class MenuItemComponent {
   @Input() routerLink: string;
   @Input() link: string;
   @Input() icon: IconDefinition;
+  @Input() extraClass: string;
+  @ViewChild('anchor') anchor: ElementRef;
 
   // Event Emitters
   @Output() closeMenu = new EventEmitter();
+  @Output() activate = new EventEmitter();
 
   // Services
   constructor(private deviceDetector: DeviceDetectorService) {}
@@ -28,6 +31,17 @@ export class MenuItemComponent {
   onNavigate() {
     if (this.deviceDetector.isMobile()) {
       this.closeMenu.emit();
+    }
+  }
+
+  onActivate() {
+    this.activate.emit();
+  }
+
+  onClick() {
+    this.onActivate();
+    if (this.extraClass === 'menu-lock') {
+      this.anchor.nativeElement.blur();
     }
   }
 

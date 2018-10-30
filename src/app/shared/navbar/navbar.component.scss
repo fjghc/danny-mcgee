@@ -46,74 +46,6 @@
   }
 }
 
-::ng-deep .menu-item, .menu-lock {
-  background-color: transparent;
-  color: $gray-light;
-  @include transition(0.1s, linear, background-color, color);
-  text-decoration: none !important;
-
-  fa-icon {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: $menu-width;
-    height: $menu-width;
-    position: relative;
-    background-color: transparent;
-    color: $gray-lighter;
-    font-size: 24px;
-    box-shadow: inset 0 0 0 0 transparentize($primary, 0.5);
-    @include transition(0.1s, linear, background-color, color, box-shadow);
-
-    :host.expanded &, .desktop :host.hover & {
-      color: $gray-lightest;
-    }
-  }
-
-  &:hover {
-    ::ng-deep .desktop & {
-      fa-icon {
-        background-color: $primary;
-        color: #fff !important;
-      }
-    }
-  }
-
-  &:focus:not(:active) {
-    fa-icon {
-      @include button-focus;
-    }
-  }
-}
-
-.menu-lock {
-  display: block;
-  position: relative;
-  z-index: 1100;
-
-  fa-icon::ng-deep {
-    svg {
-      transform: rotate(0deg);
-      transition: transform 0.1s ease-in;
-    }
-  }
-
-  :host.expanded & {
-    background-color: $gray-darkest;
-    color: #fff;
-
-    fa-icon::ng-deep {
-      background-color: $gray-darkest;
-      color: #fff;
-
-      svg {
-        transform: rotate(-90deg);
-      }
-    }
-  }
-}
-
 .menu-section {
   position: relative;
   z-index: 3;
@@ -126,58 +58,6 @@
 
   :host.expanded & {
     background-color: $gray-darkest;
-  }
-}
-
-::ng-deep .menu-item {
-  display: flex;
-  align-items: center;
-
-  :host.expanded &, .desktop :host.hover & {
-    color: $gray-lighter;
-  }
-  fa-icon {
-    :host.expanded &, .desktop :host.hover & {
-      color: $gray-lightest;
-    }
-  }
-  span {
-    flex-shrink: 0;
-    display: inline-block;
-    padding: 0 36px 0 15px;
-  }
-  &:hover {
-    ::ng-deep .desktop & {
-      background-color: darken($primary, 10%);
-      color: #fff !important;
-      text-decoration: none;
-
-      fa-icon {
-        color: #fff;
-      }
-    }
-  }
-  &.login:hover {
-    background-color: darken($success, 15%);
-    fa-icon {
-      background-color: darken($success, 7%);
-    }
-  }
-  &.logout:hover {
-    background-color: desaturate(darken($danger, 10%), 20%);
-    fa-icon {
-      background-color: $danger;
-    }
-  }
-  &.current {
-    background-color: $gray-darkest !important;
-    color: #fff !important;
-    cursor: default;
-    fa-icon {
-      background-color: $gray-darkest !important;
-      color: #fff !important;
-      box-shadow: 0 0 0 0 transparent !important;
-    }
   }
 }
 
@@ -206,7 +86,7 @@ hr {
   .menu-lock-section {
     padding: 0;
   }
-  .menu-lock {
+  ::ng-deep .menu-lock {
     @include fixed(0, 0, null, null);
     background-color: $gray-darker;
   }

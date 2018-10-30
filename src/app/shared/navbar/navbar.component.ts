@@ -1,5 +1,5 @@
 // Angular imports
-import { Component, ElementRef, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 
 // Depdendency imports
 import {
@@ -41,7 +41,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     login: faLockAlt,
     logout: faSignOut
   };
-  @ViewChild('menuLock') menuLock: ElementRef;
   mainMenuItems = [
     { name: 'Experience', routerLink: '/experience', icon: this.icons.experience },
     { name: 'Skills', routerLink: '/skills', icon: this.icons.skills },
@@ -78,11 +77,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   // Events
   onMenuLock() {
     this.isLocked = !this.isLocked;
-  }
-
-  onClickMenuLock() {
-    this.onMenuLock();
-    this.menuLock.nativeElement.blur();
   }
 
   onHover() {

@@ -2,16 +2,12 @@
   class="menu-section menu-lock-section"
   aria-hidden="true"
 >
-  <a
-    (click)="onClickMenuLock()"
-    (keydown.enter)="onMenuLock()"
-    (keydown.space)="onMenuLock()"
-    class="menu-lock"
-    #menuLock
-    tabindex="1"
-  >
-    <fa-icon [icon]="icons.menu"></fa-icon>
-  </a>
+  <dm-menu-item
+    extraClass="menu-lock"
+    (activate)="onMenuLock()"
+    [icon]="icons.menu"
+    tabindex="-1"
+  ></dm-menu-item>
 </nav>
 
 <hr />
@@ -66,15 +62,12 @@
     role="menu"
     aria-label="Admin Menu"
   >
-    <a
-      (click)="onLogout()"
-      class="menu-item logout"
-      tabindex="1"
-      role="menuitem"
-    >
-      <fa-icon [icon]="icons.logout"></fa-icon>
-      <span>Log Out</span>
-    </a>
+    <dm-menu-item
+      extraClass="logout"
+      (activate)="onLogout()"
+      [icon]="icons.logout"
+      tabindex="-1"
+    >Log Out</dm-menu-item>
   </nav>
 
 </div>

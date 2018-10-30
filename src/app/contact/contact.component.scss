@@ -34,23 +34,6 @@ form.minimal {
   p {
     font-size: 14px;
     color: $gray-lighter;
-
-    // TODO: Move this into global styling?
-    a {
-      color: $blue-light;
-      border-bottom: 1px solid transparent;
-      transition: all 0.07s linear;
-
-      &:hover, &:focus {
-        color: $gray-lightest;
-        text-decoration: none;
-        border-color: $primary;
-      }
-
-      &:focus {
-        background-color: $gray-dark;
-      }
-    }
   }
 }
 
@@ -121,6 +104,26 @@ form.minimal {
 
     &::before {
       background-color: darken($danger, 5%);
+    }
+  }
+}
+
+:host-context(.mobile) {
+  display: block;
+  width: calc(100vw - 30px);
+  min-height: 0;
+  // min-height: calc(100vh - #{$menu-width + 30 + 2});
+  margin: -15px;
+
+  form.minimal {
+    width: 100%;
+    padding: 30px 15px;
+    margin: 0;
+
+    .icon {
+      font-size: 85px;
+      line-height: 1;
+      margin-bottom: 24px;
     }
   }
 }

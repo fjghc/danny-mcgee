@@ -51,11 +51,13 @@
 }
 
 :host-context(.mobile) {
-  height: $menu-width;
+  height: $menu-width + 2;
   @include fixed(0, $menu-width, null, 0);
   background-color: $gray-darker;
+  border-bottom: 2px solid $gray-darkest;
 
   .page-title {
     font-size: 18px;
+    font-weight: 300;
   }
 }

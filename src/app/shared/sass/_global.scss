@@ -1,6 +1,6 @@
 body {
-  background: map-get($theme-colors, "dark");
-  color: map-get($theme-colors, "light");
+  background: $gray-darkest;
+  color: $gray-lightest;
 }
 
 ::-moz-selection  { background: $primary; color: #fff; }

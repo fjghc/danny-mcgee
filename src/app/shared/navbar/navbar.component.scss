@@ -200,7 +200,8 @@ hr {
 
   .side-panel {
     transform: translateX($menu-width);
-    @include transition(0.15s, ease-in, width, transform);
+    box-shadow: 0 0 0 0 $gray-darkest;
+    @include transition(0.15s, ease-in, width, transform, box-shadow);
   }
   .menu-lock-section {
     padding: 0;

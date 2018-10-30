@@ -3,12 +3,6 @@
 <h1 class="page-title">{{ pageTitle }}</h1>
 
 <div class="btn-container">
-  <ng-container *ngIf="pageTitle === 'Projects'">
-    <ul class="legend">
-      <li class="legend-item"><span class="color primary"></span> Professional</li>
-      <li class="legend-item"><span class="color info"></span> Personal</li>
-    </ul>
-  </ng-container>
   <ng-container *ngIf="authService.isAuthenticated() && pageTitle === 'Projects'">
 
     <button

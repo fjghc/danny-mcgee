@@ -14,7 +14,7 @@
 }
 
 .heading {
-  margin-bottom: 24px;
+  margin-bottom: 1.5em;
 
   span {
     display: block;
@@ -22,7 +22,7 @@
   .intro {
     font-size: 24px;
     font-weight: 200;
-    margin-bottom: 14px;
+    margin-bottom: 0.58333em;
   }
   .name, .tagline {
     font-size: 48px;
@@ -50,4 +50,21 @@
       margin-bottom: 0;
     }
   }
+}
+
+:host-context(.mobile) {
+  display: block;
+
+  .heading {
+    .intro {
+      font-size: 18px;
+    }
+    .name, .tagline {
+      font-size: 36px;
+    }
+  }
+  .content {
+    font-size: 14px;
+  }
+
 }

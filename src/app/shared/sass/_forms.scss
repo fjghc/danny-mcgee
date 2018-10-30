@@ -40,6 +40,11 @@ form.minimal {
       line-height: 50px;
       pointer-events: none;
       @include transition(0.15s, linear, top, color, font-size, line-height);
+
+      .mobile & {
+        font-size: 14px;
+        line-height: 38px;
+      }
     }
 
     &.focus label, &.filled label {
@@ -47,11 +52,23 @@ form.minimal {
       color: $gray-light;
       font-size: 13px;
       line-height: 13px;
+
+      .mobile & {
+        font-size: 12px;
+      }
     }
 
     & + .help-block {
       margin-top: -15px;
       margin-bottom: 30px;
+
+      .mobile & {
+        margin-bottom: 24px;
+      }
+    }
+
+    .mobile & {
+      margin-bottom: 24px;
     }
   }
 
@@ -87,6 +104,12 @@ form.minimal {
     transition: color 0.15s linear;
     outline: none !important;
 
+    .mobile & {
+      font-size: 14px;
+      padding: 8px 0;
+      border-bottom-width: 1px;
+    }
+
     & + .underline {
       content: ' ';
       display: block;
@@ -97,6 +120,11 @@ form.minimal {
       margin-top: -2px;
       background-color: $blue-bold;
       @include transition(0.2s, ease-in, right, left);
+
+      .mobile & {
+        height: 1px;
+        margin-top: -1px;
+      }
     }
 
     &:focus {
@@ -118,6 +146,11 @@ form.minimal {
     padding: 12px 0 14px;
     overflow: hidden;
     resize: none;
+
+    .mobile & {
+      height: 38px;
+      padding: 8px 0;
+    }
   }
 
   .checkbox {
@@ -219,6 +252,10 @@ form.minimal {
 
     &:last-child {
       margin-top: 48px;
+
+      .mobile & {
+        margin-top: 30px;
+      }
     }
   }
 }

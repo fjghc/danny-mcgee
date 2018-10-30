@@ -1,19 +1,34 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+// Angular imports
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+// Dependency imports
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { DeviceDetectorService } from 'ngx-device-detector';
+
+// Component config
 @Component({
   selector: 'dm-menu-item',
   templateUrl: './menu-item.component.html',
   styleUrls: ['./menu-item.component.scss']
 })
-export class MenuItemComponent implements OnInit {
+export class MenuItemComponent {
 
+  // Data
   @Input() routerLink: string;
   @Input() link: string;
   @Input() icon: IconDefinition;
 
-  constructor() {}
+  // Event Emitters
+  @Output() closeMenu = new EventEmitter();
 
-  ngOnInit() {}
+  // Services
+  constructor(private deviceDetector: DeviceDetectorService) {}
+
+  // Events
+  onNavigate() {
+    if (this.deviceDetector.isMobile()) {
+      this.closeMenu.emit();
+    }
+  }
 
 }

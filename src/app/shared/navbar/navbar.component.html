@@ -28,10 +28,13 @@
     role="menu"
     aria-label="Site Navigation"
   >
-    <dm-menu-item routerLink="/experience" [icon]="icons.experience" tabindex="-1">Experience</dm-menu-item>
-    <dm-menu-item routerLink="/skills"     [icon]="icons.skills"     tabindex="-1">Skills</dm-menu-item>
-    <dm-menu-item routerLink="/projects"   [icon]="icons.projects"   tabindex="-1">Projects</dm-menu-item>
-    <dm-menu-item routerLink="/contact"    [icon]="icons.contact"    tabindex="-1">Contact</dm-menu-item>
+    <dm-menu-item
+      *ngFor="let item of mainMenuItems"
+      [routerLink]="item.routerLink"
+      [icon]="item.icon"
+      (closeMenu)="onCloseMenu()"
+      tabindex="-1"
+    >{{ item.name }}</dm-menu-item>
   </nav>
 
   <hr />
@@ -41,8 +44,18 @@
     role="menu"
     aria-label="Features"
   >
-    <dm-menu-item routerLink="/view-source"      [icon]="icons.code"   tabindex="-1">View Source</dm-menu-item>
-    <dm-menu-item link="//github.com/dannymcgee" [icon]="icons.github" tabindex="-1">GitHub</dm-menu-item>
+    <dm-menu-item
+      routerLink="/view-source"
+      [icon]="icons.code"
+      (closeMenu)="onCloseMenu()"
+      tabindex="-1"
+    >View Source</dm-menu-item>
+
+    <dm-menu-item
+      link="//github.com/dannymcgee"
+      [icon]="icons.github"
+      tabindex="-1"
+    >GitHub</dm-menu-item>
   </nav>
 
   <hr *ngIf="authService.isAuthenticated()" />

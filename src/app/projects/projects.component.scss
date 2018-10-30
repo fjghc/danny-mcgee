@@ -30,3 +30,9 @@
     }
   }
 }
+
+:host-context(.mobile) {
+  .project-container:last-child {
+    margin-bottom: 0;
+  }
+}

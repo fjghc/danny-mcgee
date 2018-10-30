@@ -6,6 +6,7 @@
   [routerLink]="routerLink"
   routerLinkActive="current"
   #rla="routerLinkActive"
+  (click)="onNavigate()"
   [tabindex]="rla.isActive ? '-1' : '1'"
   role="menuitem"
 >

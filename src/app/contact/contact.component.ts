@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 // Dependency imports
 import { faEnvelope } from '@fortawesome/pro-light-svg-icons';
 import { faCheck, faTimes } from '@fortawesome/pro-solid-svg-icons';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 // Component config
 @Component({
@@ -31,7 +32,10 @@ export class ContactComponent implements OnInit {
   status: 'default' | 'sending' | 'sent' | 'error' = 'default';
 
   // Services
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    public deviceDetector: DeviceDetectorService
+  ) {}
 
   // Init
   ngOnInit() {

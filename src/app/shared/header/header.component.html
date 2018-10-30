@@ -1,5 +1,5 @@
 <dm-logo></dm-logo>
-<span class="header-separator">::</span>
+<span *ngIf="!deviceDetector.isMobile()" class="header-separator">::</span>
 <h1 class="page-title">{{ pageTitle }}</h1>
 
 <div class="btn-container">

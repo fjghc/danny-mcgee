@@ -50,6 +50,7 @@
   background-color: transparent;
   color: $gray-light;
   @include transition(0.1s, linear, background-color, color);
+  text-decoration: none !important;
 
   fa-icon {
     flex-shrink: 0;
@@ -191,5 +192,31 @@ hr {
   &.expanded::before {
     width: 100vw;
     opacity: 0.8;
+  }
+}
+
+:host-context(.mobile) {
+  padding-top: $menu-width;
+
+  .side-panel {
+    transform: translateX($menu-width);
+    @include transition(0.15s, ease-in, width, transform);
+  }
+  .menu-lock-section {
+    padding: 0;
+  }
+  .menu-lock {
+    @include fixed(0, 0, null, null);
+    background-color: $gray-darker;
+  }
+  &.peek, &.expanded {
+    .side-panel {
+      transform: translateX(0);
+    }
+  }
+  &.peek {
+    .side-panel {
+      box-shadow: 0 0 20px 5px $gray-darkest;
+    }
   }
 }

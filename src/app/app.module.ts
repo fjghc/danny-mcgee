@@ -1,5 +1,5 @@
 // Angular imports
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import * as Hammer from 'hammerjs';
 
 // App imports
 import { environment } from '../environments/environment';
@@ -45,6 +46,16 @@ import { ExperienceComponent } from './experience/experience.component';
 import { MenuItemComponent } from './shared/navbar/menu-item/menu-item.component';
 
 // TODO: Please refactor me
+
+export class DmHammerConfig extends HammerGestureConfig {
+  buildHammer(element: HTMLElement) {
+    const mc = new Hammer(element, {
+      touchAction: 'pan-y'
+    });
+
+    return mc;
+  }
+}
 
 // Module config
 @NgModule({
@@ -91,7 +102,7 @@ import { MenuItemComponent } from './shared/navbar/menu-item/menu-item.component
     TextareaAutosizeModule,
     DeviceDetectorModule.forRoot()
   ],
-  providers: [],
+  providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: DmHammerConfig }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

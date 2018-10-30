@@ -1,9 +1,13 @@
 <dm-header></dm-header>
 <div class="row no-gutters">
-  <div class="col-sm-auto navbar">
+  <div class="col-auto navbar">
     <dm-navbar></dm-navbar>
   </div>
-  <div class="col-sm main">
+  <div
+    class="col main"
+    (swipeleft)="gestureHandler.swipeLeft.next()"
+    (swiperight)="gestureHandler.swipeRight.next()"
+  >
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -15,7 +15,7 @@
   position: relative;
 }
 
-:host-context(.tablet) {
+:host-context(.tablet), :host-context(.mobile) {
   width: auto;
   height: auto;
   position: relative;
@@ -25,15 +25,35 @@
     position: relative;
 
     .navbar {
-      @include fixed(0, null, 0, 0);
       z-index: 1000;
     }
-
     .main {
       max-height: none;
       min-height: 100vh;
+    }
+  }
+}
+
+:host-context(.tablet) {
+  .row {
+    .navbar {
+      @include fixed(0, null, 0, 0);
+    }
+    .main {
       width: calc(100vw - #{$menu-width});
       margin-left: $menu-width;
+    }
+  }
+}
+
+:host-context(.mobile) {
+  .row {
+    .navbar {
+      @include fixed(0, 0, 0, null);
+    }
+    .main {
+      width: 100vw;
+      padding: ($menu-width + 30) 30px 30px;
     }
   }
 }

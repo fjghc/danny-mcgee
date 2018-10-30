@@ -49,3 +49,13 @@
     margin-bottom: 0;
   }
 }
+
+:host-context(.mobile) {
+  height: $menu-width;
+  @include fixed(0, $menu-width, null, 0);
+  background-color: $gray-darker;
+
+  .page-title {
+    font-size: 18px;
+  }
+}

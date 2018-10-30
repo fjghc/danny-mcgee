@@ -3,6 +3,7 @@ import { Router, RoutesRecognized } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { Subscription } from 'rxjs';
 import { ProjectsService } from '../../projects/projects.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'dm-header',
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     public authService: AuthService,
     public projectsService: ProjectsService,
+    public deviceDetector: DeviceDetectorService,
     private router: Router
   ) { }
 

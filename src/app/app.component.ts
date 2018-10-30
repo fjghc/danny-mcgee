@@ -1,9 +1,10 @@
 // TODO: Remove all async pipes from the entire app and stop setting object properties to promises or observables
 
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { Subscription } from 'rxjs';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { GestureHandler } from './shared/gesture-handler.service';
 
 @Component({
   selector: 'dm-root',
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private deviceDetector: DeviceDetectorService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    public gestureHandler: GestureHandler
   ) {}
 
   ngOnInit() {
@@ -34,6 +36,16 @@ export class AppComponent implements OnInit, OnDestroy {
           : this.deviceDetector.isDesktop() ? 'desktop'
           : ''
     );
+  }
+
+  @HostListener('document:swipeleft')
+  onSwipeLeft() {
+    this.gestureHandler.swipeLeft.next();
+  }
+
+  @HostListener('document:swiperight')
+  onSwipeRight() {
+    this.gestureHandler.swipeRight.next();
   }
 
   ngOnDestroy() {

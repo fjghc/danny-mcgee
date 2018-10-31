@@ -5,10 +5,15 @@
 >
   <fa-icon class="icon" [icon]="icons.mail"></fa-icon>
 
-  <div class="error-alert" *ngIf="status === 'error'">
+  <div class="alert error-alert" *ngIf="status === 'error'">
     <h6>Something went wrong!</h6>
     <p>Sorry about that. Try checking your internet connection and trying again, or if all else fails, you can email me directly at
       <a href="mailto:dannymcgee@gmail.com">dannymcgee@gmail.com</a></p>
+  </div>
+
+  <div class="alert success-alert" *ngIf="status === 'sent'">
+    <h6>Success!</h6>
+    <p>Your message has been sent. Thanks for getting in touch; I'll get back to you as soon as I can!</p>
   </div>
 
   <dm-input

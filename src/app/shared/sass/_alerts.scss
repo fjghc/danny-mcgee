@@ -1,0 +1,16 @@
+.alert {
+  border-left: 2px solid $gray-light;
+  padding-left: 15px;
+  margin-bottom: 36px;
+
+  p {
+    font-size: 14px;
+    line-height: 24px;
+    color: $gray-lighter;
+  }
+}
+
+.error-alert   { border-color: $danger; }
+.info-alert    { border-color: $info; }
+.warning-alert { border-color: $warning; }
+.success-alert { border-color: $success; }

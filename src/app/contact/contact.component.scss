@@ -26,17 +26,6 @@ form.minimal {
   }
 }
 
-.error-alert {
-  border-left: 2px solid $danger;
-  padding-left: 15px;
-  margin-bottom: 36px;
-
-  p {
-    font-size: 14px;
-    color: $gray-lighter;
-  }
-}
-
 .btn-primary {
   transition: all 0.1s linear;
 

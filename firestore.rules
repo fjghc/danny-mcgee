@@ -9,7 +9,7 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
     
-    match /projects/{project} {
+    match /projects/{document=**} {
     	allow read;
       allow write: if isAdmin();
     }

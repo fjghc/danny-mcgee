@@ -44,6 +44,7 @@ import { ContactComponent } from './contact/contact.component';
 import { SkillsComponent } from './skills/skills.component';
 import { ExperienceComponent } from './experience/experience.component';
 import { MenuItemComponent } from './shared/navbar/menu-item/menu-item.component';
+import { TooltipDirective } from './shared/tooltip.directive';
 
 // TODO: Please refactor me
 
@@ -82,7 +83,8 @@ export class DmHammerConfig extends HammerGestureConfig {
     ContactComponent,
     SkillsComponent,
     ExperienceComponent,
-    MenuItemComponent
+    MenuItemComponent,
+    TooltipDirective
   ],
   imports: [
     BrowserModule,

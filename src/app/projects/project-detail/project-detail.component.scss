@@ -1,5 +1,9 @@
 @import '../../shared/sass/vars';
 
+:host {
+  position: relative;
+}
+
 .project-menu-bar {
   display: flex;
   align-items: center;
@@ -80,8 +84,12 @@
   width: 1366px;
   max-width: calc(100vw - 30px);
   height: 768px;
+  padding-bottom: 0;
   background-color: $gray-darker;
 
+  &.has-footer {
+    padding-bottom: 36px;
+  }
   .project-content {
     width: 100%;
     height: 100%;
@@ -103,6 +111,49 @@
       height: 100%;
       border: 0;
       position: relative;
+    }
+  }
+}
+
+.project-footer {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 15px;
+  @include absolute(null, 0, 0, 0);
+  z-index: 1;
+  background-color: $gray;
+
+  .icon-row {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    &:not(:last-child) {
+      margin-right: 15px;
+      padding-right: 15px;
+      border-right: 1px solid $gray-dark;
+    }
+    .icon {
+      color: $gray-lighter;
+      font-size: 18px;
+      transition: color 0.1s linear;
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+      &.partial {
+        opacity: 0.5;
+      }
+      &:hover {
+        &.personal    { color: $purple }
+        &.design      { color: $pink }
+        &.front-end   { color: $blue-light }
+        &.back-end    { color: $orange }
+        &.photoshop   { color: #00c8ff }
+        &.illustrator { color: #ff7c00 }
+        &.wordpress   { color: #24baf1 }
+      }
     }
   }
 }

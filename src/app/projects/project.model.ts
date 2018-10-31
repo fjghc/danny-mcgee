@@ -1,3 +1,6 @@
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { DmIconDefinition } from '../shared/icon-definitions/icon-definition.model';
+
 export interface Project {
   id: string;
   name: string;
@@ -7,6 +10,16 @@ export interface Project {
   needsRefresh?: boolean;
   personal?: boolean;
   order?: number;
+  responsibilities?: {
+    icon: DmIconDefinition | IconDefinition,
+    class: string,
+    tooltip: string
+  }[];
+  tools?: {
+    icon: DmIconDefinition | IconDefinition,
+    class: string,
+    tooltip: string
+  }[];
 }
 
 export function createProject(

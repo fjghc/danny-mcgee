@@ -78,6 +78,7 @@
   align-items: center;
   justify-content: center;
   width: 1366px;
+  max-width: calc(100vw - 30px);
   height: 768px;
   background-color: $gray-darker;
 
@@ -103,5 +104,42 @@
       border: 0;
       position: relative;
     }
+  }
+}
+
+@media (max-width: map-get($grid-breakpoints, xl) - 1), (max-height: 852px) {
+  .project-window {
+    height: calc(100vh - 84px);
+  }
+}
+
+@media (max-width: map-get($grid-breakpoints, lg) - 1) {
+  .project-nav {
+    display: none;
+  }
+}
+
+@media (max-width: map-get($grid-breakpoints, sm) - 1) {
+  .project-window {
+    width: 100vw;
+    max-width: none;
+    height: calc(100vh - 40px);
+  }
+  .project-info {
+    margin: 0 0 0 15px;
+
+    .project-name {
+      max-width: calc(100vw - 100px);
+      font-size: 16px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .menu-item, .close {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 }

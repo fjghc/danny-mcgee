@@ -25,8 +25,9 @@
 }
 .skill-graph-heading {
   width: 78%;
-  margin: 0 0 14px;
+  margin: 0 0 12px;
   font-size: 18px;
+  line-height: 1.4;
   text-align: center;
   font-weight: 300;
   text-transform: uppercase;
@@ -150,3 +151,81 @@ li.graph-item {
     letter-spacing: -0.03em;
   }
 }
+
+@media (max-width: map-get($grid-breakpoints, xl) - 1) {
+  .skill-graphs {
+    padding-right: 7%;
+  }
+}
+
+@media (max-width: map-get($grid-breakpoints, lg) - 1) {
+  .skill-graphs {
+    padding-right: 0;
+    margin-bottom: 15px;
+  }
+  .skill-graph {
+    margin-bottom: 30px;
+  }
+  .skill-graph-heading {
+    width: 100%;
+    text-align: left;
+  }
+  li.graph-item {
+    display: block;
+    margin-bottom: 12px;
+    padding: 0;
+  }
+  .graph-label {
+    display: block;
+    font-size: 12px;
+    text-align: left;
+    margin-bottom: 6px;
+  }
+
+  .timeline {
+    &::before {
+      left: 55px;
+    }
+  }
+  .milestone-year {
+    flex: 0 0 55px;
+    padding-right: 15px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .milestone-content {
+    padding-left: 15px;
+
+    .icons {
+      margin-bottom: 10px;
+    }
+    .content {
+      line-height: 21px;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+:host-context(.tablet) {
+  .row {
+    min-height: calc(100vh - #{$header-size + $main-container-padding + 2})
+  }
+}
+
+@media (max-height: 768px) {
+  .skill-graph {
+    margin-bottom: 30px;
+  }
+  .timeline-milestone:first-child {
+    margin-top: 24px;
+  }
+  .milestone-content {
+    .content {
+      margin-bottom: 24px;
+    }
+  }
+}
+
+:host-context(.tablet) {}
+
+:host-context(.mobile) {}

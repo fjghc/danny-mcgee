@@ -148,7 +148,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         }
         this.setActiveEmployerContentHeight();
       })
-      .catch(error => console.log(error));
+      .catch(() => {});
 
     // Handle Tools
     this.dataHandler.getSubCollection(collRef, docRef, 'tools' )
@@ -160,7 +160,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         }
         this.setActiveEmployerContentHeight();
       })
-      .catch(error => console.log(error));
+      .catch(() => {});
 
     // Handle Languages
     this.dataHandler.getSubCollection(collRef, docRef, 'languages')
@@ -172,7 +172,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         }
         this.setActiveEmployerContentHeight();
       })
-      .catch(error => console.log(error));
+      .catch(() => {});
 
     // Handle Projects
     this.dataHandler.getSubCollection(collRef, docRef, 'projects')
@@ -184,7 +184,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
           employer.projects.push(project);
         }
       })
-      .catch(error => console.log(error));
+      .catch(() => {});
   }
 
   // State manipulation

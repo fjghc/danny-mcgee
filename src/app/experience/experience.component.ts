@@ -76,7 +76,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
   activeEmployer: Employer;
   activeYear: { year: number, employers?: Employer[] };
   singleYearHeight: number;
-  activeEmployerContentHeight = 24;
+  activeEmployerContentHeight = 0;
 
   // Subs
   dataSub: Subscription;
@@ -99,12 +99,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
     this.projectsService.watchProjects();
   }
 
-  @HostListener('window:resize')
-  onResize() {
-    this.setSingleYearHeight();
-  }
-
-  // Events
+  // Data manipulation
   createEmployers(data) {
     for (const datum of data) {
       this.employers.push(createEmployer(
@@ -139,20 +134,6 @@ export class ExperienceComponent implements OnInit, OnDestroy {
     this.setSingleYearHeight();
   }
 
-  setSingleYearHeight() {
-    setTimeout(() => {
-      const yearElems = this.elem.nativeElement.querySelectorAll('.year-container');
-      this.singleYearHeight = yearElems[1].getBoundingClientRect().top - yearElems[0].getBoundingClientRect().top;
-    });
-  }
-
-  setActiveEmployerContentHeight() {
-    setTimeout(() => {
-      const elem = this.elem.nativeElement.querySelector('.employer.active + .employer-details');
-      this.activeEmployerContentHeight = elem.scrollHeight;
-    });
-  }
-
   fetchAdditionalEmployerData(employer: Employer) {
     const collRef = 'employment';
     const docRef = employer.firestoreKey.toString();
@@ -165,9 +146,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         for (const item of response) {
           employer.responsibilities.push(item.content);
         }
-        if (!this.deviceDetector.isDesktop()) {
-          this.setActiveEmployerContentHeight();
-        }
+        this.setActiveEmployerContentHeight();
       })
       .catch(error => console.log(error));
 
@@ -179,9 +158,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         for (const item of response) {
           employer.tools.push({ class: item.class, icon: this.icons[item.class] });
         }
-        if (!this.deviceDetector.isDesktop()) {
-          this.setActiveEmployerContentHeight();
-        }
+        this.setActiveEmployerContentHeight();
       })
       .catch(error => console.log(error));
 
@@ -193,9 +170,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         for (const item of response) {
           employer.languages.push({ class: item.class, icon: this.icons[item.class] });
         }
-        if (!this.deviceDetector.isDesktop()) {
-          this.setActiveEmployerContentHeight();
-        }
+        this.setActiveEmployerContentHeight();
       })
       .catch(error => console.log(error));
 
@@ -212,9 +187,27 @@ export class ExperienceComponent implements OnInit, OnDestroy {
       .catch(error => console.log(error));
   }
 
+  // State manipulation
+  setSingleYearHeight() {
+    setTimeout(() => {
+      const yearElems = this.elem.nativeElement.querySelectorAll('.year-container');
+      this.singleYearHeight = yearElems[1].getBoundingClientRect().top - yearElems[0].getBoundingClientRect().top;
+    });
+  }
+
+  setActiveEmployerContentHeight() {
+    setTimeout(() => {
+      const selector = this.deviceDetector.isDesktop() ? '.active-employer' : '.employer.active + .employer-details';
+      const elem = this.elem.nativeElement.querySelector(selector);
+      this.activeEmployerContentHeight = elem.scrollHeight;
+    });
+  }
+
+  // Events
   onSetActive(employer: Employer) {
     this.activeEmployer = employer;
     this.activeYear = null;
+    this.setActiveEmployerContentHeight();
 
     if (this.deviceDetector.isDesktop()) {
       for (const year of this.years) {
@@ -222,12 +215,15 @@ export class ExperienceComponent implements OnInit, OnDestroy {
           this.activeYear = year;
         }
       }
-    } else {
-      this.setActiveEmployerContentHeight();
     }
     if (!employer.responsibilities) {
       this.fetchAdditionalEmployerData(employer);
     }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.setSingleYearHeight();
   }
 
   // Cleanup

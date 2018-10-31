@@ -33,17 +33,20 @@ h5 {
 
   .active-employer {
     flex: 0 0 100%;
+    transition: height 0.25s ease-out;
   }
 
   .employer-name {
-    color: $gray-lightest;
+    color: #fff;
     font-size: 24px;
-    margin: 4px 0 8px;
+    margin: 0;
+    padding: 4px 0 8px;
   }
   .job-title {
-    color: $gray-lighter;
+    color: $blue-light;
     font-size: 18px;
     font-weight: 300;
+    margin: 0;
 
     .dates {
       display: inline-block;
@@ -53,11 +56,24 @@ h5 {
   }
 
   section {
-    margin: 36px 0;
+    padding: 0 0 30px;
 
+    &:first-of-type {
+      padding-top: 30px;
+    }
     h4 {
       color: $gray-lighter;
-      margin-bottom: 12px;
+      margin: 0;
+      padding-bottom: 12px;
+    }
+  }
+  .loading {
+    height: 54px;
+    position: relative;
+    box-sizing: content-box;
+
+    dm-loading {
+      left: 27px;
     }
   }
   .responsibilities {
@@ -70,16 +86,25 @@ h5 {
       list-style: none;
 
       li {
-        margin-bottom: 6px;
+        margin: 0;
+        padding-bottom: 6px;
         padding-left: 12px;
         text-indent: -6px;
 
+        &:last-child {
+          padding-bottom: 0;
+        }
         &::before {
           content: '\2022';
           display: inline-block;
           margin-right: 5px;
         }
       }
+    }
+  }
+  section.projects {
+    h4 {
+      padding-bottom: 15px;
     }
   }
 

@@ -1,7 +1,13 @@
+<!-- DESKTOP -->
 <div *ngIf="deviceDetector.isDesktop()" class="row no-gutters">
   <div class="col-lg-6 employer-details">
-    <div class="active-employer" *ngIf="activeEmployer">
+    <div
+      class="active-employer"
+      *ngIf="activeEmployer"
+      [ngStyle]="{ 'height': activeEmployerContentHeight + 'px' }"
+    >
 
+      <!-- Employer Details -->
       <h2 class="employer-name">{{ activeEmployer.companyName }}</h2>
       <h3 class="job-title">{{ activeEmployer.title }}
         <span class="dates">
@@ -10,6 +16,12 @@
         </span>
       </h3>
 
+      <!-- Loading -->
+      <section class="loading" *ngIf="!activeEmployer.responsibilities">
+        <dm-loading></dm-loading>
+      </section>
+
+      <!-- Responsibilities -->
       <section class="responsibilities" *ngIf="activeEmployer.responsibilities">
         <h4>Responsibilities</h4>
         <ul>
@@ -17,8 +29,10 @@
         </ul>
       </section>
 
+      <!-- Tools & Languages -->
       <section class="tools" *ngIf="activeEmployer.tools || activeEmployer.languages">
         <h4>Tools Used</h4>
+        <!-- Tools -->
         <div class="icon-row tools" *ngIf="activeEmployer.tools">
           <fa-icon
             *ngFor="let tool of activeEmployer.tools"
@@ -26,6 +40,7 @@
             [icon]="tool.icon"
           ></fa-icon>
         </div>
+        <!-- Languages -->
         <div class="icon-row languages" *ngIf="activeEmployer.languages">
           <fa-icon
             *ngFor="let language of activeEmployer.languages"
@@ -35,6 +50,7 @@
         </div>
       </section>
 
+      <!-- Projects -->
       <section class="projects" *ngIf="activeEmployer.projects">
         <h4>Featured Projects</h4>
         <div class="row">
@@ -53,6 +69,8 @@
 
     </div>
   </div>
+
+  <!-- Timeline -->
   <div class="col-lg-6 timeline">
     <ng-container *ngIf="activeYear && activeEmployer">
 
@@ -91,8 +109,10 @@
   </div>
 </div>
 
+<!-- MOBILE & TABLET -->
 <div class="employers-simple" *ngIf="!deviceDetector.isDesktop()">
   <ng-container *ngFor="let employer of employers">
+    <!-- Simple Employers List -->
     <div
       class="employer"
       [ngClass]="{ 'active': activeEmployer.id === employer.id }"
@@ -111,15 +131,19 @@
       </span>
       </h5>
     </div>
+    <!-- Employer Details -->
     <div
       class="employer-details"
       [ngStyle]="{ 'height': activeEmployer.id === employer.id ? activeEmployerContentHeight + 'px' : 0 }"
     >
       <ng-container *ngIf="activeEmployer.id === employer.id">
+
+        <!-- Loading -->
         <section class="loading" *ngIf="!activeEmployer.responsibilities">
           <dm-loading></dm-loading>
         </section>
 
+        <!-- Responsibilities -->
         <section class="responsibilities" *ngIf="activeEmployer.responsibilities">
           <h4>Responsibilities</h4>
           <ul>
@@ -127,8 +151,10 @@
           </ul>
         </section>
 
+        <!-- Tools & Languages -->
         <section class="tools" *ngIf="activeEmployer.tools || activeEmployer.languages">
           <h4>Tools Used</h4>
+          <!-- Tools -->
           <div class="icon-row tools" *ngIf="activeEmployer.tools">
             <fa-icon
               *ngFor="let tool of activeEmployer.tools"
@@ -136,6 +162,7 @@
               [icon]="tool.icon"
             ></fa-icon>
           </div>
+          <!-- Languages -->
           <div class="icon-row languages" *ngIf="activeEmployer.languages">
             <fa-icon
               *ngFor="let language of activeEmployer.languages"

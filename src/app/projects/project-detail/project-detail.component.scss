@@ -135,8 +135,10 @@
       border-right: 1px solid $gray-dark;
     }
     .icon {
+      height: 18px;
       color: $gray-lighter;
       font-size: 18px;
+      line-height: 1;
       transition: color 0.1s linear;
 
       &:not(:last-child) {

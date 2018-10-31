@@ -67,7 +67,7 @@
       class="tabs-nav"
       [ngClass]="{ 'empty': tabs.length === 0 }"
       [perfectScrollbar]="{ suppressScrollY: true, useBothWheelAxes: true, wheelSpeed: 0.33 }"
-      dragula="tabs"
+      [dragula]="deviceDetector.isDesktop() ? 'tabs' : ''"
       [(dragulaModel)]="tabs"
     >
       <a

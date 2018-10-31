@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'dm-view-source',
   templateUrl: './view-source.component.html',
   styleUrls: ['./view-source.component.scss']
 })
-export class ViewSourceComponent implements OnInit {
+export class ViewSourceComponent {
 
-  constructor() { }
-
-  ngOnInit() {
-  }
+  constructor(public deviceDetector: DeviceDetectorService) {}
 
 }

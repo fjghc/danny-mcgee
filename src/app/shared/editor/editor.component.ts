@@ -28,6 +28,7 @@ import { EditorFile, createFile } from './file.model';
 import { Tab, createTab } from './tab.model';
 import { EditorService } from './editor.service';
 import { AuthService } from '../../auth/auth.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 // Component config
 @Component({
@@ -67,7 +68,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   // Services
   constructor(
     public editorService: EditorService,
-    public authService: AuthService
+    public authService: AuthService,
+    public deviceDetector: DeviceDetectorService
   ) {}
 
   // Init

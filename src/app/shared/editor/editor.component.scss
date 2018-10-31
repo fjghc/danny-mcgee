@@ -226,3 +226,7 @@
     }
   }
 }
+
+:host-context(.tablet) {
+  height: calc(100vh - #{$header-size + $main-container-padding + 2});
+}

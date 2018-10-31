@@ -1,3 +1,10 @@
 <dm-editor
+  *ngIf="!deviceDetector.isMobile()"
   projectId="dannymcgee"
 ></dm-editor>
+
+<div class="alert info-alert" *ngIf="deviceDetector.isMobile()">
+  <h6>Sorry!</h6>
+  <p>The custom code explorer built for this website is not well optimized for mobile devices. Check it out in a desktop browser or tablet, or
+    <a href="https://github.com/dannymcgee/danny-mcgee" target="_blank">peruse the repo</a> on GitHub.</p>
+</div>

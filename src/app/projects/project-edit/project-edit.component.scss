@@ -1,9 +1,0 @@
-@import '../../shared/sass/vars';
-
-form {
-  width: 100%;
-}
-
-.row:not(:last-child) {
-  margin-bottom: $grid-gutter-width * 2;
-}

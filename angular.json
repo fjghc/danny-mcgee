@@ -27,7 +27,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/app/shared/sass/styles.scss"
+              "src/app/core/sass/styles.scss"
             ],
             "scripts": []
           },

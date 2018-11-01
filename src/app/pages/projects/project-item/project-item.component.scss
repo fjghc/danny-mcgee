@@ -1,0 +1,86 @@
+@import '../../../core/sass/vars';
+
+:host {
+  display: block;
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+  outline: none !important;
+
+  &::after::ng-deep {
+    content: ' ';
+    display: block;
+    width: 0;
+    height: 2px;
+    @include absolute(null, 50%, 0, 50%);
+    background-color: $primary;
+    @include transition(0.15s, ease-in, width, right, left);
+
+    .edit-mode & {
+      background-color: $warning;
+    }
+  }
+
+  &.personal::after {
+    background-color: $purple;
+  }
+
+  &:hover::after, &:focus::after {
+    width: 100%;
+    @include position(null, 0, 0, 0);
+  }
+}
+
+iframe {
+  width: 1366px;
+  height: 768px;
+  @include absolute(0, null, null, 0);
+  transform-origin: top left;
+  border: 0;
+  pointer-events: none;
+}
+
+.project-image {
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-top: 56.25%;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+
+  @media (min-width: map-get($grid-breakpoints, xxl)) {
+    padding-top: 70%;
+  }
+}
+
+// TODO: Merge common styles (project-detail.component.scss)
+.project-info {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px 14px;
+  @include absolute(null, 0, 0, 0);
+  transform: translateY(100%);
+  background-color: $gray-dark;
+  transition: transform 0.12s ease-out;
+
+  .project-year {
+    margin-right: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  .project-name {
+    margin: 0;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  :host:hover &, :host:focus &, ::ng-deep .edit-mode & {
+    transform: translateY(0);
+  }
+}

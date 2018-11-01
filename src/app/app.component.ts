@@ -1,10 +1,10 @@
 // TODO: Remove all async pipes from the entire app and stop setting object properties to promises or observables
 
 import { Component, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './shared/auth.service';
 import { Subscription } from 'rxjs';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { GestureHandler } from './shared/gesture-handler.service';
+import { GestureHandler } from './core/gesture-handler.service';
 
 @Component({
   selector: 'dm-root',

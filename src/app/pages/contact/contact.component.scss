@@ -1,0 +1,118 @@
+@import '../../core/sass/vars';
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - #{$header-size + $main-container-padding + 2});
+}
+
+form.minimal {
+  width: 650px;
+  max-width: 100%;
+
+  .icon {
+    display: block;
+    margin-bottom: 30px;
+    color: $gray-mid;
+    font-size: 120px;
+    text-align: center;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+
+.btn-primary {
+  transition: all 0.1s linear;
+
+  &::before {
+    transition: all 0.12s ease-in;
+  }
+  span {
+    transition: all 0.1s linear;
+  }
+  dm-loading {
+    transform: translateX(-50%) translateY(-50%) scale(0.65);
+    opacity: 0;
+    transition: all 0.1s linear;
+
+    &::ng-deep .icons {
+      color: $gray-lightest;
+    }
+  }
+  fa-icon {
+    opacity: 0;
+    @include absolute-center;
+    font-size: 24px;
+    transition: opacity 0.1s linear;
+  }
+
+  &.sending, &.sent, &.error {
+    pointer-events: none;
+    box-shadow: none !important;
+
+    span {
+      opacity: 0;
+    }
+  }
+
+  &.sent, &.error {
+    &::before {
+      width: 100%;
+      right: 0;
+      left: 0;
+    }
+    fa-icon {
+      opacity: 1;
+    }
+  }
+
+  &.sending {
+    &::before {
+      opacity: 0;
+    }
+    dm-loading {
+      opacity: 1;
+    }
+  }
+
+  &.sent {
+    border-color: darken($success, 5%);
+
+    &::before {
+      background-color: darken($success, 5%);
+    }
+  }
+
+  &.error {
+    border-color: darken($danger, 5%);
+
+    &::before {
+      background-color: darken($danger, 5%);
+    }
+  }
+}
+
+:host-context(.mobile) {
+  display: block;
+  width: calc(100vw - 30px);
+  min-height: 0;
+  // min-height: calc(100vh - #{$menu-width + 30 + 2});
+  margin: -15px;
+
+  form.minimal {
+    width: 100%;
+    padding: 30px 15px;
+    margin: 0;
+
+    .icon {
+      font-size: 85px;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+  }
+}

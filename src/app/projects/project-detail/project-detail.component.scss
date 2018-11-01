@@ -145,16 +145,24 @@
         margin-right: 10px;
       }
       &.partial {
-        opacity: 0.5;
+        color: transparentize($gray-lighter, 0.5);
       }
-      &:hover {
-        &.personal    { color: $purple }
-        &.design      { color: $pink }
-        &.front-end   { color: $blue-light }
-        &.back-end    { color: $orange }
-        &.photoshop   { color: #00c8ff }
-        &.illustrator { color: #ff7c00 }
-        &.wordpress   { color: #24baf1 }
+      $icon-colors: (
+        'personal':    $purple,
+        'design':      $pink,
+        'front-end':   $blue-light,
+        'back-end':    $orange,
+        'photoshop':   #00c8ff,
+        'illustrator': #ff7c00,
+        'wordpress':   #24baf1
+      );
+      @each $key, $value in $icon-colors {
+        &.#{$key}:hover {
+          color: $value;
+        }
+        &.#{$key}.partial:hover {
+          color: transparentize($value, 0.5);
+        }
       }
     }
   }

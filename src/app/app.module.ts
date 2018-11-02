@@ -10,16 +10,16 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './pages/home/home.component';
-import { ViewSourceComponent } from './pages/view-source/view-source.component';
-import { ContactComponent } from './pages/contact/contact.component';
-import { SkillsComponent } from './pages/skills/skills.component';
 import { ExperienceComponent } from './pages/experience/experience.component';
-import { EditorModule } from './editor/editor.module';
-import { SharedModule } from './shared/shared.module';
+import { SkillsComponent } from './pages/skills/skills.component';
 import { ProjectsModule } from './pages/projects/projects.module';
+import { ContactComponent } from './pages/contact/contact.component';
+import { ViewSourceComponent } from './pages/view-source/view-source.component';
+import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
-import { DatabaseModule } from './database/database.module';
 import { FormComponentsModule } from './form-components/form-components.module';
+import { DatabaseModule } from './database/database.module';
+import { EditorModule } from './editor/editor.module';
 
 // Module config
 @NgModule({

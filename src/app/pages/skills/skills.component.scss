@@ -57,7 +57,13 @@ li.graph-item {
   text-align: right;
 }
 .graph-rank {
-  flex: 0 0 60%;
+  flex: 0 0 auto;
+  width: 0;
+  transition: width 0.25s ease-in-out;
+
+  &.expanded {
+    width: 60%;
+  }
 
   &::before {
     content: ' ';
@@ -185,6 +191,14 @@ li.graph-item {
     font-size: 12px;
     text-align: left;
     margin-bottom: 6px;
+  }
+  .graph-rank {
+    display: block;
+    width: 0;
+
+    &.expanded {
+      width: 100%;
+    }
   }
 
   .timeline {

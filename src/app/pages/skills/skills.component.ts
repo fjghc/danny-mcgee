@@ -1,13 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  dmUnity,
-  dmPhotoshop,
-  dmIllustrator,
-  dmInDesign,
-  dmNationBuilder,
-  dmBootstrap,
-  dmCSharp
-} from '../../shared/icon-definitions';
+// Angular imports
+import { AfterViewInit, Component, Renderer2 } from '@angular/core';
+
+// Dependency imports
 import {
   faAngular,
   faCss3Alt,
@@ -19,13 +13,26 @@ import {
   faWordpressSimple
 } from '@fortawesome/free-brands-svg-icons';
 
+// App imports
+import {
+  dmUnity,
+  dmPhotoshop,
+  dmIllustrator,
+  dmInDesign,
+  dmNationBuilder,
+  dmBootstrap,
+  dmCSharp
+} from '../../shared/icon-definitions';
+
+// Component config
 @Component({
   selector: 'dm-skills',
   templateUrl: './skills.component.html',
   styleUrls: ['./skills.component.scss']
 })
-export class SkillsComponent implements OnInit {
+export class SkillsComponent implements AfterViewInit {
 
+  // Data
   icons = {
     html: faHtml5,
     css: faCss3Alt,
@@ -44,7 +51,6 @@ export class SkillsComponent implements OnInit {
     cSharp: dmCSharp
   };
 
-  // TODO: Move data to Firebase
   skillGraphs = [
     {
       heading: 'Languages',
@@ -139,8 +145,22 @@ export class SkillsComponent implements OnInit {
     }
   ];
 
-  constructor() {}
+  constructor(private renderer: Renderer2) {}
 
-  ngOnInit() {}
+  ngAfterViewInit() {
+    const graphRanks = document.querySelectorAll('.graph-rank');
+    this.staggerGraphAnimations(graphRanks, 0);
+  }
+
+  staggerGraphAnimations(graphRanks: NodeList, i: number) {
+    // Avoiding Angular's clunky child animation system
+    setTimeout(() => {
+      this.renderer.addClass(graphRanks[i], 'expanded');
+
+      if (++i < graphRanks.length) {
+        this.staggerGraphAnimations(graphRanks, i);
+      }
+    }, 75);
+  }
 
 }

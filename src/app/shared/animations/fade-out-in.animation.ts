@@ -1,7 +1,7 @@
 import { AnimationMetadata, query, sequence, style } from '@angular/animations';
 import { fadeConfig } from './animation.configs';
-import { fadeOut } from './fade-out.animation';
-import { fadeIn } from './fade-in.animation';
+import { fadeOutQuery } from './fade-out.animation';
+import { fadeInQuery } from './fade-in.animation';
 
 export function fadeOutIn(elem1Selector: string, elem2Selector?: string): AnimationMetadata {
   const initialStep: AnimationMetadata = elem2Selector ? query(
@@ -18,8 +18,8 @@ export function fadeOutIn(elem1Selector: string, elem2Selector?: string): Animat
 
   return sequence([
     initialStep ? initialStep : null,
-    fadeOut(elem1Selector),
+    fadeOutQuery(elem1Selector),
     middleStep ? middleStep : null,
-    fadeIn(elem2Selector ? elem2Selector : elem1Selector)
+    fadeInQuery(elem2Selector ? elem2Selector : elem1Selector)
   ]);
 }

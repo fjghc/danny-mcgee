@@ -3,17 +3,17 @@
   <div class="col-lg-6 employer-details">
     <div
       class="active-employer"
-      *ngIf="activeEmployer"
+      [@activeEmployerTransition]="activeEmployerIsReady"
     >
       <!-- Active Employer -->
 
       <!-- Loading -->
-      <section class="loading" *ngIf="!activeEmployer.responsibilities && isSlowLoading">
+      <section class="loading" *ngIf="(!activeEmployer || !activeEmployer.responsibilities) && isSlowLoading">
         <dm-loading></dm-loading>
       </section>
 
       <!-- Heading -->
-      <ng-container *ngIf="activeEmployer.responsibilities">
+      <section class="heading" *ngIf="activeEmployer && activeEmployer.responsibilities">
         <h2 class="employer-name">{{ activeEmployer.companyName }}</h2>
         <h3 class="job-title">{{ activeEmployer.title }}
           <span class="dates">
@@ -21,10 +21,10 @@
             {{ activeEmployer.dateEnd !== activeEmployer.dateStart ? ' - ' + activeEmployer.dateEnd : '' }}
           </span>
         </h3>
-      </ng-container>
+      </section>
 
       <!-- Responsibilities -->
-      <section class="responsibilities" *ngIf="activeEmployer.responsibilities">
+      <section class="responsibilities" *ngIf="activeEmployer && activeEmployer.responsibilities">
         <h4>Responsibilities</h4>
         <ul>
           <li *ngFor="let responsibility of activeEmployer.responsibilities">{{ responsibility }}</li>
@@ -32,7 +32,7 @@
       </section>
 
       <!-- Tools & Languages -->
-      <section class="tools" *ngIf="activeEmployer.tools || activeEmployer.languages">
+      <section class="tools" *ngIf="activeEmployer && (activeEmployer.tools || activeEmployer.languages)">
         <h4>Tools Used</h4>
         <!-- Tools -->
         <div class="icon-row tools" *ngIf="activeEmployer.tools">
@@ -53,7 +53,7 @@
       </section>
 
       <!-- Projects -->
-      <section class="projects" *ngIf="activeEmployer.projects">
+      <section class="projects" *ngIf="activeEmployer && activeEmployer.projects">
         <h4>Featured Projects</h4>
         <div class="row">
           <div
@@ -73,41 +73,41 @@
   </div>
 
   <!-- Timeline -->
-  <div class="col-lg-6 timeline">
-    <ng-container *ngIf="activeYear && activeEmployer">
-
-      <div
-        class="year-container"
-        *ngFor="let year of years"
-        [ngClass]="{ 'active': activeYear.year === year.year }"
-      >
-        <span class="year">{{ year.year }}</span>
-        <div class="employers" *ngIf="year.employers">
+  <div
+    class="col-lg-6 timeline"
+    *ngIf="activeYear && activeEmployer"
+    [@timelineTransition]="timelineIsReady"
+  >
+    <div
+      class="year-container"
+      *ngFor="let year of years"
+      [ngClass]="{ 'active': activeYear.year === year.year }"
+    >
+      <span class="year">{{ year.year }}</span>
+      <div class="employers" *ngIf="year.employers">
+        <div
+          class="employer"
+          *ngFor="let employer of year.employers"
+          [ngClass]="{ 'active': activeEmployer.id === employer.id }"
+          (click)="onSetActive(employer)"
+          (keydown.enter)="onSetActive(employer)"
+          (keydown.space)="onSetActive(employer)"
+          role="button"
+          [tabindex]="activeEmployer.id === employer.id ? '-1' : '0'"
+        >
+          <h4 class="name">{{ employer.companyName }}</h4>
+          <h5 class="title">{{ employer.title }}</h5>
           <div
-            class="employer"
-            *ngFor="let employer of year.employers"
-            [ngClass]="{ 'active': activeEmployer.id === employer.id }"
-            (click)="onSetActive(employer)"
-            (keydown.enter)="onSetActive(employer)"
-            (keydown.space)="onSetActive(employer)"
-            role="button"
-            [tabindex]="activeEmployer.id === employer.id ? '-1' : '0'"
-          >
-            <h4 class="name">{{ employer.companyName }}</h4>
-            <h5 class="title">{{ employer.title }}</h5>
-            <div
-              class="duration-line"
-              [ngStyle]="{
-                height: activeEmployer.id === employer.id
-                  ? (employer.dateEnd - employer.dateStart) * singleYearHeight + 'px'
-                  : '0'
-              }"
-            ></div>
-          </div>
+            class="duration-line"
+            [ngStyle]="{
+              height: activeEmployer.id === employer.id
+                ? (employer.dateEnd - employer.dateStart) * singleYearHeight + 'px'
+                : '0'
+            }"
+          ></div>
         </div>
       </div>
-
-    </ng-container>
+    </div>
   </div>
 </div>
 

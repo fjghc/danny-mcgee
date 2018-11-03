@@ -30,10 +30,13 @@ import {
 } from '../../shared/icon-definitions';
 import { ProjectsService } from '../projects/projects.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { timelineTransition, activeEmployerTransition } from './experience.animations';
+import { fadeConfig } from '../../shared/animations/animation.configs';
 
 // Component config
 @Component({
   selector: 'dm-experience',
+  animations: [timelineTransition, activeEmployerTransition],
   templateUrl: './experience.component.html',
   styleUrls: ['./experience.component.scss']
 })
@@ -79,6 +82,8 @@ export class ExperienceComponent implements OnInit, OnDestroy {
   activeEmployerContentHeight = 0;
   isSlowLoading = false;
   slowLoadingTimeout: number;
+  timelineIsReady = false;
+  activeEmployerIsReady = 'out';
 
   // Subs
   dataSub: Subscription;
@@ -133,12 +138,24 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.setSingleYearHeight();
+    this.timelineIsReady = true;
+    setTimeout(() => {
+      this.setSingleYearHeight();
+    }, fadeConfig.delay);
   }
 
   fetchAdditionalEmployerData(employer: Employer) {
     const collRef = 'employment';
     const docRef = employer.firestoreKey.toString();
+
+    const subCollectionsCount = 4;
+    let subCollectionsChecked = 0;
+
+    const checkReadiness = () => {
+      if (++subCollectionsChecked === subCollectionsCount) {
+        this.activeEmployerIsReady = 'in';
+      }
+    };
 
     // Only display the loading spinner if it takes longer than 250ms to load content
     this.isSlowLoading = false;
@@ -158,8 +175,11 @@ export class ExperienceComponent implements OnInit, OnDestroy {
           employer.responsibilities.push(item.content);
         }
         this.setActiveEmployerContentHeight();
+        checkReadiness();
       })
-      .catch(() => {});
+      .catch(() => {
+        checkReadiness();
+      });
 
     // Handle Tools
     this.dataHandler.getSubCollection(collRef, docRef, 'tools' )
@@ -170,8 +190,11 @@ export class ExperienceComponent implements OnInit, OnDestroy {
           employer.tools.push({ class: item.class, icon: this.icons[item.class] });
         }
         this.setActiveEmployerContentHeight();
+        checkReadiness();
       })
-      .catch(() => {});
+      .catch(() => {
+        checkReadiness();
+      });
 
     // Handle Languages
     this.dataHandler.getSubCollection(collRef, docRef, 'languages')
@@ -182,8 +205,11 @@ export class ExperienceComponent implements OnInit, OnDestroy {
           employer.languages.push({ class: item.class, icon: this.icons[item.class] });
         }
         this.setActiveEmployerContentHeight();
+        checkReadiness();
       })
-      .catch(() => {});
+      .catch(() => {
+        checkReadiness();
+      });
 
     // Handle Projects
     this.dataHandler.getSubCollection(collRef, docRef, 'projects')
@@ -194,8 +220,11 @@ export class ExperienceComponent implements OnInit, OnDestroy {
           const project = this.projectsService.getProject(item.id, 'db');
           employer.projects.push(project);
         }
+        checkReadiness();
       })
-      .catch(() => {});
+      .catch(() => {
+        checkReadiness();
+      });
   }
 
   // State manipulation
@@ -214,17 +243,31 @@ export class ExperienceComponent implements OnInit, OnDestroy {
         this.activeEmployerContentHeight = elem.scrollHeight;
       });
     }
-    // setTimeout(() => {
-    //   const selector = this.deviceDetector.isDesktop() ? '.active-employer' : '.employer.active + .employer-details';
-    //   const elem = this.elem.nativeElement.querySelector(selector);
-    //   this.activeEmployerContentHeight = elem.scrollHeight;
-    //   console.log('activeEmployerContentHeight:', this.activeEmployerContentHeight);
-    // });
   }
 
   // Events
   onSetActive(employer: Employer) {
-    this.activeEmployer = employer;
+
+    const checkReadiness = () => {
+      if (employer.responsibilities) {
+        setTimeout(() => {
+          this.activeEmployerIsReady = 'in';
+        });
+      }
+    };
+
+    // If there's already an active employer, fade it out before activating the new one
+    if (this.activeEmployer && this.deviceDetector.isDesktop()) {
+      this.activeEmployerIsReady = 'out';
+      setTimeout(() => {
+        this.activeEmployer = employer;
+        checkReadiness();
+      }, fadeConfig.delay);
+    } else {
+      this.activeEmployer = employer;
+      checkReadiness();
+    }
+
     this.activeYear = null;
     this.setActiveEmployerContentHeight();
 

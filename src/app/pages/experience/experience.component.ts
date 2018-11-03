@@ -246,8 +246,19 @@ export class ExperienceComponent implements OnInit, OnDestroy {
   }
 
   // Events
-  onSetActive(employer: Employer) {
+  onSetActive(employer: Employer, elem?: ElementRef) {
 
+    // Update 'active' class on buttons immediately
+    if (elem) {
+      console.log('elem:', elem);
+      const buttons = document.querySelectorAll('.employers > .employer');
+      for (let i = 0; i < buttons.length; i++) {
+        this.renderer.removeClass(buttons[i], 'active');
+      }
+      this.renderer.addClass(elem, 'active');
+    }
+
+    // Check readiness for animation state change
     const checkReadiness = () => {
       if (employer.responsibilities) {
         setTimeout(() => {

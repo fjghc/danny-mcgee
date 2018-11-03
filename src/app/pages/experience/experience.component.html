@@ -89,9 +89,10 @@
           class="employer"
           *ngFor="let employer of year.employers"
           [ngClass]="{ 'active': activeEmployer.id === employer.id }"
-          (click)="onSetActive(employer)"
-          (keydown.enter)="onSetActive(employer)"
-          (keydown.space)="onSetActive(employer)"
+          #elem
+          (click)="onSetActive(employer, elem)"
+          (keydown.enter)="onSetActive(employer, elem)"
+          (keydown.space)="onSetActive(employer, elem)"
           role="button"
           [tabindex]="activeEmployer.id === employer.id ? '-1' : '0'"
         >

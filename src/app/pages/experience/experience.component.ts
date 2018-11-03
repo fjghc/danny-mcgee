@@ -250,7 +250,6 @@ export class ExperienceComponent implements OnInit, OnDestroy {
 
     // Update 'active' class on buttons immediately
     if (elem) {
-      console.log('elem:', elem);
       const buttons = document.querySelectorAll('.employers > .employer');
       for (let i = 0; i < buttons.length; i++) {
         this.renderer.removeClass(buttons[i], 'active');

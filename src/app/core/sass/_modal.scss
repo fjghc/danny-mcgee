@@ -9,8 +9,8 @@ body.modal-open {
   align-items: center;
   justify-content: center;
 
-  &.hidden {
-    display: none;
+  &.clickthrough {
+    pointer-events: none;
   }
 
   .modal-backdrop {

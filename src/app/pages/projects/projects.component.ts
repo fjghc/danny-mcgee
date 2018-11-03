@@ -3,24 +3,25 @@ import { Component, HostBinding, OnDestroy, OnInit, Renderer2 } from '@angular/c
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Dependency imports
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { faEllipsisV } from '@fortawesome/pro-light-svg-icons';
 
 // App imports
 import { Project } from './project.model';
 import { AuthService } from '../../shared/auth.service';
 import { ProjectsService } from './projects.service';
+import { projectsTransition, projectModalTransition } from './projects.animations';
 
 // Component config
 @Component({
   selector: 'dm-projects',
+  animations: [projectsTransition, projectModalTransition],
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss']
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
 
   // Data
-  projectsObservable: Observable<Project[]>;
   projects: Project[];
   icons = {
     drag: faEllipsisV
@@ -29,8 +30,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   // State
   viewingSingle = false;
   @HostBinding('class.edit-mode') editMode: boolean;
+  projectsAnimState = 'out';
+  projectsCount: number;
+  projectsLoaded = 0;
 
   // Subs
+  projectsSub: Subscription;
   viewProjectSub: Subscription;
   closeProjectSub: Subscription;
   editModeSub: Subscription;
@@ -66,6 +71,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   // Events
+  onProjectImageLoad() {
+    if (++this.projectsLoaded === this.projectsCount) {
+      this.projectsAnimState = 'in';
+    }
+  }
+
   onViewProject(project: Project) {
     this.viewingSingle = true;
     this.router.navigate([project.id], { relativeTo: this.route });
@@ -93,10 +104,18 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.editMode = mode;
     if (mode) {
       // Create a temporary copy of the projects for editing
+      if (this.projectsSub) {
+        this.projectsSub.unsubscribe();
+      }
       this.projects = this.projectsService.getProjectsCopy();
     } else {
       // Get projects from database
-      this.projectsObservable = this.projectsService.watchProjects();
+      this.projectsSub = this.projectsService.watchProjects().subscribe(
+        projects => {
+          this.projects = projects;
+          this.projectsCount = this.projects.length;
+        }
+      );
     }
   }
 
@@ -111,6 +130,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   // Cleanup
   ngOnDestroy() {
+    if (this.projectsSub) {
+      this.projectsSub.unsubscribe();
+    }
     this.viewProjectSub.unsubscribe();
     this.closeProjectSub.unsubscribe();
     this.editModeSub.unsubscribe();

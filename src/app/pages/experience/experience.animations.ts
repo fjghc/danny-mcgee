@@ -1,5 +1,5 @@
 import { AnimationTriggerMetadata, query, stagger, state, style, transition, trigger } from '@angular/animations';
-import { fadeIn, fadeOut, fadeOutQuery } from '../../shared/animations';
+import { fadeIn, fadeOut } from '../../shared/animations';
 
 export const timelineTransition: AnimationTriggerMetadata = trigger('timelineTransition', [
   transition('void => *', fadeIn)
@@ -14,13 +14,4 @@ export const activeEmployerTransition: AnimationTriggerMetadata = trigger('activ
     query('section', style({ opacity: 0 }), { optional: true }),
     query('section', stagger(100, fadeIn), { optional: true })
   ])
-
-
-  // state('in', style({ transform: `translateY(0)`, opacity: 1 })),
-  // state('out', style({ transform: `translateY(${fadeConfig.distance}px)`, opacity: 0 })),
-  // transition('in => out', animate(fadeConfig.delay)),
-  // transition('out => in', [
-  //   query('section', style({ opacity: 0 }), { optional: true }),
-  //   query('section', stagger(100, fadeIn), { optional: true })
-  // ]),
 ]);

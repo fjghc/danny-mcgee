@@ -83,7 +83,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
   isSlowLoading = false;
   slowLoadingTimeout: number;
   timelineIsReady = false;
-  activeEmployerIsReady = 'out';
+  activeEmployerAnimState = 'out';
 
   // Subs
   dataSub: Subscription;
@@ -153,7 +153,7 @@ export class ExperienceComponent implements OnInit, OnDestroy {
 
     const checkReadiness = () => {
       if (++subCollectionsChecked === subCollectionsCount) {
-        this.activeEmployerIsReady = 'in';
+        this.activeEmployerAnimState = 'in';
       }
     };
 
@@ -261,14 +261,14 @@ export class ExperienceComponent implements OnInit, OnDestroy {
     const checkReadiness = () => {
       if (employer.responsibilities) {
         setTimeout(() => {
-          this.activeEmployerIsReady = 'in';
+          this.activeEmployerAnimState = 'in';
         });
       }
     };
 
     // If there's already an active employer, fade it out before activating the new one
     if (this.activeEmployer && this.deviceDetector.isDesktop()) {
-      this.activeEmployerIsReady = 'out';
+      this.activeEmployerAnimState = 'out';
       setTimeout(() => {
         this.activeEmployer = employer;
         checkReadiness();

@@ -7,8 +7,9 @@
     class="col main"
     (swipeleft)="gestureHandler.swipeLeft.next()"
     (swiperight)="gestureHandler.swipeRight.next()"
+    [@routerTransition]="getState(outlet)"
   >
-    <router-outlet></router-outlet>
+    <router-outlet #outlet="outlet"></router-outlet>
   </div>
 </div>
 

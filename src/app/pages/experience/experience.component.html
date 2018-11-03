@@ -4,22 +4,24 @@
     <div
       class="active-employer"
       *ngIf="activeEmployer"
-      [ngStyle]="{ 'height': activeEmployerContentHeight + 'px' }"
     >
-
-      <!-- Employer Details -->
-      <h2 class="employer-name">{{ activeEmployer.companyName }}</h2>
-      <h3 class="job-title">{{ activeEmployer.title }}
-        <span class="dates">
-          {{ activeEmployer.dateStart }}
-          {{ activeEmployer.dateEnd !== activeEmployer.dateStart ? ' - ' + activeEmployer.dateEnd : '' }}
-        </span>
-      </h3>
+      <!-- Active Employer -->
 
       <!-- Loading -->
-      <section class="loading" *ngIf="!activeEmployer.responsibilities">
+      <section class="loading" *ngIf="!activeEmployer.responsibilities && isSlowLoading">
         <dm-loading></dm-loading>
       </section>
+
+      <!-- Heading -->
+      <ng-container *ngIf="activeEmployer.responsibilities">
+        <h2 class="employer-name">{{ activeEmployer.companyName }}</h2>
+        <h3 class="job-title">{{ activeEmployer.title }}
+          <span class="dates">
+            {{ activeEmployer.dateStart }}
+            {{ activeEmployer.dateEnd !== activeEmployer.dateStart ? ' - ' + activeEmployer.dateEnd : '' }}
+          </span>
+        </h3>
+      </ng-container>
 
       <!-- Responsibilities -->
       <section class="responsibilities" *ngIf="activeEmployer.responsibilities">

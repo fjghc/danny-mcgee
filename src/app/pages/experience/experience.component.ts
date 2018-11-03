@@ -77,6 +77,8 @@ export class ExperienceComponent implements OnInit, OnDestroy {
   activeYear: { year: number, employers?: Employer[] };
   singleYearHeight: number;
   activeEmployerContentHeight = 0;
+  isSlowLoading = false;
+  slowLoadingTimeout: number;
 
   // Subs
   dataSub: Subscription;
@@ -138,9 +140,18 @@ export class ExperienceComponent implements OnInit, OnDestroy {
     const collRef = 'employment';
     const docRef = employer.firestoreKey.toString();
 
+    // Only display the loading spinner if it takes longer than 250ms to load content
+    this.isSlowLoading = false;
+    clearTimeout(this.slowLoadingTimeout);
+    this.slowLoadingTimeout = setTimeout(() => {
+      this.isSlowLoading = true;
+    }, 250);
+
     // Handle Responsibilities
     this.dataHandler.getSubCollection(collRef, docRef, 'responsibilities')
       .then(response => {
+        clearTimeout(this.slowLoadingTimeout);
+
         employer.responsibilities = [];
 
         for (const item of response) {
@@ -192,15 +203,23 @@ export class ExperienceComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const yearElems = this.elem.nativeElement.querySelectorAll('.year-container');
       this.singleYearHeight = yearElems[1].getBoundingClientRect().top - yearElems[0].getBoundingClientRect().top;
-    });
+    }, 500);
   }
 
   setActiveEmployerContentHeight() {
-    setTimeout(() => {
-      const selector = this.deviceDetector.isDesktop() ? '.active-employer' : '.employer.active + .employer-details';
-      const elem = this.elem.nativeElement.querySelector(selector);
-      this.activeEmployerContentHeight = elem.scrollHeight;
-    });
+    if (!this.deviceDetector.isDesktop()) {
+      setTimeout(() => {
+        const selector = this.deviceDetector.isDesktop() ? '.active-employer' : '.employer.active + .employer-details';
+        const elem = this.elem.nativeElement.querySelector(selector);
+        this.activeEmployerContentHeight = elem.scrollHeight;
+      });
+    }
+    // setTimeout(() => {
+    //   const selector = this.deviceDetector.isDesktop() ? '.active-employer' : '.employer.active + .employer-details';
+    //   const elem = this.elem.nativeElement.querySelector(selector);
+    //   this.activeEmployerContentHeight = elem.scrollHeight;
+    //   console.log('activeEmployerContentHeight:', this.activeEmployerContentHeight);
+    // });
   }
 
   // Events

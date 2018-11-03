@@ -106,7 +106,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   onCloseMenu() {
     this.isLocked = false;
-    this.onPeek(1000);
+    // this.onPeek(1000);
   }
 
   onLogout() {

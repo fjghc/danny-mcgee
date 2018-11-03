@@ -8,6 +8,7 @@ const projectsRoutes: Routes = [
   {
     path: 'projects',
     component: ProjectsComponent,
+    data: { state: 'projects' },
     children: [
       {
         path: 'new',

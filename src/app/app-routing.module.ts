@@ -11,27 +11,33 @@ const appRoutes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: { state: 'home' }
   },
   {
     path: 'experience',
-    component: ExperienceComponent
+    component: ExperienceComponent,
+    data: { state: 'experience' }
   },
   {
     path: 'skills',
-    component: SkillsComponent
+    component: SkillsComponent,
+    data: { state: 'skills' }
   },
   {
     path: 'contact',
-    component: ContactComponent
+    component: ContactComponent,
+    data: { state: 'contact' }
   },
   {
     path: 'view-source',
-    component: ViewSourceComponent
+    component: ViewSourceComponent,
+    data: { state: 'view-source' }
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    data: { state: 'login' }
   },
 ];
 

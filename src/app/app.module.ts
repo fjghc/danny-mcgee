@@ -1,6 +1,7 @@
 // Angular imports
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Dependency imports
 import { DragulaModule } from 'ng2-dragula';
@@ -33,6 +34,7 @@ import { EditorModule } from './editor/editor.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     SharedModule,
     FormComponentsModule,
     CoreModule,

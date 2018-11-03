@@ -3,6 +3,11 @@
 
 // General
 
+:host {
+  display: block;
+  height: 100%;
+}
+
 h4, h5 {
   font-size: 14px;
   transition: color 0.1s linear;

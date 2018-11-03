@@ -3,6 +3,11 @@
 
 // Page layout
 
+:host {
+  display: block;
+  height: 100%;
+}
+
 .row {
   min-height: 100%;
 }

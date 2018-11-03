@@ -1,20 +1,29 @@
-// TODO: Remove all async pipes from the entire app and stop setting object properties to promises or observables
-
+// Angular imports
 import { Component, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { AuthService } from './shared/auth.service';
+
+// Dependency imports
 import { Subscription } from 'rxjs';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { GestureHandler } from './core/gesture-handler.service';
 
+// App imports
+import { AuthService } from './shared/auth.service';
+import { GestureHandler } from './core/gesture-handler.service';
+import { RouterOutlet } from '@angular/router';
+import { routerTransition } from './core/router.animations';
+
+// Component config
 @Component({
   selector: 'dm-root',
+  animations: [routerTransition],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  subscription: Subscription;
+  // Subs
+  authSub: Subscription;
 
+  // Services
   constructor(
     private authService: AuthService,
     private deviceDetector: DeviceDetectorService,
@@ -22,8 +31,9 @@ export class AppComponent implements OnInit, OnDestroy {
     public gestureHandler: GestureHandler
   ) {}
 
+  // Init
   ngOnInit() {
-    this.subscription = this.authService.listenForAuthChanges().subscribe(
+    this.authSub = this.authService.listenForAuthChanges().subscribe(
       () => {
         this.authService.setAuthenticationStatus();
       }
@@ -38,6 +48,12 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
+  // State management
+  getState(outlet: RouterOutlet) {
+    return outlet.activatedRouteData.state;
+  }
+
+  // Events
   @HostListener('document:swipeleft')
   onSwipeLeft() {
     this.gestureHandler.swipeLeft.next();
@@ -48,8 +64,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.gestureHandler.swipeRight.next();
   }
 
+  // Cleanup
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.authSub.unsubscribe();
   }
 
 }

@@ -4,9 +4,12 @@ import { AuthService } from '../../shared/auth.service';
 import { Subscription } from 'rxjs';
 import { ProjectsService } from '../../pages/projects/projects.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { fadeConfig } from '../../shared/animations/animation.configs';
+import { headerTitleTransition } from '../core.animations';
 
 @Component({
   selector: 'dm-header',
+  animations: [headerTitleTransition],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -14,6 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   pageTitle: string;
   subscription: Subscription;
+  titleAnimState = 'in';
 
   constructor(
     public authService: AuthService,
@@ -27,8 +31,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       event => {
         if (event instanceof RoutesRecognized) {
           const url = event.url.toString();
-
-          this.pageTitle = this.getPageTitleForUrl(url);
+          this.titleAnimState = 'out';
+          setTimeout(() => {
+            this.pageTitle = this.getPageTitleForUrl(url);
+            this.titleAnimState = 'in';
+          }, fadeConfig.delay);
         }
       }
     );

@@ -1,6 +1,6 @@
 <dm-logo></dm-logo>
 <span *ngIf="!deviceDetector.isMobile()" class="header-separator">::</span>
-<h1 class="page-title">{{ pageTitle }}</h1>
+<h1 class="page-title" [@headerTitleTransition]="titleAnimState">{{ pageTitle }}</h1>
 
 <div class="btn-container">
   <ng-container *ngIf="authService.isAuthenticated() && pageTitle === 'Projects'">

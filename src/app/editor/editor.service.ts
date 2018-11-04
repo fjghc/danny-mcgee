@@ -222,6 +222,9 @@ export class EditorService {
 
     if (selectedFile) {
       if (selectedFile.type === 'folder') {
+        if (!selectedFile.contents) {
+          selectedFile.contents = [];
+        }
         parent = selectedFile.contents as EditorFile[];
         path = selectedFile.path;
       } else {

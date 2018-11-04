@@ -269,6 +269,9 @@
 
     const ngClasses = {
       'ActivatedRoute': true,
+      'AngularFirestore': true,
+      'AngularFireDatabase': true,
+      'AngularFireStorage': true,
       'Attribute': true,
       'Component': true,
       'ContentChild': true,
@@ -278,6 +281,7 @@
       'Host': true,
       'HostBinding': true,
       'HostListener': true,
+      'HttpClient': true,
       'Inject': true,
       'Injectable': true,
       'Input': true,

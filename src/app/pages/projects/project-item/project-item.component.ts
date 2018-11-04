@@ -11,7 +11,7 @@ export class ProjectItemComponent implements OnInit {
 
   @Input() project: Project;
   bypassedUrl: SafeResourceUrl;
-  image: HTMLImageElement;
+  // image: HTMLImageElement;
   imageLocation: string;
 
   @Output() imageReady = new EventEmitter();
@@ -20,9 +20,9 @@ export class ProjectItemComponent implements OnInit {
 
   ngOnInit() {
     this.imageLocation = `assets/projects/${this.project.id}.${this.project.imageFormat}`;
-    this.image = new Image();
-    this.image.src = this.imageLocation;
-    this.image.onload = () => {
+    const image = new Image();
+    image.src = this.imageLocation;
+    image.onload = () => {
       this.imageReady.emit();
     };
     this.bypassedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.url);

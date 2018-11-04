@@ -1,7 +1,15 @@
-<dm-header></dm-header>
+<dm-header
+  *ngIf="deviceDetector.isDesktop() || deviceDetector.isTablet()"
+  [@headerInTransition]
+></dm-header>
+<dm-header *ngIf="deviceDetector.isMobile()"></dm-header>
 <div class="row no-gutters">
   <div class="col-auto navbar">
-    <dm-navbar></dm-navbar>
+    <dm-navbar
+      *ngIf="deviceDetector.isDesktop() || deviceDetector.isTablet()"
+      [@navInTransition]
+    ></dm-navbar>
+    <dm-navbar *ngIf="deviceDetector.isMobile()"></dm-navbar>
   </div>
   <div
     class="col main"

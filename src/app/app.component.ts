@@ -10,11 +10,12 @@ import { AuthService } from './shared/auth.service';
 import { GestureHandler } from './core/gesture-handler.service';
 import { RouterOutlet } from '@angular/router';
 import { routerTransition } from './core/router.animations';
+import { headerInTransition, navInTransition } from './core/load-in.animations';
 
 // Component config
 @Component({
   selector: 'dm-root',
-  animations: [routerTransition],
+  animations: [routerTransition, navInTransition, headerInTransition],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -26,8 +27,8 @@ export class AppComponent implements OnInit, OnDestroy {
   // Services
   constructor(
     private authService: AuthService,
-    private deviceDetector: DeviceDetectorService,
     private renderer: Renderer2,
+    public deviceDetector: DeviceDetectorService,
     public gestureHandler: GestureHandler
   ) {}
 

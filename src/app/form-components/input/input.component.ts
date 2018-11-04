@@ -1,6 +1,8 @@
+// Angular imports
 import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit,  } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
+// Component config
 @Component({
   selector: 'dm-input',
   host: { class: 'form-group' },
@@ -9,6 +11,7 @@ import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 })
 export class InputComponent implements OnInit, AfterViewInit {
 
+  // Data
   @Input() label: string;
   @Input() id: string;
   @Input() type: string;
@@ -16,13 +19,16 @@ export class InputComponent implements OnInit, AfterViewInit {
   @Input() form: FormGroup;
   @Input() validationMessage: string;
   control: FormControl;
-  isValid = true;
 
+  // State
+  isValid = true;
   @HostBinding('class.filled') isFilled = false;
   @HostBinding('class.focus') isFocused = false;
 
+  // Services
   constructor(private element: ElementRef) {}
 
+  // Init
   ngOnInit() {
     this.control = new FormControl(null, this.validators);
     this.form.addControl(this.id, this.control);
@@ -52,6 +58,7 @@ export class InputComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
+  // Events
   onFocus() {
     this.isFocused = true;
   }

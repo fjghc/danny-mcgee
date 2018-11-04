@@ -1,21 +1,38 @@
+// Angular imports
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+// Dependency imports
 import * as firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
+
+// App imports
 import { ProjectsService } from '../pages/projects/projects.service';
 
+// Service config
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
+  // State
   token: string = null;
 
+  // Services
   constructor(
     private afAuth: AngularFireAuth,
     private router: Router,
     private projectsService: ProjectsService
   ) {}
 
+  // Getters
+  isAuthenticated() {
+    return this.token !== null;
+  }
+
+  listenForAuthChanges() {
+    return this.afAuth.authState;
+  }
+
+  // State manipulation
   login(email: string, password: string, remember?: boolean) {
     if (!remember) {
       this.afAuth.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
@@ -35,14 +52,6 @@ export class AuthService {
       });
   }
 
-  isAuthenticated() {
-    return this.token !== null;
-  }
-
-  getToken() {
-    return this.token;
-  }
-
   setAuthenticationStatus() {
     if (this.afAuth.auth.currentUser) {
       this.afAuth.auth.currentUser.getIdToken()
@@ -56,10 +65,6 @@ export class AuthService {
     } else {
       this.token = null;
     }
-  }
-
-  listenForAuthChanges() {
-    return this.afAuth.authState;
   }
 
   private loginSetTokenAndRedirect(email: string, password: string) {

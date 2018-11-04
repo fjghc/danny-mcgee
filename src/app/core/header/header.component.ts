@@ -1,12 +1,18 @@
+// Angular imports
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RoutesRecognized } from '@angular/router';
-import { AuthService } from '../../shared/auth.service';
+import { Router, RouterEvent, RoutesRecognized } from '@angular/router';
+
+// Dependency imports
 import { Subscription } from 'rxjs';
-import { ProjectsService } from '../../pages/projects/projects.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
+
+// App imports
+import { AuthService } from '../../shared/auth.service';
+import { ProjectsService } from '../../pages/projects/projects.service';
 import { fadeConfig } from '../../shared/animations/animation.configs';
 import { headerTitleTransition } from '../core.animations';
 
+// Component config
 @Component({
   selector: 'dm-header',
   animations: [headerTitleTransition],
@@ -15,10 +21,16 @@ import { headerTitleTransition } from '../core.animations';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+  // Data
   pageTitle: string;
-  subscription: Subscription;
+
+  // State
   titleAnimState = 'in';
 
+  // Subs
+  routerEventsSub: Subscription;
+
+  // Services
   constructor(
     public authService: AuthService,
     public projectsService: ProjectsService,
@@ -26,21 +38,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router
   ) { }
 
+  // Init
   ngOnInit() {
-    this.subscription = this.router.events.subscribe(
-      event => {
-        if (event instanceof RoutesRecognized) {
-          const url = event.url.toString();
-          this.titleAnimState = 'out';
-          setTimeout(() => {
-            this.pageTitle = this.getPageTitleForUrl(url);
-            this.titleAnimState = 'in';
-          }, fadeConfig.delay);
-        }
-      }
+    this.routerEventsSub = this.router.events.subscribe(
+      event => this.onRouterEvent(event as RouterEvent)
     );
   }
 
+  // Events
+  onRouterEvent(event: RouterEvent) {
+    if (event instanceof RoutesRecognized) {
+      const url = event.url.toString();
+      this.titleAnimState = 'out';
+      setTimeout(() => {
+        this.pageTitle = this.getPageTitleForUrl(url);
+        this.titleAnimState = 'in';
+      }, fadeConfig.delay);
+    }
+  }
+
+  // Data manipulation
   getPageTitleForUrl(url: string): string {
     if (url === '/') {
       return 'dannymcgee.io';
@@ -66,8 +83,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  // Cleanup
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.routerEventsSub.unsubscribe();
   }
 
 }

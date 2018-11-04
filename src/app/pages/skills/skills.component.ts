@@ -145,13 +145,16 @@ export class SkillsComponent implements AfterViewInit {
     }
   ];
 
+  // Services
   constructor(private renderer: Renderer2) {}
 
+  // Init
   ngAfterViewInit() {
     const graphRanks = document.querySelectorAll('.graph-rank');
     this.staggerGraphAnimations(graphRanks, 0);
   }
 
+  // DOM manipulation
   staggerGraphAnimations(graphRanks: NodeList, i: number) {
     // Avoiding Angular's clunky child animation system
     setTimeout(() => {

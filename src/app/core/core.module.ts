@@ -4,7 +4,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SharedModule } from '../shared/shared.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { MenuItemComponent } from './navbar/menu-item/menu-item.component';
-import { LoginComponent } from './auth/login/login.component';
+import { LoginComponent } from './login/login.component';
 import { DatabaseModule } from '../database/database.module';
 import { FormComponentsModule } from '../form-components/form-components.module';
 import * as Hammer from 'hammerjs';

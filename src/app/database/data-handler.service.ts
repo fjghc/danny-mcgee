@@ -106,7 +106,7 @@ export class DataHandler {
     const regex = RegExp(/^(http(s)?:\/\/).*$/);
 
     if (!regex.test(refOrUrl)) {
-      // This is NOT a URL, so resolve the reference with Firebase Storage
+      // this is NOT a URL, so resolve the reference with Firebase Storage
       return new Promise((resolve, reject) => {
         this.getDownloadUrlForRef(refOrUrl).toPromise()
           .then(downloadUrl => {

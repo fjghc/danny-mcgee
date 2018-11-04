@@ -24,10 +24,6 @@ $orange: #FF953F;
 
 $purple: #a787f8;
 
-@function brightenUp($color) {
-  @return lighten(saturate($color, 100%), 1%);
-}
-
 
 
 // Bootstrap overwrites

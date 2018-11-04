@@ -3,7 +3,7 @@ import { FormGroup, Validators } from '@angular/forms';
 
 import { faLockAlt } from '@fortawesome/pro-light-svg-icons';
 
-import { AuthService } from '../../../shared/auth.service';
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
   selector: 'dm-login',

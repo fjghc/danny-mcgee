@@ -34,9 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
   // Init
   ngOnInit() {
     this.authSub = this.authService.listenForAuthChanges().subscribe(
-      () => {
-        this.authService.setAuthenticationStatus();
-      }
+      () => this.authService.setAuthenticationStatus()
     );
     this.renderer.addClass(document.body, this.deviceDetector.getDeviceInfo().browser);
     this.renderer.addClass(

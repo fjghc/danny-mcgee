@@ -5,16 +5,16 @@
   if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(
       require("../../../../node_modules/codemirror/lib/codemirror"),
-      require("../../../../node_modules/codemirror/mode/xml/xml"),
+      require("./xml"),
       require("./javascript"),
       require("../../../../node_modules/codemirror/mode/css/css")
     );
   else if (typeof define == "function" && define.amd) // AMD
     define([
       "../../../../node_modules/codemirror/lib/codemirror",
-      "../../../../../node_modules/codemirror/mode/xml/xml",
+      "./xml",
       "./javascript",
-      "../../../../../node_modules/codemirror/mode/css/css"
+      "../../../../node_modules/codemirror/mode/css/css"
     ], mod);
   else // Plain browser env
     mod(CodeMirror);
@@ -106,7 +106,6 @@
 
       // Get the Typescript mode for insertion
       var tsMode = CodeMirror.getMode(config, "application/typescript");
-
       var style = htmlMode.token(stream, state.htmlState);
       var attr = style === 'attribute';
 
@@ -185,7 +184,15 @@
       var interpPos = stream.current().search(interpStart);
 
       if (interpPos !== -1) {
-        // Interpolator brackets found, so back up the stream to their start position
+        // Interpolator brackets found
+        if (style === 'string') {
+          // If we're in a string, set a flag and save the opening quote so we can recognize when it closes
+          state.inString = true;
+          state.stringCloser = stream.current().match(/^["'`]/)[0];
+          state.inInterp = true;
+        }
+
+        // Back up the stream to the start of the interpolation
         stream.backUp(stream.current().length - interpPos);
 
         state.token = function(stream, state) {
@@ -197,6 +204,7 @@
             // Stop parsing Typescript
             state.token = html;
             state.localState = state.localMode = null;
+            state.inInterp = false;
             // Style the closing brackets
             return 'operator-2';
           }
@@ -208,6 +216,16 @@
         state.localState = CodeMirror.startState(tsMode, htmlMode.indent(state.htmlState, ""));
       }
 
+      // If interpolation occurred in an attribute value, skip to the end of the string and continue
+      if (state.inString && !state.inInterp) {
+        stream.skipTo(state.stringCloser);
+        stream.eat(state.stringCloser);
+        state.inString = false;
+        state.stringCloser = null;
+        htmlMode.closeAttrValue(state.htmlState, stream);
+        return 'string';
+      }
+
       return style;
     }
 
@@ -217,6 +235,9 @@
         return {
           token: html,
           inTag: null,
+          inString: false,
+          stringCloser: null,
+          inInterp: false,
           inNgAttr: false,
           ngBlockStarted: false,
           ngForBlock: {

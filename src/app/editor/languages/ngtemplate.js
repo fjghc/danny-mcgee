@@ -153,6 +153,8 @@
                 state.token = html;
                 state.localState = state.localMode = null;
                 state.ngBlockStarted = false;
+                state.inNgAttr = false;
+                htmlMode.closeAttrValue(state.htmlState, stream);
                 return 'string';
               }
             }
@@ -253,14 +255,28 @@
       },
 
       copyState: function (state) {
+
         var local;
         if (state.localState) {
           local = CodeMirror.copyState(state.localMode, state.localState);
         }
+
+        var ngForBlock;
+        if (state.ngForBlock) {
+          ngForBlock = { ...state.ngForBlock };
+        }
+
         return {
           token: state.token,
           inTag: state.inTag,
-          localMode: state.localMode, localState: local,
+          inString: state.inString,
+          stringCloser: state.stringCloser,
+          inInterp: state.inInterp,
+          inNgAttr: state.inNgAttr,
+          ngBlockStarted: state.ngBlockStarted,
+          ngForBlock: ngForBlock,
+          localMode: state.localMode,
+          localState: local,
           htmlState: CodeMirror.copyState(htmlMode, state.htmlState)
         };
       },

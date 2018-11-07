@@ -263,7 +263,12 @@
 
         var ngForBlock;
         if (state.ngForBlock) {
-          ngForBlock = { ...state.ngForBlock };
+          ngForBlock = {
+            started: state.ngForBlock.started,
+            tagName: state.ngForBlock.tagName,
+            indent: state.ngForBlock.indent,
+            vars: state.ngForBlock.vars.slice()
+          };
         }
 
         return {

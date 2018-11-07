@@ -395,10 +395,6 @@
         state.state = attrState;
         state.tokenize = inTag;
       },
-
-      lookForClose(state, quote) {
-        state.tokenize = inAttribute(quote);
-      }
     };
   });
 

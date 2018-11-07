@@ -141,6 +141,10 @@
       line-height: 1;
       transition: color 0.1s linear;
 
+      ::ng-deep .ie & {
+        width: 18px;
+      }
+
       &:not(:last-child) {
         margin-right: 10px;
       }

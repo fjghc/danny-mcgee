@@ -10,11 +10,19 @@
 
 .row {
   min-height: 100%;
+
+  ::ng-deep .ie & {
+    height: 100%;
+  }
 }
 .skill-graphs, .timeline {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+
+  ::ng-deep .ms-edge &, ::ng-deep .ie & {
+    justify-content: space-around;
+  }
 }
 
 .skill-graphs {
@@ -111,6 +119,10 @@ li.graph-item {
   font-size: 24px;
   line-height: 1;
   text-align: right;
+
+  ::ng-deep .ie & {
+    flex: 0 0 60px;
+  }
 
   &::after {
     content: ' ';

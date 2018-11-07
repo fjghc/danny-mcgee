@@ -57,12 +57,12 @@ export class TooltipDirective implements OnInit, AfterViewInit {
       this.renderer.setStyle(
         this.tooltipElem,
         'transform',
-        `translateX(calc(-50% + ${Math.abs(rect.x)}px)) translateY(calc(-100% - 8px))`
+        `translateX(-50%) translateX(${Math.abs(rect.x)}px) translateY(-100%) translateY(-8px)`
       );
       this.renderer.setStyle(
         this.tooltipArrow,
         'transform',
-        `translateX(calc(-50% - ${Math.abs(rect.x)}px))`
+        `translateX(-50%) translateX(-${Math.abs(rect.x)}px)`
       );
     }
   }

@@ -7,6 +7,10 @@
   min-height: calc(100vh - #{$header-size + $main-container-padding + 2});
 }
 
+:host-context(.ie) {
+  height: 100%;
+}
+
 .about-me {
   flex: 0 0 100%;
   max-width: 800px;

@@ -9,16 +9,20 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { AuthService } from './shared/auth.service';
 import { GestureHandler } from './core/gesture-handler.service';
 import { RouterOutlet } from '@angular/router';
-import { routerTransition, headerInTransition, navInTransition } from './core/core.animations';
+import { routerTransition, routerTransitionFallback, headerInTransition, navInTransition } from './core/core.animations';
+import { fadeConfig } from './shared/animations/animation.configs';
 
 // Component config
 @Component({
   selector: 'dm-root',
-  animations: [routerTransition, navInTransition, headerInTransition],
+  animations: [routerTransition, routerTransitionFallback, navInTransition, headerInTransition],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+
+  // Data
+  browser: string;
 
   // Subs
   authSub: Subscription;
@@ -36,7 +40,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.listenForAuthChanges().subscribe(
       () => this.authService.setAuthenticationStatus()
     );
-    this.renderer.addClass(document.body, this.deviceDetector.getDeviceInfo().browser);
+    this.browser = this.deviceDetector.getDeviceInfo().browser;
+    this.renderer.addClass(document.body, this.browser);
     this.renderer.addClass(
       document.body,
       this.deviceDetector.isMobile() ? 'mobile'
@@ -60,6 +65,26 @@ export class AppComponent implements OnInit, OnDestroy {
   @HostListener('document:swiperight')
   onSwipeRight() {
     this.gestureHandler.swipeRight.next();
+  }
+
+  onRouterTransitionStart($event) {
+    // Edge and IE don't seem to correctly handle query steps in an Angular animation sequence,
+    // so we need to manually hide the entering node until it's ready to show
+    const childNodes = $event.element.childNodes;
+
+    if (childNodes.length === 3) {
+      // if childNodes.length is more than 2, there's a leaving node which needs to fade out
+      // before the entering node should start to fade in, so hide the entering node
+      const entering = childNodes[1];
+      const leaving = childNodes[2];
+      this.renderer.addClass(entering, 'animation-state-hidden');
+
+      setTimeout(() => {
+        // after the leaving node has finished fading out, hide it and unhide the entering node
+        this.renderer.removeClass(entering, 'animation-state-hidden');
+        this.renderer.addClass(leaving, 'animation-state-hidden');
+      }, fadeConfig.delay);
+    }
   }
 
   // Cleanup

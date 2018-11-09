@@ -11,11 +11,24 @@
     ></dm-navbar>
     <dm-navbar *ngIf="deviceDetector.isMobile()"></dm-navbar>
   </div>
+
   <div
     class="col main"
+    *ngIf="browser && browser !== 'ms-edge' && browser !== 'ie'"
     (swipeleft)="gestureHandler.swipeLeft.next()"
     (swiperight)="gestureHandler.swipeRight.next()"
     [@routerTransition]="getState(outlet)"
+  >
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>
+
+  <div
+    class="col main"
+    *ngIf="browser && (browser === 'ms-edge' || browser === 'ie')"
+    (swipeleft)="gestureHandler.swipeLeft.next()"
+    (swiperight)="gestureHandler.swipeRight.next()"
+    [@routerTransitionFallback]="getState(outlet)"
+    (@routerTransitionFallback.start)="onRouterTransitionStart($event)"
   >
     <router-outlet #outlet="outlet"></router-outlet>
   </div>

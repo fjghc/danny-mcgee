@@ -16,6 +16,18 @@ export function fadeOutIn(elem1Selector: string, elem2Selector: string): Animati
       style({ position: 'relative', transform: `translateY(${fadeConfig.distance})` }),
       { optional: true }
     ),
+    query(
+      elem1Selector,
+      style({ height: 0, overflow: 'hidden' }),
+      { optional: true }
+    ),
+    fadeInQuery(elem2Selector)
+  ]);
+}
+
+export function fadeOutInFallback(elem1Selector: string, elem2Selector: string): AnimationMetadata {
+  return sequence([
+    fadeOutQuery(elem1Selector),
     fadeInQuery(elem2Selector)
   ]);
 }

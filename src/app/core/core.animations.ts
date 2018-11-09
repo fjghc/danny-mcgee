@@ -8,12 +8,25 @@ import {
   transition,
   trigger
 } from '@angular/animations';
-import { fadeOutIn, fadeOutQuery } from '../shared/animations';
+import { fadeOutIn, fadeOutInFallback, fadeOutQuery } from '../shared/animations';
 import { fadeConfig } from '../shared/animations/animation.configs';
 
 export const routerTransition: AnimationTriggerMetadata = trigger('routerTransition', [
   transition('* => home, * => skills, * => contact, * => view-source', [
     fadeOutIn(':leave', ':enter')
+  ]),
+  transition('* => experience, * => projects', [
+    sequence([
+      query(':enter', style({ position: 'fixed', opacity: 0 }), { optional: true }),
+      fadeOutQuery(':leave'),
+      query(':enter', style({ position: 'relative', opacity: 1 }), { optional: true })
+    ])
+  ])
+]);
+
+export const routerTransitionFallback: AnimationTriggerMetadata = trigger('routerTransition', [
+  transition('* => home, * => skills, * => contact, * => view-source', [
+    fadeOutInFallback(':leave', ':enter')
   ]),
   transition('* => experience, * => projects', [
     sequence([

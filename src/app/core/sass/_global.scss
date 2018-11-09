@@ -36,3 +36,8 @@ p {
 .aria-only {
   display: none !important;
 }
+
+.animation-state-hidden {
+  position: fixed !important;
+  opacity: 0 !important;
+}

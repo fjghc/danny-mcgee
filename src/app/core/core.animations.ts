@@ -24,7 +24,7 @@ export const routerTransition: AnimationTriggerMetadata = trigger('routerTransit
   ])
 ]);
 
-export const routerTransitionFallback: AnimationTriggerMetadata = trigger('routerTransition', [
+export const routerTransitionFallback: AnimationTriggerMetadata = trigger('routerTransitionFallback', [
   transition('* => home, * => skills, * => contact, * => view-source', [
     fadeOutInFallback(':leave', ':enter')
   ]),

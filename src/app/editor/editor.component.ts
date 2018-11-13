@@ -198,18 +198,15 @@ export class EditorComponent implements OnInit, OnDestroy {
       if (this.tabs[i] === tab) {
 
         // If this is the active tab, set a flag for later use
-        let needsNewActiveTab = false;
-        if (this.activeTab === this.tabs[i]) {
-          needsNewActiveTab = true;
-        }
+        const needsNewActiveTab = this.activeTab === this.tabs[i];
 
         // Confirm before closing if the file has been modified
-        if (this.tabs[i].file.contents !== this.tabs[i].file.initialContent) {
-          if (!confirm('Close this file? Unsaved changes will be lost!')) {
-            return;
-          } else {
+        if (tab.file.contents !== tab.file.initialContent) {
+          if (confirm('Close this file? Unsaved changes will be lost!')) {
             // reset the file back to its initial content
-            this.tabs[i].file.contents = this.tabs[i].file.initialContent;
+            tab.file.contents = tab.file.initialContent;
+          } else {
+            return;
           }
         }
 

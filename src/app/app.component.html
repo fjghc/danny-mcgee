@@ -14,7 +14,7 @@
 
   <div
     class="col main"
-    *ngIf="browser && browser !== 'ms-edge' && browser !== 'ie'"
+    *ngIf="browser && browser !== 'ms-edge' && browser !== 'ie' && browser !== 'safari'"
     (swipeleft)="gestureHandler.swipeLeft.next()"
     (swiperight)="gestureHandler.swipeRight.next()"
     [@routerTransition]="getState(outlet)"
@@ -24,7 +24,7 @@
 
   <div
     class="col main"
-    *ngIf="browser && (browser === 'ms-edge' || browser === 'ie')"
+    *ngIf="browser && (browser === 'ms-edge' || browser === 'ie' || browser === 'safari')"
     (swipeleft)="gestureHandler.swipeLeft.next()"
     (swiperight)="gestureHandler.swipeRight.next()"
     [@routerTransitionFallback]="getState(outlet)"

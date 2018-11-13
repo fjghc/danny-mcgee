@@ -31,7 +31,7 @@ import {
 import { ProjectsService } from '../projects/projects.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { timelineTransition, activeEmployerTransition } from './experience.animations';
-import { fadeConfig } from '../../shared/animations/animation.configs';
+import { fadeConfig } from '../../shared/animations';
 
 // Component config
 @Component({

@@ -8,8 +8,7 @@ import {
   transition,
   trigger
 } from '@angular/animations';
-import { fadeOutIn, fadeOutInFallback, fadeOutQuery } from '../shared/animations';
-import { fadeConfig } from '../shared/animations/animation.configs';
+import { fadeConfig, fadeOutIn, fadeOutInFallback, fadeOutQuery } from '../shared/animations';
 
 export const routerTransition: AnimationTriggerMetadata = trigger('routerTransition', [
   transition('* => home, * => skills, * => contact, * => view-source', [

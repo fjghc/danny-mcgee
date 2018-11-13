@@ -9,8 +9,8 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { AuthService } from './shared/auth.service';
 import { GestureHandler } from './core/gesture-handler.service';
 import { RouterOutlet } from '@angular/router';
+import { fadeConfig } from './shared/animations';
 import { routerTransition, routerTransitionFallback, headerInTransition, navInTransition } from './core/core.animations';
-import { fadeConfig } from './shared/animations/animation.configs';
 
 // Component config
 @Component({

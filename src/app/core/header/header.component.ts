@@ -9,7 +9,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 // App imports
 import { AuthService } from '../../shared/auth.service';
 import { ProjectsService } from '../../pages/projects/projects.service';
-import { fadeConfig } from '../../shared/animations/animation.configs';
+import { fadeConfig } from '../../shared/animations';
 import { headerTitleTransition } from '../core.animations';
 
 // Component config

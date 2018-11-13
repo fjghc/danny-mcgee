@@ -8,8 +8,7 @@ import {
   transition,
   trigger, group
 } from '@angular/animations';
-import { fadeIn, fadeInQuery, fadeOutQuery } from '../../shared/animations';
-import { fadeConfig } from '../../shared/animations/animation.configs';
+import { fadeConfig, fadeIn, fadeInQuery, fadeOutQuery } from '../../shared/animations';
 
 export const projectsTransition: AnimationTriggerMetadata = trigger('projectsTransition', [
   state('out', style({ opacity: 0 })),

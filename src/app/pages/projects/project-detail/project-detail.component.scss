@@ -188,7 +188,7 @@
   .project-window {
     width: 100vw;
     max-width: none;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 60px);
   }
   .project-info {
     margin: 0 0 0 15px;
@@ -203,8 +203,8 @@
   }
 
   .menu-item, .close {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 60px;
     font-size: 18px;
   }
 }

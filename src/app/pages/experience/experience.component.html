@@ -25,7 +25,7 @@
 
       <!-- Responsibilities -->
       <section class="responsibilities" *ngIf="activeEmployer && activeEmployer.responsibilities">
-        <h4>Responsibilities</h4>
+        <h4>Achievements</h4>
         <ul>
           <li *ngFor="let responsibility of activeEmployer.responsibilities">{{ responsibility }}</li>
         </ul>
@@ -152,7 +152,7 @@
 
         <!-- Responsibilities -->
         <section class="responsibilities" *ngIf="activeEmployer.responsibilities">
-          <h4>Responsibilities</h4>
+          <h4>Achievements</h4>
           <ul>
             <li *ngFor="let responsibility of activeEmployer.responsibilities">{{ responsibility }}</li>
           </ul>

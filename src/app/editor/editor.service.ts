@@ -19,6 +19,8 @@ import { faAngular, faCss3, faHtml5, faJs, faLess, faPhp, faSass } from '@fortaw
 // App imports
 import { DataHandler } from '../database/data-handler.service';
 import { createFile, EditorFile } from './file.model';
+import { DmIconDefinition } from '../shared/icon-definitions/icon-definition.model';
+import { dmTypeScript } from '../shared/icon-definitions';
 
 // Service config
 @Injectable()
@@ -48,6 +50,7 @@ export class EditorService {
         less: faLess,
         sass: faSass,
         js: faJs,
+        ts: dmTypeScript,
         php: faPhp
       },
       ui: {
@@ -95,7 +98,7 @@ export class EditorService {
     return this.filesTemp;
   }
 
-  getIconForType(type: string, open?: boolean): IconDefinition | IconDefinition[] {
+  getIconForType(type: string, open?: boolean): IconDefinition | IconDefinition[] | DmIconDefinition {
     switch (type) {
       case 'folder':
         if (open) {
@@ -115,8 +118,9 @@ export class EditorService {
       case 'less':
         return this.icons.files.less;
       case 'js':
-      case 'ts':
         return this.icons.files.js;
+      case 'ts':
+        return this.icons.files.ts;
       case 'ng-module':
       case 'ng-component':
       case 'ng-template':

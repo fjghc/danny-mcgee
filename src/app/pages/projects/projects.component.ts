@@ -11,6 +11,7 @@ import { Project } from './project.model';
 import { AuthService } from '../../shared/auth.service';
 import { ProjectsService } from './projects.service';
 import { projectsTransition, projectModalTransition } from './projects.animations';
+import { fadeConfig } from '../../shared/animations';
 
 // Component config
 @Component({
@@ -73,7 +74,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   // Events
   onProjectImageLoad() {
     if (++this.projectsLoaded === this.projectsCount) {
-      this.projectsAnimState = 'in';
+      setTimeout(() => {
+        this.projectsAnimState = 'in';
+      }, fadeConfig.delay);
     }
   }
 

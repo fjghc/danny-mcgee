@@ -1,11 +1,4 @@
-<a
-  routerLink="/"
-  routerLinkActive="active"
-  [routerLinkActiveOptions]="{ exact: true }"
-  tabindex="2"
-  role="button"
-  aria-label="Return to Home"
->
+<ng-template #svg>
   <svg
     class="logo"
     xmlns="http://www.w3.org/2000/svg"
@@ -44,4 +37,20 @@
       points="197.98 51.59 235.89 30.57 197.98 11.34 197.98 0 249.87 26.34 249.87 34.45 197.98 63.21 197.98 51.59"
     ></polygon>
   </svg>
+</ng-template>
+
+<a
+  *ngIf="linked"
+  routerLink="/"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: true }"
+  tabindex="2"
+  role="button"
+  aria-label="Return to Home"
+>
+  <ng-container *ngTemplateOutlet="svg"></ng-container>
 </a>
+
+<ng-container *ngIf="!linked">
+  <ng-container *ngTemplateOutlet="svg"></ng-container>
+</ng-container>

@@ -16,6 +16,10 @@
   }
 }
 
+dm-logo {
+  margin-right: 24px;
+}
+
 .page-title, .header-separator {
   font-size: 30px;
   font-weight: 200;
@@ -55,6 +59,10 @@
   @include fixed(0, $menu-width, null, 0);
   background-color: $gray-darker;
   border-bottom: 2px solid $gray-darkest;
+
+  dm-logo {
+    margin-right: 15px;
+  }
 
   .page-title {
     font-size: 18px;

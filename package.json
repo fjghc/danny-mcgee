@@ -1,6 +1,9 @@
 {
   "name": "danny-mcgee",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "author": "Danny McGee <dannymcgee@gmail.com> (https://dannymcgee.io)",
+  "description": "My personal portfolio and resume website",
+  "license": "GPL-3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

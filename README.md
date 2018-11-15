@@ -1,27 +1,7 @@
-# DannyMcgee
+## dannymcgee.io
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.1.
+This is my personal portfolio and resume website, built in Angular. Feel free to take inspiration from it, borrow code snippets, or reskin it for your own use.
 
-## Development server
+If you do copy significant portions or the entirety of this project for your own use, please give me credit for the original design and codebase, and be aware that it is licensed under the GPL.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+If you have any questions, feel free to [shoot me a message](https://dannymcgee.io/contact).

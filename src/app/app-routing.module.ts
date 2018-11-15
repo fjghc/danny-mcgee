@@ -5,11 +5,11 @@ import { HomeComponent } from './pages/home/home.component';
 import { ViewSourceComponent } from './pages/view-source/view-source.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { SkillsComponent } from './pages/skills/skills.component';
-import { ExperienceComponent } from './pages/experience/experience.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { ProjectEditComponent } from './pages/projects/project-edit/project-edit.component';
 import { ProjectDetailComponent } from './pages/projects/project-detail/project-detail.component';
+import { ExperienceComponent } from './pages/experience/experience.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 const appRoutes: Routes = [
   {

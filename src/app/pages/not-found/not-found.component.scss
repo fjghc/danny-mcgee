@@ -1,0 +1,21 @@
+@import '../../core/sass/vars';
+
+:host-context(.desktop) {
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - #{$header-size + $main-container-padding + 2});
+
+  .not-found {
+    flex: 0 0 600px;
+    margin-top: 20vh;
+  }
+}
+
+:host-context(.ie) {
+  height: 100%;
+}
+
+h1 {
+  color: $gray-lighter;
+  margin-bottom: 0.33em;
+}

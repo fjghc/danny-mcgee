@@ -7,7 +7,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { DragulaModule } from 'ng2-dragula';
 import { RouterModule } from '@angular/router';
 import { EditorModule } from '../../editor/editor.module';
-import { ProjectsRoutingModule } from './projects-routing.module';
 import { FormComponentsModule } from '../../form-components/form-components.module';
 
 @NgModule({
@@ -21,7 +20,6 @@ import { FormComponentsModule } from '../../form-components/form-components.modu
     SharedModule,
     FormComponentsModule,
     RouterModule,
-    ProjectsRoutingModule,
     DragulaModule,
     EditorModule,
   ]

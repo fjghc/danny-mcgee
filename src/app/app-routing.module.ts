@@ -6,6 +6,10 @@ import { ViewSourceComponent } from './pages/view-source/view-source.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { SkillsComponent } from './pages/skills/skills.component';
 import { ExperienceComponent } from './pages/experience/experience.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { ProjectEditComponent } from './pages/projects/project-edit/project-edit.component';
+import { ProjectDetailComponent } from './pages/projects/project-detail/project-detail.component';
 
 const appRoutes: Routes = [
   {
@@ -25,6 +29,25 @@ const appRoutes: Routes = [
     data: { state: 'skills' }
   },
   {
+    path: 'projects',
+    component: ProjectsComponent,
+    data: { state: 'projects' },
+    children: [
+      {
+        path: 'new',
+        component: ProjectEditComponent
+      },
+      {
+        path: 'edit/:path',
+        component: ProjectEditComponent
+      },
+      {
+        path: ':path',
+        component: ProjectDetailComponent
+      }
+    ]
+  },
+  {
     path: 'contact',
     component: ContactComponent,
     data: { state: 'contact' }
@@ -39,6 +62,15 @@ const appRoutes: Routes = [
     component: LoginComponent,
     data: { state: 'login' }
   },
+  {
+    path: '404',
+    component: NotFoundComponent,
+    data: { state: 'not-found' }
+  },
+  {
+    path: '**',
+    redirectTo: '404'
+  }
 ];
 
 @NgModule({

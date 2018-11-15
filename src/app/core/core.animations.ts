@@ -11,7 +11,7 @@ import {
 import { fadeConfig, fadeOutIn, fadeOutInFallback, fadeOutQuery } from '../shared/animations';
 
 export const routerTransition: AnimationTriggerMetadata = trigger('routerTransition', [
-  transition('* => home, * => skills, * => contact, * => view-source', [
+  transition('* => home, * => skills, * => contact, * => view-source, * => not-found', [
     fadeOutIn(':leave', ':enter')
   ]),
   transition('* => experience, * => projects', [

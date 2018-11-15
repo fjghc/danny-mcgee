@@ -49,7 +49,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onRouterEvent(event: RouterEvent) {
     if (event instanceof RoutesRecognized) {
       const url = event.url.toString();
-      this.titleAnimState = 'out';
+      if (!(this.pageTitle === 'Projects' && /\bprojects\b/.test(url))) {
+        this.titleAnimState = 'out';
+      }
       setTimeout(() => {
         this.pageTitle = this.getPageTitleForUrl(url);
         this.titleAnimState = 'in';
